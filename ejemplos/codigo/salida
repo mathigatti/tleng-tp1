@@ -1,0 +1,5 @@
+type:NUMBER value:4 line:1 position:0
+type:PLUS value:+ line:1 position:1
+type:NUMBER value:5 line:1 position:2
+type:TIMES value:* line:1 position:3
+type:NUMBER value:3 line:1 position:4
