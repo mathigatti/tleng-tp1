@@ -102,7 +102,7 @@ t_INTERROGACION = r"\?"
 t_DOSPUNTOS = r"\:"
 t_PUNTOYCOMA = r"\;"
 t_COMA = r"\,"
-t_NUMERAL = r"\#([a-z]|[A-Z]|\_|[ \t]|[0-9]|=|;|,|!)*"
+t_NUMERAL = r"\#([a-z]|[A-Z]|\_|[ \t]|[0-9]|\=|\;|\,|\+|\*|\%|\#|\$|\/|\(|\)|\?|\{|\}|\-|\_|\'|\"|[|]|\.|\:|\<|\>|\||!)*"
 
 
 t_BOOLEANO = r"(false|FALSE|true|TRUE)"
