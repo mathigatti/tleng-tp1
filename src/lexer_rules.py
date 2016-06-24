@@ -117,7 +117,7 @@ t_COLINEALES = r"colineales"
 t_MULTIPLICACIONESCALAR = r"multiplicacionEscalar"
 
 t_CADENA = r"\" ([a-z]|[A-Z]|\_|[ \t]|[0-9]|!)* \" "
-t_VARIABLE = r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])*"
+t_VARIABLE = r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])* [^do|DO|while|WHILE|for|FOR|if|IF|else|ELSE|res|RES|return|RETURN|begin|BEGIN|end|END|capitalizar|length|print|multiplicacionEscalar|colineales|true|TRUE|false|FALSE|and|AND|or|OR|NOT|not]"
 
 """
 Deberian sacarse todos estos valores del conjunto que forma a VARIABLE:
