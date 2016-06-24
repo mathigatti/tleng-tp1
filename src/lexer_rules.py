@@ -64,8 +64,8 @@ tokens = [
 
 
 def t_NUMBER(token):
-	r"([1-9][0-9]*|0)"
-	token.value = int(token.value)
+	r"(-?[0-9]+(\.[0-9][0-9]*)?)"
+	token.value = float(token.value)
 	return token
 # Falta agregarle decimales, Podra ser negativo?
 
