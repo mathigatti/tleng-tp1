@@ -37,6 +37,7 @@ tokens = [
    'INTERROGACION',
    'DOSPUNTOS',
    'PUNTOYCOMA',
+   'COMA',
    'NUMERAL', #Esto hay que cambiarlo por comentario y que borre las lineas hasta el primer \n
    'LLAVEDER',
    'LLAVEIZQ',
@@ -100,6 +101,7 @@ t_LLAVEDER = r"\}"
 t_INTERROGACION = r"\?"
 t_DOSPUNTOS = r"\:"
 t_PUNTOYCOMA = r"\;"
+t_COMA = r"\,"
 t_NUMERAL = r"\#"
 
 
