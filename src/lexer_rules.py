@@ -1,6 +1,28 @@
 # Si el codigo esta vacio o solo tiene espacios, saltos de linea y demas caracteres no imprimibles entonces no es valido
 
 #
+reserved = {
+	'do':'DO',
+	'while':'WHILE',
+	'for':'FOR',
+	'if':'IF',
+	'else':'ELSE',
+	'res':'RES',
+	'return':'RETURN',
+	'begin':'BEGIN',
+	'end':'END',
+	'capitalizar':'CAPITALIZAR',
+	'length':'LENGTH',
+	'print':'PRINT',
+	'multiplicacionEscalar':'MULTIPLICACIONESCALAR',
+	'colineales':'COLINEALES',
+	'true':'TRUE',
+	'false':'FALSE',
+	'and':'AND',
+	'or':'OR',
+	'NOT':'not',
+
+}
 
 tokens = [
 # Numeros
@@ -23,16 +45,8 @@ tokens = [
    'MASMAS',
    'LESSLESS',
 # Booleanos
-   'AND',
-   'OR',
-   'NOT',
-   'BOOLEANO',
-# Funciones
-   'LENGTH',
-   'PRINT',
-   'CAPITALIZAR',
-   'COLINEALES',
-   'MULTIPLICACIONESCALAR',
+	'BOOL',
+
 #
    'INTERROGACION',
    'DOSPUNTOS',
@@ -50,18 +64,8 @@ tokens = [
    'CADENA',
 
 # Estos actualmente estan siendo ignorados, son tomados como tipo VARIABLE 
-   'IF',
-   'ELSE',
-   'FOR',
-   'WHILE',
-   'DO',
-   'RES',
-   'RETURN',
-   'BEGIN',
    'ASIGNACION',
-   'END'
-]
-
+] + list(reserved.values())
 
 def t_NUMBER(token):
 	r"(-?[0-9]+(\.[0-9][0-9]*)?)"
@@ -104,33 +108,13 @@ t_COMA = r"\,"
 t_COMENTARIO = r"\#([a-z]|[A-Z]|\_|[ \t]|[0-9]|\=|\;|\,|\+|\*|\%|\#|\$|\/|\(|\)|\?|\{|\}|\-|\_|\'|\"|[|]|\.|\:|\<|\>|\|\!)*"
 
 
-t_BOOLEANO = r"(false|FALSE|true|TRUE)"
-t_AND = r"(and|AND)"
-t_OR = r"(or|OR)"
-t_NOT = r"(NOT|not)"
-
-t_LENGTH = r"length"
-t_PRINT = r"print"
-t_CAPITALIZAR = r"capitalizar"
-t_COLINEALES = r"colineales"
-t_MULTIPLICACIONESCALAR = r"multiplicacionEscalar"
-
 t_CADENA = r"\" ([a-z]|[A-Z]|\_|[ \t]|[0-9]|!)* \" "
-t_VARIABLE = r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])* [^do|DO|while|WHILE|for|FOR|if|IF|else|ELSE|res|RES|return|RETURN|begin|BEGIN|end|END|capitalizar|length|print|multiplicacionEscalar|colineales|true|TRUE|false|FALSE|and|AND|or|OR|NOT|not]"
 
-"""
-Deberian sacarse todos estos valores del conjunto que forma a VARIABLE:
-((DO|do)|(while|WHILE)|(for|FOR)|(if|IF) |(else|ELSE) |(res|RES) | (return|RETURN) |(begin|BEGIN) | (end|END) | capitalizar |length | print | multiplicacionEscalar | colineales | (true|TRUE) | (false|FALSE) | (and|AND) | (or|OR) | (NOT|not) )"""
+def t_VARIABLE(token):
+	r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])*"
+	token.type = reserved.get(token.value,'VARIABLE')
+	return token
 
-t_DO = r"(DO|do)"
-t_WHILE = r"(while|WHILE)"
-t_FOR = r"(for|FOR)"
-t_IF = r"(if|IF)"
-t_ELSE = r"(else|ELSE)"
-t_RES = r"(res|RES)"
-t_RETURN = r"(return|RETURN)"
-t_BEGIN = r"(begin|BEGIN)"
-t_END = r"(end|END)"
 t_ASIGNACION = r"="
 
 t_ignore = " \t"
