@@ -40,11 +40,11 @@ def p_sentencia_g_ctrl_list(sentencia):
 
 def p_sentencia_var_op(sentencia):
     'sentencia : var_ops PUNTOYCOMA'
-    sentencia[0] = sentencia[1] + ';\n'
+    sentencia[0] = sentencia[1] + ';'
 
 def p_sentencia_var_asig(sentencia):
     'sentencia : var_asig PUNTOYCOMA'
-    sentencia[0] = sentencia[1] + ';\n'
+    sentencia[0] = sentencia[1] + ';'
 
 def p_sentencia_func(p):
     'sentencia : funcion PUNTOYCOMA'
