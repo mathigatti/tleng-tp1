@@ -10,6 +10,8 @@ Control:
 IFE→ if(exp_bool) then Bloque else Bloque
 Bloque → S | {P}
 
+Comentarios: 
+Comentario -> #CADENA | // CADENA 
 
 Funciones
 Func → FuncReturn | FuncVoid
