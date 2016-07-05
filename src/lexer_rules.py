@@ -6,6 +6,7 @@ reserved = {
 	'while':'WHILE',
 	'for':'FOR',
 	'if':'IF',
+	'then':'THEN',
 	'else':'ELSE',
 	'res':'RES',
 	'return':'RETURN',
