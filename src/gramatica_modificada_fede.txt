@@ -1,0 +1,76 @@
+
+Gramática:
+P → SP | CtrlP | S | Ctrl
+S →  var_pos ; | funcion; | var_asign;
+Ctrl →  IFE | Loop
+
+Loop → while(exp_bool) Bloque | do Bloque while(exp_bool); | for(var_asig; exp_bool; var_pos)Bloque
+
+Control:
+IFE→ if(exp_bool) then Bloque else Bloque
+Bloque → S | {P}
+
+
+Funciones
+Func → FuncReturn | FuncVoid
+FuncReturn → FuncInt | colineales(exp_bool,exp_bool) | capitalizar(exp_cadena)
+FuncInt → multiplicacionEscalar(Vec, exp_mat, var) | length(var)
+FuncVoid → print(valores) 
+
+Vectores  y variables
+Valores → exp_mat | exp_bool | exp_cadena | VARIABLE |  exp_arreglo  | var_pos | Reg | FuncReturn
+// q es var_pos ?? 
+exp_arreglo -> [Valores ListaValores] | []
+NUMBER -> (0|1|2|3|4|5|6|7|8|9)N
+N -> (0|1|2|3|4|5|6|7|8|9)N | lanbda
+ListaValores -> ,Valores ListaValores
+
+Operaciones binarias enteros:
+exp_mat → exp_mat + F | exp_mat - F | F
+F → P * Exp | F / Exp | F % Exp | Exp
+Exp → Exp ^ ISing | ISing
+ISing → -Paren | +Paren | Paren
+Paren → (exp_mat) | Valores | FuncInt
+
+Operaciones con strings
+exp_cadena → exp_cadena + CADENA | exp_cadena + capitalizar(exp_cadena) | CADENA| capitalizar(exp_cadena) 
+
+Registros:
+Reg → {U}
+U -> CADENA: Valores, U | CADENA: Valores
+
+
+Operadores de variables:
+var_pos → --SMM | ++SMM | SMM
+SMM → exp_mat++ | exp_mat--
+
+Asignaciones:
+var_asign → VARIABLE *= Valores | VARIABLE /= Valores | VARIABLE | VARIABLE += Valores |  VARIABLE -= Valores
+ 			| VARIABLE = Valores 
+
+Asig → VARIABLE = Valores  | VARIABLE  = [lista_valores] 
+lista_valores -> Valores,lista_valores| Valores
+VARIABLE → a Var
+Var = a Var | lanbda 
+// este es el token , dsp hay q pedirle el val a "a" y que te de las letras 
+CADENA → "Var"
+// una cadena de un string tiene q tener siempre comillas adelante y atras 
+
+
+// (para generar a = b += 1)
+//a = v *= [1,2,3] ? 
+
+exp_bool -> True | False
+
+Lo de abajo no esta implementado
+Op booleanas
+exp_bool → Or ? exp_bool : exp_bool  | Or
+Or → Or or And | And
+And →  And and Eq | Eq
+Eq → Eq == TBool |  Eq != TBool | Mayor 
+Mayor → TCompare > TCompare | TCompare >= TCompare | Menor
+Menor → TCompare < TCompare | TCompare <= TCompare | Not 
+// (not 1 < 2 != not (1 < 2))
+Not →  not Not | TBool 
+TBool → (exp_bool) | bool | VarYVals | FuncBool
+TCompare → exp_mat | var_pos | VarYVals | FuncInt
