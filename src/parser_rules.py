@@ -14,6 +14,10 @@ class ParserException(Exception):
         pass
 
 #Producciones Generales
+def p_sentencia_g_s_coment(sentencia):
+    'g : sentencia COMENTARIO'
+    sentencia[0] = sentencia[1] + '\ncomment\n'
+
 def p_sentencia_g_s(sentencia):
     'g : sentencia'
     sentencia[0] = sentencia[1]
@@ -22,19 +26,35 @@ def p_sentencia_g_ctrl(sentencia):
     'g : control'
     sentencia[0] = sentencia[1]
 
+def p_sentencia_g_ctrl_coment(sentencia):
+    'g : control COMENTARIO'
+    sentencia[0] = sentencia[1] + '\ncomment\n'
+
 def p_sentencia_g_s_list(sentencia):
     'g : sentencia g'
+    sentencia[0] = sentencia[1] + sentencia[2]
+
 def p_sentencia_g_ctrl_list(sentencia):
     'g : control g'
+    sentencia[0] = sentencia[1] + sentencia[2]
+
 def p_sentencia_var_op(sentencia):
     'sentencia : var_ops PUNTOYCOMA'
-    sentencia[0] = sentencia[1] + ';'
+    sentencia[0] = sentencia[1] + ';\n'
+
+def p_sentencia_var_asig(sentencia):
+    'sentencia : var_asig PUNTOYCOMA'
+    sentencia[0] = sentencia[1] + ';\n'
 
 def p_sentencia_func(p):
     'sentencia : funcion PUNTOYCOMA'
-    p[0] = p[1] + ';'
+    p[0] = p[1] + ';\n'
 
 #Producciones para estructuras de control
+def p_control_ifelse(p):
+    'control : ifelse'
+    p[0] = p[1]
+
 def p_control_if(p):
     'control : if'
     p[0] = p[1]
@@ -47,11 +67,20 @@ def p_loop_while(p):
     'loop : WHILE LPAREN exp_bool RPAREN bloque '
 def p_loop_do(p):
     'loop : DO bloque WHILE LPAREN exp_bool RPAREN PUNTOYCOMA'
+    p[0] = 'DO\n' + find_and_replace(p[2]) + 'while(' + p[5] + ');' +')\n'
+
 def p_loop_for(p):
     'loop : FOR LPAREN var_asig PUNTOYCOMA exp_bool PUNTOYCOMA var_ops RPAREN bloque'
+    p[0] = 'for(' + p[3] + ';' + p[5] + ';' + p[7] +')\n    ' + find_and_replace(p[9]) + '\n'
+
+def p_ifelse(p):
+    'ifelse : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n else' + find_and_replace(p[8]) + '\n'
+
 def p_if(p):
-    'if : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
-    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n else' + find_and_replace(p[8])
+    'if : IF LPAREN exp_bool RPAREN THEN bloque'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n'
+
 
 def p_bloque_s(p):
     'bloque : sentencia'
@@ -87,20 +116,33 @@ def p_vec_val(p):
     'vec_val : VARIABLE vec'
 def p_var_y_vals_var(p):
     'var_y_vals : VARIABLE'
-    p[0] = 'variablesita'
+    p[0] = 'variable'
+
 
 def p_var_y_vals_vec_val(p):
     'var_y_vals : vec_val'
 def p_valores_exp_mat(p):
     'valores : exp_mat'
+    p[0] = p[1]
+
 def p_valores_exp_string(p):
     'valores : exp_string'
+    p[0] = p[1]
+
+def p_valores_exp_int(p):
+    'valores : NUMBER'
+    p[0] = 'numero'
+
 def p_valores_exp_bool(p):
     'valores : exp_bool'
+    p[0] = p[1]
 def p_valores_vyv(p):
     'valores : var_y_vals'
+    p[0] = p[1]
 def p_valores_func_ret(p):
     'valores : func_ret'
+    p[0] = p[1]
+
 #Producciones operaciones binarias con enteros
 def p_exp_mat_pp(p):
     'exp_mat : exp_mat PLUS prod'
@@ -170,26 +212,39 @@ def p_smm_pp(p):
 #Producciones de asignaciones
 def p_var_asig_multipl(p):
     'var_asig : sigual MULTIPL valores'
+    p[0] = p[1] + '*' + p[3]
+
 def p_var_asig_dividi(p):
     'var_asig : sigual DIVIDI valores'
+    p[0] = p[1] + '/' + p[3]
+
 def p_var_asig_sigual(p):
     'var_asig : sigual'
+    p[0] = p[1]
 def p_sigual_agregar(p):
-    'sigual : asig AGREGAR'
+    'sigual : asig AGREGAR valores'
+    p[0] = p[1] + '+=' + p[3]
 def p_sigual_sacar(p):
-    'sigual : asig SACAR'
+    'sigual : asig SACAR valores'
+    p[0] = p[1] + '+=' + p[3]
+def p_sigual_asig(p):
+    'sigual : asig'
+    p[0] = p[1]
 def p_asig_var_val(p):
     'asig : VARIABLE ASIGNACION valores'
+    p[0] = p[1] + '=' + p[3]
 def p_asig_var_var(p):
     'asig : VARIABLE ASIGNACION VARIABLE'
+    p[0] = 'variable' + '=' + 'variable'
+
 #Producciones de operaciones booleanas
 def p_exp_bool_true(p):
     'exp_bool : TRUE'
-    p[0] = 'trusito'
+    p[0] = 'true'
 
 def p_exp_bool_false(p):
     'exp_bool : FALSE'
-    p[0] = 'fols'
+    p[0] = 'false'
 
 def p_error(token):
     message = "[Syntax error]"
