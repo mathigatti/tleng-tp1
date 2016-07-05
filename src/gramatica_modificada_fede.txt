@@ -27,11 +27,11 @@ NUMBER -> num
 ListaValores -> ,Valores ListaValores
 
 Operaciones binarias enteros:
-exp_mat → exp_mat + exp_mat | exp_mat - exp_mat | F
-F → P * Exp | F / Exp | F % Exp | Exp
-Exp → Exp ^ ISing | ISing
-ISing → -Paren | +Paren | Paren
-Paren → (exp_mat) | Valores | FuncInt
+exp_mat → exp_mat + exp_mat | exp_mat - exp_mat | exp_mat * exp_mat | exp_mat / exp_mat | 
+		exp_mat ^ exp_mat | exp_mat % exp_mat | exp_mat++ | exp_mat-- | num | FuncInt
+		(exp_mat) + (exp_mat) | (exp_mat) - (exp_mat) | (exp_mat) * (exp_mat) | (exp_mat) / (exp_mat) | 
+		(exp_mat ^ (exp_mat) | (exp_mat % (exp_mat) | (exp_mat)++ | (exp_mat)-- |
+		
 
 Operaciones con strings
 exp_cadena → exp_cadena + exp_cadena | exp_cadena | CADENA | capitalizar(exp_cadena) 
