@@ -11,7 +11,7 @@ if __name__ == "__main__":
     if len(argv) != 2:
         print "Parametros invalidos."
         print "Uso:"
-        print "  lexer.py archivo_entrada "
+        print "SLSParser archivo_entrada"
         exit()
 
     src = open(argv[1], "r")
