@@ -44,7 +44,7 @@ def p_funcion_ret_int(p):
 def p_funcion_ret_int_mult(p):
     'func_ret_int : MULTIPLICACIONESCALAR LPAREN vec COMA exp_mat COMA VARIABLE'
 def p_funcion_ret_int_length(p):
-    'func_ret_int : LENGTH'
+    'func_ret_int : LENGTH VARIABLE'
 def p_funcion_ret_string(p):
     'func_ret : CAPITALIZAR LPAREN exp_string RPAREN'
 def p_funcion_ret_bool(p):
