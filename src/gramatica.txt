@@ -1,6 +1,7 @@
 
 Gramática:
-G → SG | CtrlG
+#G → SG | CtrlG | S | G
+G → SG | CtrlG 
 S →  VarOps ; | Func ;
 Ctrl → IF| Loop
 
@@ -14,7 +15,8 @@ Bloque → S | {G}
 Funciones
 Func → FuncReturn | FuncVoid
 FuncReturn → FuncInt | FuncString | FuncBool
-FuncInt → multiplicacionEscalar(Vec, EMat, M) | length(Vec)
+#FuncInt → multiplicacionEscalar(Vec, EMat, M) | length(Vec)
+FuncInt → multiplicacionEscalar(Vec, EMat, var) | length(var)
 FuncString → capitalizar(ExpString)
 FuncBool → colineales(Vec,Vec )
 FuncVoid → print(V) 
@@ -25,9 +27,9 @@ Elem→ Valores, Elem | Valores
 Valores → EMat | ExpBool | ExpString | VarYVals | FuncReturn
 VarYVals → var | VecVal
 VecVal →  var M
-M → [int] | [int] M
+#M → [int] | [int] M
 // vec se coloca en el lexer
-M → ExpBool | 𝝺
+#M → ExpBool | 𝝺
 
 
 Operaciones binarias enteros:
@@ -42,7 +44,8 @@ ExpString → ExpString + string | string | VarYVals | FuncString
 
 Registros:
 Reg → {U}
-U -> campo: Valores, U | campo: Valores
+#U -> campo: Valores, U | campo: Valores
+U -> string: Valores, U | string: Valores
 
  alumno = {nombre:"Juan Perez", edad:23};
 
@@ -53,11 +56,15 @@ SMM → VarYVals++ | VarYVals--
  Asignaciones:
 VarAsig → SIgual *= Valores | SIgual /= Valores | SIgual
 SIgual → Asig += Valores |  Asig -= Valores | Asig
-Asig → var = Valores  | var = Valores    | var = Vec          
+#Asig → var = Valores  | var = Valores    | var = Vec          
+#Asig → var = Valores  | var = var 
 
 // (para generar a = b += 1)
 //a = v *= [1,2,3]
 
+ExpBool -> True | False
+
+Lo de abajo no esta implementado
 Op booleanas
 ExpBool → Or ? ExpBool : ExpBool  | Or
 Or → Or or And | And
