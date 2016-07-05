@@ -152,15 +152,15 @@ def p_reg_item(p):
     'reg_item : CADENA DOSPUNTOS valores' 
 #Producciones de operadores de variables
 def p_var_ops_mm_smm(p):
-    'var_ops : MINUS MINUS smm' 
+    'var_ops : LESSLESS smm' 
 def p_var_ops_pp_smm(p):
-    'var_ops : PLUS PLUS smm' 
+    'var_ops : MASMAS smm' 
 def p_var_ops_smm(p):
     'var_ops : smm' 
     p[0] = p[1]
 
 def p_smm_mm(p):
-    'smm : var_y_vals MINUS MINUS'
+    'smm : var_y_vals LESSLESS'
     p[0] = p[1] + '--'
 
 def p_smm_pp(p):
