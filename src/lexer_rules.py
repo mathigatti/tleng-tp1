@@ -111,6 +111,14 @@ t_COMENTARIO = r"\#([a-z]|[A-Z]|\_|[ \t]|[0-9]|\=|\;|\,|\+|\*|\%|\#|\$|\/|\(|\)|
 
 t_CADENA = r"\" ([a-z]|[A-Z]|\_|[ \t]|[0-9]|!)* \" "
 
+"""def t_BOOL(token) : 
+    r"true | false"
+    atributos = {}
+    atributos["type"] = "bool"
+    atributos["value"] = token.value
+    token.value = atributos
+    return token"""
+
 def t_VARIABLE(token):
 	r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])*"
 	token.type = reserved.get(token.value,'VARIABLE')

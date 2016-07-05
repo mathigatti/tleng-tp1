@@ -1,27 +1,48 @@
 from lexer_rules import tokens
 import ply.yacc as yacc
 
+def find_and_replace(palabra):
+    j = 0
+    res = ''
+    for i in range(len(palabra)):
+        if palabra[i] == '\n':
+            res = res + palabra[j:i] + '\n    '
+            j = i+1
+    return res + palabra[j:]
+
 class ParserException(Exception):
         pass
 
 #Producciones Generales
 def p_sentencia_g_s(sentencia):
     'g : sentencia'
+    sentencia[0] = sentencia[1]
+
 def p_sentencia_g_ctrl(sentencia):
     'g : control'
+    sentencia[0] = sentencia[1]
+
 def p_sentencia_g_s_list(sentencia):
     'g : sentencia g'
 def p_sentencia_g_ctrl_list(sentencia):
     'g : control g'
 def p_sentencia_var_op(sentencia):
     'sentencia : var_ops PUNTOYCOMA'
+    sentencia[0] = sentencia[1] + ';'
+
 def p_sentencia_func(p):
     'sentencia : funcion PUNTOYCOMA'
+    p[0] = p[1] + ';'
+
 #Producciones para estructuras de control
 def p_control_if(p):
     'control : if'
+    p[0] = p[1]
+
 def p_control_loop(p):
     'control : loop'
+    p[0] = p[1]
+
 def p_loop_while(p):
     'loop : WHILE LPAREN exp_bool RPAREN bloque '
 def p_loop_do(p):
@@ -30,10 +51,16 @@ def p_loop_for(p):
     'loop : FOR LPAREN var_asig PUNTOYCOMA exp_bool PUNTOYCOMA var_ops RPAREN bloque'
 def p_if(p):
     'if : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n else' + find_and_replace(p[8])
+
 def p_bloque_s(p):
     'bloque : sentencia'
+    p[0] = p[1]
+
 def p_bloque_g(p):
     'bloque : LLAVEIZQ g LLAVEDER'
+    p[0] = '{' + p[2] + '}'
+
 #Producciones para funciones
 def p_funcion_ret(p):
     'funcion : func_ret'
@@ -51,7 +78,7 @@ def p_funcion_ret_bool(p):
     'func_ret : COLINEALES LPAREN vec RPAREN '
 #Producciones para vectores y variables
 def p_vec(p):
-    'vec : VARIABLE IGUAL LCORCHETE elem RCORCHETE'
+    'vec : VARIABLE ASIGNACION LCORCHETE elem RCORCHETE'
 def p_elem_list(p):
     'elem : valores COMA elem'
 def p_elem(p):
@@ -60,6 +87,8 @@ def p_vec_val(p):
     'vec_val : VARIABLE vec'
 def p_var_y_vals_var(p):
     'var_y_vals : VARIABLE'
+    p[0] = 'variablesita'
+
 def p_var_y_vals_vec_val(p):
     'var_y_vals : vec_val'
 def p_valores_exp_mat(p):
@@ -123,15 +152,21 @@ def p_reg_item(p):
     'reg_item : CADENA DOSPUNTOS valores' 
 #Producciones de operadores de variables
 def p_var_ops_mm_smm(p):
-    'var_ops : LESSLESS smm' 
+    'var_ops : MINUS MINUS smm' 
 def p_var_ops_pp_smm(p):
-    'var_ops : MASMAS smm' 
+    'var_ops : PLUS PLUS smm' 
 def p_var_ops_smm(p):
     'var_ops : smm' 
+    p[0] = p[1]
+
 def p_smm_mm(p):
-    'smm : var_y_vals LESSLESS'
+    'smm : var_y_vals MINUS MINUS'
+    p[0] = p[1] + '--'
+
 def p_smm_pp(p):
     'smm : var_y_vals MASMAS'
+    p[0] = p[1] + '++'
+
 #Producciones de asignaciones
 def p_var_asig_multipl(p):
     'var_asig : sigual MULTIPL valores'
@@ -144,14 +179,18 @@ def p_sigual_agregar(p):
 def p_sigual_sacar(p):
     'sigual : asig SACAR'
 def p_asig_var_val(p):
-    'asig : VARIABLE IGUAL valores'
+    'asig : VARIABLE ASIGNACION valores'
 def p_asig_var_var(p):
-    'asig : VARIABLE IGUAL VARIABLE'
+    'asig : VARIABLE ASIGNACION VARIABLE'
 #Producciones de operaciones booleanas
 def p_exp_bool_true(p):
     'exp_bool : TRUE'
+    p[0] = 'trusito'
+
 def p_exp_bool_false(p):
     'exp_bool : FALSE'
+    p[0] = 'fols'
+
 def p_error(token):
     message = "[Syntax error]"
     if token is not None:
