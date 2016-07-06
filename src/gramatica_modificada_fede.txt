@@ -21,7 +21,7 @@ FuncInt → multiplicacionEscalar(VARIABLE, exp_mat, VARIABLE) | length(VARIABLE
 FuncVoid → print(valores) 
 
 Vectores  y variables
-Valores → exp_mat | exp_bool | exp_cadena | VARIABLE |  exp_arreglo  | Reg | FuncReturn
+Valores → exp_mat | exp_bool | exp_cadena | VARIABLE |  exp_arreglo  | Reg 
 
 exp_arreglo -> [Valores ListaValores] | [] | multiplicacionEscalar(VARIABLE, exp_mat, VARIABLE)
 NUMBER -> Signonum
@@ -56,7 +56,7 @@ Operaciones con strings
 exp_cadena → parentesisCadena + parentesisCadena | parentesisCadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
 
 Operaciones binarias enteros:
-exp_mat → parentesisMat + parentesisMat | parentesisMat - parentesisMat | parentesisMat * parentesisMat | parentesisMat / parentesisMat | parentesisMat ^ parentesisMat | parentesisMat % parentesisMat | parentesisMat++ | parentesisMat-- | num | FuncInt | VARIABLE | ++parentesisMat | --parentesisMat
+exp_mat → parentesisMat + parentesisMat | parentesisMat - parentesisMat | parentesisMat * parentesisMat | parentesisMat / parentesisMat | parentesisMat ^ parentesisMat | parentesisMat % parentesisMat | parentesisMat++ | parentesisMat-- | num | FuncInt | VARIABLE | ++parentesisMat | --parentesisMat | length(VARIABLE)
 
 
 parentesisBool -> (exp_bool) | exp_bool
