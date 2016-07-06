@@ -1,5 +1,7 @@
 Gramática:
-P → S P | Ctrl P | Comentario P | lambda
+P → S P' | Ctrl P' | Comentario P
+P' -> S P' | Ctrl P' | Comentario P' | lanbda
+
 S →  Func; | var_asign;
 Ctrl →  IFE | Loop
 
