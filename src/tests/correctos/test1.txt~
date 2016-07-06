@@ -3,7 +3,7 @@ for (i=1; i<a;i++) b = b+10*i;
 
 res = b*8;
 
-do { i++; # comento algo
+do { i++;
 inicio += " ";
 j = length(inicio)* i;
 }while (j % 32 != 0); print("Mundo!");

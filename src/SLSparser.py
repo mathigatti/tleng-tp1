@@ -1,5 +1,6 @@
-# Para correr el parser hay tres opciones:
+# Para correr el parser hay cuatro opciones:
 # SLSparser.py -o archivo_salida -c archivo_entrada
+# SLSparser.py -c archivo_entrada <---- En este caso la salida se imprime en el terminal
 # SLRparser.py -o arvhico_salida 'texto de entrada escrito en el terminal directamente'
 # SLRparser.py 'texto de entrada' <---- En este caso la salida se imprime en el terminal
 
