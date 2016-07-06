@@ -185,6 +185,22 @@ def p_reg_item(p):
     p[0] = p[1] + ":" + toStrIfInt(p[3])
 
 #Producciones de asignaciones
+def p_var_asig_base_mm(p):
+    'var_asig : VARIABLE LESSLESS'
+    p[0] = toStrIfInt(p[1]) + '--'
+
+def p_var_asig_mm_base(p):
+    'var_asig : LESSLESS VARIABLE'
+    p[0] = '--' + toStrIfInt(p[2])
+
+def p_var_asig_base_pp(p):
+    'var_asig : VARIABLE MASMAS'
+    p[0] = toStrIfInt(p[1]) + '++'
+
+def p_var_asig_pp_base(p):
+    'var_asig : MASMAS VARIABLE '
+    p[0] = '++' + toStrIfInt(p[2])
+
 def p_var_asig_multipl(p):
     'var_asig : VARIABLE MULTIPL valores'
     p[0] = p[1] + '*' + p[3]
