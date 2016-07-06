@@ -15,13 +15,13 @@ Comentario -> #CADENA
 Funciones
 Func → FuncReturn | FuncVoid
 FuncReturn → FuncInt | colineales(exp_bool,exp_bool) | capitalizar(exp_cadena)
-FuncInt → multiplicacionEscalar(Vec, exp_mat, var) | length(var)
+FuncInt → multiplicacionEscalar(VARIABLE, exp_mat, VARIABLE) | length(VARIABLE)
 FuncVoid → print(valores) 
 
 Vectores  y variables
 Valores → exp_mat | exp_bool | exp_cadena | VARIABLE |  exp_arreglo  | Reg | FuncReturn
 
-exp_arreglo -> [Valores ListaValores] | []
+exp_arreglo -> [Valores ListaValores] | [] | multiplicacionEscalar(VARIABLE, exp_mat, VARIABLE)
 NUMBER -> Signonum
 Signo -> + | - | lanbda 
 ListaValores -> ,Valores ListaValores
@@ -48,7 +48,7 @@ Op booleanas
 exp_bool → parentesisBool == parentesisBool | parentesisBool != parentesisBool | parentesisMat != parentesisMat | parentesisMat 		== parentesisMat | parentesisCadena == parentesisCadena | parentesisCadena != parentesisCadena  
 	 	| parentesisMat > parentesisMat | parentesisMat < parentesisMat
 	 	| NOT parentesisBool | parentesisBool AND parentesisBool | parentesisBool OR parentesisBool
-	 	| VARIABLE | True | False 
+	 	| VARIABLE | True | False | colineales(VARIABLE, VARIABLE)
 
 Operaciones con strings
 exp_cadena → parentesisCadena + parentesisCadena | parentesisCadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
