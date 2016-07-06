@@ -6,7 +6,7 @@ Ctrl →  IFE | Loop
 Loop → while(exp_bool) Bloque | do Bloque while(exp_bool); | for(var_asig; exp_bool; var_asig)Bloque
 
 Control:
-IFE→ if(exp_bool) Bloque else Bloque 
+IFE→ if(exp_bool) Bloque else Bloque  | if(exp_bool) Bloque 
 Bloque → S | {P}
 
 Comentarios: 
@@ -20,7 +20,7 @@ FuncVoid → print(valores)
 
 Vectores  y variables
 Valores → exp_mat | exp_bool | exp_cadena | VARIABLE |  exp_arreglo  | Reg | FuncReturn
-// q es var_pos ?? 
+
 exp_arreglo -> [Valores ListaValores] | []
 NUMBER -> Signonum
 Signo -> + | - | lanbda 
@@ -32,7 +32,9 @@ U -> CADENA: Valores, U | CADENA: Valores
 
 Asignaciones:
 var_asign → VARIABLE *= Valores | VARIABLE /= Valores | VARIABLE | VARIABLE += Valores |  VARIABLE -= Valores
- 			| VARIABLE = Valores 
+ 			| VARIABLE = Valores | VARIABLE = OperadorTernario
+
+OperadorTernario -> (exp_bool)? exp_bool:exp_bool; | (exp_bool)? exp_mat:exp_mat; | (exp_bool)? exp_cadena:exp_cadena;
 
 VARIABLE → aVar
 Var = aVar | lanbda 
