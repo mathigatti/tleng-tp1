@@ -27,14 +27,10 @@ NUMBER -> num
 ListaValores -> ,Valores ListaValores
 
 Operaciones binarias enteros:
-exp_mat → exp_mat + exp_mat | exp_mat - exp_mat | exp_mat * exp_mat | exp_mat / exp_mat | 
-		exp_mat ^ exp_mat | exp_mat % exp_mat | exp_mat++ | exp_mat-- | num | FuncInt | VARIABLE
-		(exp_mat) + (exp_mat) | (exp_mat) - (exp_mat) | (exp_mat) * (exp_mat) | (exp_mat) / (exp_mat) | 
-		(exp_mat ^ (exp_mat) | (exp_mat % (exp_mat) | (exp_mat)++ | (exp_mat)-- 
-
+exp_mat → parentesisMat + parentesisMat | parentesisMat - parentesisMat | parentesisMat * parentesisMat | parentesisMat / parentesisMat | parentesisMat ^ parentesisMat | parentesisMat % parentesisMat | parentesisMat++ | parentesisMat-- | num | FuncInt | VARIABLE
 
 Operaciones con strings
-exp_cadena → exp_cadena + exp_cadena | exp_cadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
+exp_cadena → parentesisCadena + parentesisCadena | parentesisCadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
 
 Registros:
 Reg → {U}
@@ -62,6 +58,11 @@ CADENA → "Var"
 //a = v *= [1,2,3] ? 
 
 Op booleanas
-exp_bool → exp == exp | exp != exp | exp_mat > exp_mat | exp_mat < exp_mat 
-			| NOT exp_bool | exp_bool AND exp_bool | exp_bool OR exp_bool | True | False | VARIABLE
-exp -> exp_bool | exp_mat | CADENA
+exp_bool → parentesisBool == parentesisBool | parentesisBool != parentesisBool | parentesisMat != parentesisMat | parentesisMat 		== parentesisMat | parentesisCadena == parentesisCadena | parentesisCadena != parentesisCadena  
+	 	| parentesisMat > parentesisMat | parentesisMat < parentesisMat
+	 	| NOT parentesisBool | parentesisBool AND parentesisBool | parentesisBool OR parentesisBool
+	 	| VARIABLE | True | False 
+
+parentesisBool -> (exp_bool) | exp_bool
+parentesisMat -> (exp_mat) | exp_mat
+parentesisCadena -> (exp_cadena) | exp_cadena
