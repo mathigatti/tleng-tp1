@@ -283,12 +283,12 @@ def p_base_expr(p):
 def p_base_valor(p):
     'base : NUMBER'
     #chequear que el valor sea numerico
-    p[0] =  toStrIfInt(p[2]) 
+    p[0] =  toStrIfInt(p[1]) 
 
 def p_exp_valor(p):
     'exp : NUMBER'
     #chequear que el valor sea numerico
-    p[0] =  toStrIfInt(p[2]) 
+    p[0] =  toStrIfInt(p[1]) 
 
 def p_exp__expr(p):
     'exp : LPAREN exp_mat RPAREN'
