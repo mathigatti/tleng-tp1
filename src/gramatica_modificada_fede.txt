@@ -26,38 +26,34 @@ NUMBER -> Signonum
 Signo -> + | - | lanbda 
 ListaValores -> ,Valores ListaValores
 
-Operaciones binarias enteros:
-exp_mat → parentesisMat + parentesisMat | parentesisMat - parentesisMat | parentesisMat * parentesisMat | parentesisMat / parentesisMat | parentesisMat ^ parentesisMat | parentesisMat % parentesisMat | parentesisMat++ | parentesisMat-- | num | FuncInt | VARIABLE | ++parentesisMat | --parentesisMat
-
-Operaciones con strings
-exp_cadena → parentesisCadena + parentesisCadena | parentesisCadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
-
 Registros:
 Reg → {U}
 U -> CADENA: Valores, U | CADENA: Valores
-
 
 Asignaciones:
 var_asign → VARIABLE *= Valores | VARIABLE /= Valores | VARIABLE | VARIABLE += Valores |  VARIABLE -= Valores
  			| VARIABLE = Valores 
 
-Asig → VARIABLE = Valores  | VARIABLE  = [lista_valores] 
-lista_valores -> Valores,lista_valores| Valores
 VARIABLE → aVar
 Var = aVar | lanbda 
 // este es el token , dsp hay q pedirle el val a "a" y que te de las letras 
 CADENA → "Var"
 // una cadena de un string tiene q tener siempre comillas adelante y atras 
 
-
-// (para generar a = b += 1)
-//a = v *= [1,2,3] ? 
+---------------------------------------------------------------------------------------------------------------------------------
 
 Op booleanas
 exp_bool → parentesisBool == parentesisBool | parentesisBool != parentesisBool | parentesisMat != parentesisMat | parentesisMat 		== parentesisMat | parentesisCadena == parentesisCadena | parentesisCadena != parentesisCadena  
 	 	| parentesisMat > parentesisMat | parentesisMat < parentesisMat
 	 	| NOT parentesisBool | parentesisBool AND parentesisBool | parentesisBool OR parentesisBool
 	 	| VARIABLE | True | False 
+
+Operaciones con strings
+exp_cadena → parentesisCadena + parentesisCadena | parentesisCadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
+
+Operaciones binarias enteros:
+exp_mat → parentesisMat + parentesisMat | parentesisMat - parentesisMat | parentesisMat * parentesisMat | parentesisMat / parentesisMat | parentesisMat ^ parentesisMat | parentesisMat % parentesisMat | parentesisMat++ | parentesisMat-- | num | FuncInt | VARIABLE | ++parentesisMat | --parentesisMat
+
 
 parentesisBool -> (exp_bool) | exp_bool
 parentesisMat -> (exp_mat) | exp_mat
