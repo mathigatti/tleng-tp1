@@ -200,11 +200,11 @@ def p_var_asig_pp_base(p):
 
 def p_var_asig_multipl(p):
     'var_asig : VARIABLE MULTIPL valores'
-    p[0] = p[1] + '*' + p[3]
+    p[0] = p[1] + '=*' + p[3]
 
 def p_var_asig_dividi(p):
     'var_asig : VARIABLE DIVIDI valores'
-    p[0] = p[1] + '/' + p[3]
+    p[0] = p[1] + '=/' + p[3]
 
 def p_var_asig_sigual(p):
     'var_asig : VARIABLE'
