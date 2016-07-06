@@ -340,6 +340,10 @@ def p_bool_expr_term(p):
     'exp_bool : term_bool'
     p[0] = p[1] 
 
+def p_bool_expr_not_term(p):
+    'exp_bool : NOT term_bool'
+    p[0] = 'not ' +  p[2] 
+
 def p_term_bool_paren(p):
     'term_bool : LPAREN exp_bool RPAREN'
     p[0] = '(' + p[2] + ')'
