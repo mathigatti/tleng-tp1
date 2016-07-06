@@ -141,9 +141,9 @@ def p_valores_exp_cadena(p):
     'valores : exp_cadena'
     p[0] = p[1]
 
-def p_valores_variables(p):
-    'valores : VARIABLE'
-    p[0] = p[1]
+#def p_valores_variables(p):
+#    'valores : VARIABLE'
+#    p[0] = p[1]
 
 def p_valores_exp_arreglo(p):
     'valores : exp_arreglo'
@@ -328,6 +328,11 @@ def p_base_valor(p):
     #chequear que el valor sea numerico
     p[0] =  toStrIfInt(p[1]) 
 
+def p_base_var(p):
+    'base : VARIABLE'
+    #chequear que el valor sea numerico
+    p[0] =  p[1] 
+
 def p_sigexp_m(p):
     'sigexp : MINUS exp'
     p[0] = '-' + p[2]
@@ -335,6 +340,11 @@ def p_sigexp_m(p):
 def p_sigexp_exp(p):
     'sigexp : exp'
     p[0] = toStrIfInt(p[1])
+
+def p_exp_var(p):
+    'exp : VARIABLE'
+    #chequear que el valor sea numerico
+    p[0] =  p[1] 
 
 def p_exp_valor(p):
     'exp : NUMBER'
@@ -403,6 +413,10 @@ def p_bool_expr_not_term(p):
 def p_term_bool_paren(p):
     'term_bool : LPAREN exp_bool RPAREN'
     p[0] = '(' + p[2] + ')'
+
+def p_term_bool_var(p):
+    'term_bool : VARIABLE'
+    p[0] = str(p[1])
 
 def p_term_bool_bool(p):
     'term_bool : BOOL'
