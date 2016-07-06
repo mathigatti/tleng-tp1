@@ -17,11 +17,9 @@ reserved = {
 	'print':'PRINT',
 	'multiplicacionEscalar':'MULTIPLICACIONESCALAR',
 	'colineales':'COLINEALES',
-	'true':'TRUE',
-	'false':'FALSE',
 	'and':'AND',
 	'or':'OR',
-	'NOT':'not',
+	'not':'NOT',
 
 }
 
@@ -78,7 +76,6 @@ def t_NEWLINE(token):
   token.lexer.lineno += len(token.value)
 
 
-
 t_IGUAL = r"=="
 t_DISTINTO = r"\!="
 t_AGREGAR = r"\+="
@@ -111,13 +108,9 @@ t_COMENTARIO = r"\#([a-z]|[A-Z]|\_|[ \t]|[0-9]|\=|\;|\,|\+|\*|\%|\#|\$|\/|\(|\)|
 
 t_CADENA = r"\" ([a-z]|[A-Z]|\_|[ \t]|[0-9]|!)* \" "
 
-"""def t_BOOL(token) : 
-    r"true | false"
-    atributos = {}
-    atributos["type"] = "bool"
-    atributos["value"] = token.value
-    token.value = atributos
-    return token"""
+def t_BOOL(token) : 
+    r"true | false | FALSE | TRUE"
+    return token
 
 def t_VARIABLE(token):
 	r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])*"

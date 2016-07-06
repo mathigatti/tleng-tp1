@@ -55,16 +55,16 @@ def p_control_ifelse(p):
     'control : ifelse'
     p[0] = p[1]
 
-def p_control_if(p):
-    'control : if'
-    p[0] = p[1]
+#def p_control_if(p):
+#    'control : if'
+#    p[0] = p[1]
 
 def p_control_loop(p):
     'control : loop'
     p[0] = p[1]
 
-def p_loop_while(p):
-    'loop : WHILE LPAREN exp_bool RPAREN bloque '
+#def p_loop_while(p):
+#    'loop : WHILE LPAREN exp_bool RPAREN bloque '
 def p_loop_do(p):
     'loop : DO bloque WHILE LPAREN exp_bool RPAREN PUNTOYCOMA'
     p[0] = 'DO\n' + find_and_replace(p[2]) + 'while(' + p[5] + ');' +')\n'
@@ -77,9 +77,9 @@ def p_ifelse(p):
     'ifelse : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
     p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n else' + find_and_replace(p[8]) + '\n'
 
-def p_if(p):
-    'if : IF LPAREN exp_bool RPAREN THEN bloque'
-    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n'
+#def p_if(p):
+#    'if : IF LPAREN exp_bool RPAREN THEN bloque'
+#    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n'
 
 
 def p_bloque_s(p):
@@ -116,7 +116,7 @@ def p_vec_val(p):
     'vec_val : VARIABLE vec'
 def p_var_y_vals_var(p):
     'var_y_vals : VARIABLE'
-    p[0] = 'variable'
+    p[0] = p[1]
 
 
 def p_var_y_vals_vec_val(p):
@@ -131,7 +131,7 @@ def p_valores_exp_string(p):
 
 def p_valores_exp_int(p):
     'valores : NUMBER'
-    p[0] = 'numero'
+    p[0] = str(p[1])
 
 def p_valores_exp_bool(p):
     'valores : exp_bool'
@@ -238,14 +238,10 @@ def p_asig_var_var(p):
     p[0] = 'variable' + '=' + 'variable'
 
 #Producciones de operaciones booleanas
-def p_exp_bool_true(p):
-    'exp_bool : TRUE'
-    p[0] = 'true'
-
-def p_exp_bool_false(p):
-    'exp_bool : FALSE'
-    p[0] = 'false'
-
+def p_exp_bool_bool(p):
+    'exp_bool : BOOL'
+    p[0] = str(p[1])
+    
 def p_error(token):
     message = "[Syntax error]"
     if token is not None:
