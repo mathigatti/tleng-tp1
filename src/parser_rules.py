@@ -60,12 +60,15 @@ def p_sentencia_func(p):
 def p_control_ifelse(p):
     'control : ifelse'
     p[0] = p[1]
+
 def p_control_loop(p):
     'control : loop'
     p[0] = p[1]
+
 def p_loop_while(p):
     'loop : WHILE LPAREN exp_bool RPAREN bloque'
     p[0] = 'while('+ p[3] + ')\n' + find_and_replace(p[5])
+
 def p_loop_do(p):
     'loop : DO bloque WHILE LPAREN exp_bool RPAREN PUNTOYCOMA'
     p[0] = 'do\n' + find_and_replace(p[2]) + 'while(' + p[5] + ');' +')\n'
@@ -89,13 +92,16 @@ def p_bloque_s(p):
 def p_bloque_p(p):
     'bloque : LLAVEIZQ p LLAVEDER'
     p[0] = '{' + p[2] + '}'
+
 #Producciones para funciones
 def p_funcion_ret(p):
     'funcion : func_ret'
     p[0] = p[1]
+
 def p_funcion_void(p):
     'funcion : func_void '
     p[0] = p[1]
+
 def p_func_void(p):
     'func_void : PRINT LPAREN valores RPAREN'
     p[0] = 'print(' + p[3] + ')'
@@ -103,6 +109,7 @@ def p_func_void(p):
 def p_funcion_ret_int(p):
     'func_ret : func_ret_int'
     p[0] = p[1]
+
 def p_funcion_ret_int_mult(p):
     'func_ret_int : MULTIPLICACIONESCALAR LPAREN VARIABLE COMA exp_mat COMA VARIABLE RPAREN'
     #Chequear que primer parametro es vector
@@ -244,16 +251,7 @@ def p_operador_ternarioret_bool(p):
 
 def p_operador_ternarioret_mat(p):
     'operador_ternario : LPAREN exp_bool RPAREN INTERROGACION exp_mat DOSPUNTOS exp_mat'
-    p[0] = '(' + p[2] + ')? ' + p[5] + ':' + p[7] 
-    if isinstance( p[5], int ):
-        p[0] += str(p[5])
-    else:
-        p[0] += p[5]
-    p[0] += ':'
-    if isinstance( p[7], int ):
-        p[0] += str(p[7])
-    else:
-        p[0] += p[7]
+    p[0] = '(' + p[2] + ')? ' + toStrIfInt(p[5]) + ':' + p[7] 
 
 def p_operador_ternarioret_cadena(p):
     'operador_ternario : LPAREN exp_cadena RPAREN INTERROGACION exp_bool DOSPUNTOS exp_cadena'
