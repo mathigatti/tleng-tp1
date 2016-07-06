@@ -54,10 +54,13 @@ def p_loop_for(p):
     'loop : FOR LPAREN var_asig PUNTOYCOMA exp_bool PUNTOYCOMA var_ops RPAREN bloque'
     p[0] = 'for(' + p[3] + ';' + p[5] + ';' + p[7] +')\n    ' + find_and_replace(p[9]) + '\n'
 
-def p_ifelse(p):
-    'ifelse : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
+def p_ifelse(p):  # no iria el if sin el else aca tmb ?? 
+    'ifelse : IF LPAREN exp_bool RPAREN bloque ELSE bloque'
     p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n else' + find_and_replace(p[8]) + '\n'
 
+def p_ifSinElse(p):
+    'ifelse : IF LPAREN exp_bool RPAREN bloque'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n'
 
 def p_bloque_s(p):
     'bloque : sentencia'
@@ -66,7 +69,7 @@ def p_bloque_s(p):
 def p_bloque_p(p):
     'bloque : LLAVEIZQ p LLAVEDER'
     p[0] = '{' + p[2] + '}'
-#Produccion de Comentario
+#Produccion de Comentario , no hay q poner el # ?? 
     'comentario : COMENTARIO '
     p[0] = p[1]
 #Producciones para funciones
