@@ -16,7 +16,7 @@ class ParserException(Exception):
 #Producciones Generales
 def p_sentencia_g_s_coment(sentencia):
     'g : sentencia COMENTARIO'
-    sentencia[0] = sentencia[1] + '\ncomment\n'
+    sentencia[0] = sentencia[1] + '\n'  + sentencia[2] + '\n'
 
 def p_sentencia_g_s(sentencia):
     'g : sentencia'
@@ -28,7 +28,7 @@ def p_sentencia_g_ctrl(sentencia):
 
 def p_sentencia_g_ctrl_coment(sentencia):
     'g : control COMENTARIO'
-    sentencia[0] = sentencia[1] + '\ncomment\n'
+    sentencia[0] = sentencia[1] + '\n'  + sentencia[2] + '\n'
 
 def p_sentencia_g_s_list(sentencia):
     'g : sentencia g'
