@@ -1,0 +1,98 @@
+\begin{verbatim}
+<programa>      :   <sentencia> <programa'>   
+                |   <control> <programa'>   
+                |   COMENTARIO <programa>   
+<programa'>     :   <sentencia> <programa'>   
+                |   <control> <programa'>   
+                |   COMENTARIO <programa'>   
+                |   <empty>
+<sentencia>     :   <var_asig> ';'
+                |   <funcion> ';'
+<control>       :   <ifelse>
+                |   <loop>
+<loop>          :   'while' '(' <exp_bool> ')' <bloque>
+                |   'do' <bloque> 'while' '(' exp_bool ')' ';' 
+                |   'for' '(' <var_asig> ',' <exp_bool> ',' exp_mat ')' <bloque>
+<ifelse>        :   'if' '(' <exp_bool> ')' <bloque>
+                |   'if' '(' <exp_bool> ')' <bloque> else <bloque>
+<bloque>        :   <sentencia>
+                |   '{' <programa> '}'
+<funcion>       :   func_ret
+                |   func_void
+<func_void>     :   'print' '(' <valores> ')'
+<func_ret>      :   <func_ret_int>
+                |   'capitalizar' '(' CADENA ')'
+                |   'colineales' '(' VARIABLE ',' VARIABLE')'
+<func_ret_int>  :   'multiplicarEscalar' '(' VARIABLE ',' <exp_mat> ',' VARIABLE ')'
+                |   'length' '(' VARIABLE ')'
+<valores>       :   <exp_mat>
+                |   <exp_bool>
+                |   <exp_cadena>
+                |   <exp_arreglo>
+                |   <registro>
+<exp_arreglo>   :   '[' <valores> <lista_arreglo> ']'
+                |   '['']'
+                |   'multiplicacionEscalar' '(' VARIABLE ',' 
+                    <exp_mat> ',' VARIABLE ')'
+<registro>      :   '{' <reg_item> '}'
+<reg_item>      :   CADENA ':' <valores> ',' <reg_item>
+                |   CADENA ':' <valores> 
+<var_asig>      :   VARIABLE '++'
+                |   '++' VARIABLE
+                |   VARIABLE '--'
+                |   '--' VARIABLE
+                |   VARIABLE '*=' <valores>
+                |   VARIABLE '/=' <valores>
+                |   VARIABLE ????
+                |   VARIABLE '+=' <valores>
+                |   VARIABLE '-=' <valores>
+                |   VARIABLE '=' <valores>
+                |   VARIABLE '[' NUMBER ']' '=' <valores>
+                |   VARIABLE '[' CADENA ']' '=' <valores>
+                |   VARIABLE '.' VARIABLE '=' <valores>
+                |   VARIABLE '=' <op_ternario>
+<op_ternario>   :   '(' <exp_bool> ')' '?' <exp_bool> ':' <exp_bool>
+                |   '(' <exp_bool> ')' '?' <exp_mat> ':' <exp_mat>
+                |   '(' <exp_bool> ')' '?' <exp_cadena> ':' <exp_cadena>
+<exp_mat>       :   exp_mat '+' <term>
+                |   exp_mat '-' <term>
+                |   <term>
+<term>          :   <term>  '*' <factor>
+                |   <term>  '/' <factor>
+                |   <term>  '%' <factor>
+                |   <factor>
+<factor>        :   <base> '^' <sigexp>
+                |   '-' <base> ?????
+                |   <base>
+<base>          :   '(' <exp_mat> ')'
+                |   NUMBER
+                |   VARIABLE
+<sigexp>        :   '-' <exp>
+                |   <exp>
+<exp>           :   VARIABLE
+                |   NUMBER
+                |   '(' <exp_mat> ')'
+<exp_cadena>    :   <exp_cadena> '+' <term_cadena>
+                |   <term_cadena> 
+<term_cadena>   :   CADENA
+                |   'capitalizar' '(' CADENA ')'
+                |   '(' exp_cadena ')'
+<bool_operator> :   'and'
+                |   'or'
+                |   '=='
+<exp_bool>      :   <exp_bool> <bool_operator>  <term_bool>
+                |   <comparacion>
+                |   <term_bool>
+                |   'not' term_bool
+<term_bool>     :   VARIABLE
+                |   BOOL
+                |   '(' <exp_bool> ')'
+<op_comp>       :   '=='
+                |   '>'
+                |   '<'
+                |   '!='
+<comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
+                |   <exp_mat>   <op_comp>   <exp_mat>
+
+    
+\end{verbatim}
