@@ -257,12 +257,16 @@ def p_exp_mat_term(p):
     p[0] = toStrIfInt(p[1])
 
 def p_term_tmf(p):
-    'term : term MULTIPL factor'
+    'term : term TIMES factor'
     p[0] = p[1] + ' * ' + toStrIfInt(p[3])
 
 def p_term_tdf(p):
     'term : term DIV factor'
     p[0] = p[1] + ' / ' + toStrIfInt(p[3])
+
+def p_term_tmodf(p):
+    'term : term MODULO factor'
+    p[0] = p[1] + ' % ' + toStrIfInt(p[3])
 
 def p_term_factor(p):
     'term : factor'
@@ -365,6 +369,10 @@ def p_bool_expr_oper(p):
     'exp_bool : exp_bool bool_operator term_bool'
     p[0] = p[1] + p[2] + p[3]
 
+def p_bool_expr_comparacion(p):
+    'exp_bool : comparacion'
+    p[0] = p[1] 
+
 def p_bool_expr_term(p):
     'exp_bool : term_bool'
     p[0] = p[1] 
@@ -380,7 +388,31 @@ def p_term_bool_paren(p):
 def p_term_bool_bool(p):
     'term_bool : BOOL'
     p[0] = str(p[1])
-    
+
+def p_operador_comparacion_igual(p):
+    'comparacion : IGUAL'
+    p[0] = ' == '
+
+def p_operador_comparacion_mayor(p):
+    'operador_comp : MAYOR'
+    p[0] = ' > '
+
+def p_operador_comparacion_menor(p):
+    'operador_comp : MENOR'
+    p[0] = ' < '
+
+def p_operador_comparacion_dif(p):
+    'operador_comp : DISTINTO'
+    p[0] = ' != '
+
+def p_comparcion_cadenas(p):
+    'comparacion : exp_cadena operador_comp exp_cadena'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_exp_mat(p):
+    'comparacion : exp_mat operador_comp exp_mat'
+    p[0] = toStrIfInt(p[1]) + p[2] + toStrIfInt(p[3])
+
 def p_error(token):
     message = "[Syntax error]"
     if token is not None:
