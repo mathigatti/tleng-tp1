@@ -28,13 +28,13 @@ ListaValores -> ,Valores ListaValores
 
 Operaciones binarias enteros:
 exp_mat → exp_mat + exp_mat | exp_mat - exp_mat | exp_mat * exp_mat | exp_mat / exp_mat | 
-		exp_mat ^ exp_mat | exp_mat % exp_mat | exp_mat++ | exp_mat-- | num | FuncInt
+		exp_mat ^ exp_mat | exp_mat % exp_mat | exp_mat++ | exp_mat-- | num | FuncInt | VARIABLE
 		(exp_mat) + (exp_mat) | (exp_mat) - (exp_mat) | (exp_mat) * (exp_mat) | (exp_mat) / (exp_mat) | 
-		(exp_mat ^ (exp_mat) | (exp_mat % (exp_mat) | (exp_mat)++ | (exp_mat)-- |
-		
+		(exp_mat ^ (exp_mat) | (exp_mat % (exp_mat) | (exp_mat)++ | (exp_mat)-- 
+
 
 Operaciones con strings
-exp_cadena → exp_cadena + exp_cadena | exp_cadena | CADENA | capitalizar(exp_cadena) 
+exp_cadena → exp_cadena + exp_cadena | exp_cadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
 
 Registros:
 Reg → {U}
@@ -61,8 +61,7 @@ CADENA → "Var"
 // (para generar a = b += 1)
 //a = v *= [1,2,3] ? 
 
-Lo de abajo no esta implementado
 Op booleanas
 exp_bool → exp == exp | exp != exp | exp_mat > exp_mat | exp_mat < exp_mat 
-			| NOT exp_bool | exp_bool AND exp_bool | exp_bool OR exp_bool | True | False 
+			| NOT exp_bool | exp_bool AND exp_bool | exp_bool OR exp_bool | True | False | VARIABLE
 exp -> exp_bool | exp_mat | CADENA
