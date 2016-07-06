@@ -34,7 +34,8 @@ U -> CADENA: Valores, U | CADENA: Valores
 
 Asignaciones:
 var_asign → VARIABLE *= Valores | VARIABLE /= Valores | VARIABLE | VARIABLE += Valores |  VARIABLE -= Valores
- 			| VARIABLE = Valores | VARIABLE = OperadorTernario
+ 			| VARIABLE = Valores | VARIABLE = OperadorTernario | VARIABLE.CADENA = Valores | VARIABLE[num] = Valores 
+ 			| VARIABLE[CADENA] = Valores
 
 OperadorTernario -> (exp_bool)? exp_bool:exp_bool; | (exp_bool)? exp_mat:exp_mat; | (exp_bool)? exp_cadena:exp_cadena;
 
