@@ -48,6 +48,7 @@ tokens = [
 
 #
    'INTERROGACION',
+   'PUNTO',
    'DOSPUNTOS',
    'PUNTOYCOMA',
    'COMA',
@@ -99,6 +100,7 @@ t_LCORCHETE = r"\]"
 t_LLAVEIZQ = r"\{"
 t_LLAVEDER = r"\}"
 t_INTERROGACION = r"\?"
+t_PUNTO = r"\."
 t_DOSPUNTOS = r"\:"
 t_PUNTOYCOMA = r"\;"
 t_COMA = r"\,"
