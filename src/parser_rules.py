@@ -269,12 +269,32 @@ def p_term_factor(p):
     p[0] = toStrIfInt(p[1])
 
 def p_factor_base_exp(p):
-    'factor : base ELEVADO exp'
-    p[0] = p[1] + ' ^ ' + toStrIfInt(p[3])
+    'factor : base ELEVADO sigexp'
+    p[0] = p[1] + ' ^' + toStrIfInt(p[3])
 
 def p_factor_base(p):
     'factor : base '
     p[0] = toStrIfInt(p[1])
+
+def p_factor_m_base(p):
+    'factor : MINUS base '
+    p[0] = '-' + toStrIfInt(p[2])
+
+def p_factor_base_mm(p):
+    'factor : base LESSLESS'
+    p[0] = toStrIfInt(p[1]) + '--'
+
+def p_factor_mm_base(p):
+    'factor : LESSLESS base '
+    p[0] = '--' + toStrIfInt(p[2])
+
+def p_factor_base_pp(p):
+    'factor : base MASMAS'
+    p[0] = toStrIfInt(p[1]) + '++'
+
+def p_factor_pp_base(p):
+    'factor : MASMAS base '
+    p[0] = '++' + toStrIfInt(p[2])
 
 def p_base_expr(p):
     'base : LPAREN exp_mat RPAREN'
@@ -285,6 +305,14 @@ def p_base_valor(p):
     #chequear que el valor sea numerico
     p[0] =  toStrIfInt(p[1]) 
 
+def p_sigexp_m(p):
+    'sigexp : MINUS exp'
+    p[0] = '-' + p[2]
+
+def p_sigexp_exp(p):
+    'sigexp : exp'
+    p[0] = toStrIfInt(p[1])
+
 def p_exp_valor(p):
     'exp : NUMBER'
     #chequear que el valor sea numerico
@@ -293,6 +321,7 @@ def p_exp_valor(p):
 def p_exp__expr(p):
     'exp : LPAREN exp_mat RPAREN'
     p[0] = '(' + toStrIfInt(p[2]) + ')'
+
 
 
 #Producciones operaciones con Strings
