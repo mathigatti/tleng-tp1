@@ -1,10 +1,9 @@
-
 Gramática:
 P → S P | Ctrl P | Comentario P | lambda
-S →  var_pos ; | Func; | var_asign;
+S →  Func; | var_asign;
 Ctrl →  IFE | Loop
 
-Loop → while(exp_bool) Bloque | do Bloque while(exp_bool); | for(var_asig; exp_bool; var_pos)Bloque
+Loop → while(exp_bool) Bloque | do Bloque while(exp_bool); | for(var_asig; exp_bool; var_asig)Bloque
 
 Control:
 IFE→ if(exp_bool) Bloque else Bloque 
@@ -20,14 +19,15 @@ FuncInt → multiplicacionEscalar(Vec, exp_mat, var) | length(var)
 FuncVoid → print(valores) 
 
 Vectores  y variables
-Valores → exp_mat | exp_bool | exp_cadena | VARIABLE |  exp_arreglo  | var_pos | Reg | FuncReturn
+Valores → exp_mat | exp_bool | exp_cadena | VARIABLE |  exp_arreglo  | Reg | FuncReturn
 // q es var_pos ?? 
 exp_arreglo -> [Valores ListaValores] | []
-NUMBER -> num
+NUMBER -> Signonum
+Signo -> + | - | lanbda 
 ListaValores -> ,Valores ListaValores
 
 Operaciones binarias enteros:
-exp_mat → parentesisMat + parentesisMat | parentesisMat - parentesisMat | parentesisMat * parentesisMat | parentesisMat / parentesisMat | parentesisMat ^ parentesisMat | parentesisMat % parentesisMat | parentesisMat++ | parentesisMat-- | num | FuncInt | VARIABLE
+exp_mat → parentesisMat + parentesisMat | parentesisMat - parentesisMat | parentesisMat * parentesisMat | parentesisMat / parentesisMat | parentesisMat ^ parentesisMat | parentesisMat % parentesisMat | parentesisMat++ | parentesisMat-- | num | FuncInt | VARIABLE | ++parentesisMat | --parentesisMat
 
 Operaciones con strings
 exp_cadena → parentesisCadena + parentesisCadena | parentesisCadena | CADENA | capitalizar(exp_cadena) | VARIABLE 
@@ -36,10 +36,6 @@ Registros:
 Reg → {U}
 U -> CADENA: Valores, U | CADENA: Valores
 
-
-Operadores de variables:
-var_pos → --SMM | ++SMM | SMM
-SMM → exp_mat++ | exp_mat--
 
 Asignaciones:
 var_asign → VARIABLE *= Valores | VARIABLE /= Valores | VARIABLE | VARIABLE += Valores |  VARIABLE -= Valores
