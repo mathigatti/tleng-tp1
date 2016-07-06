@@ -240,8 +240,8 @@ def p_asig_var_var(p):
 #Producciones de operaciones booleanas
 def p_exp_bool_bool(p):
     'exp_bool : BOOL'
-    p[0] = str(p[1])
-    
+    p[0] = p[1]
+
 def p_error(token):
     message = "[Syntax error]"
     if token is not None:
