@@ -25,11 +25,11 @@ def p_programa_s_pp(p):
     p[0] = p[1] + '\n'  + p[2] + '\n'
 
 def p_programa_coment_pp(p):
-    'p : COMENTARIO pp'
+    'p : COMENTARIO p'
     p[0] = p[1] + '\n'  + p[2] + '\n'
 
 def p_programa_ctl_p(p):
-    'p : control p'
+    'p : control pp'
     p[0] = p[1] + '\n'  + p[2] + '\n'
 
 def p_pp_s_pp(p):
