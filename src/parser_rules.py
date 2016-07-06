@@ -89,9 +89,6 @@ def p_bloque_s(p):
 def p_bloque_p(p):
     'bloque : LLAVEIZQ p LLAVEDER'
     p[0] = '{' + p[2] + '}'
-#Produccion de Comentario
-    'comentario : COMENTARIO '
-    p[0] = p[1]
 #Producciones para funciones
 def p_funcion_ret(p):
     'funcion : func_ret'
