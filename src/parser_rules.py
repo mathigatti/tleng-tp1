@@ -78,6 +78,9 @@ def p_ifelse(p):
     'ifelse : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
     p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n else' + find_and_replace(p[8]) + '\n'
 
+def p_ifSinElse(p):
+    'ifelse : IF LPAREN exp_bool RPAREN bloque'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n'
 
 def p_bloque_s(p):
     'bloque : sentencia'
