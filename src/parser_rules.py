@@ -20,6 +20,7 @@ class ParserException(Exception):
         pass
 
 #Producciones Generales
+
 def p_programa_s_pp(p):
     'p : sentencia pp'
     p[0] = p[1] + '\n'  + p[2] + '\n'
@@ -41,13 +42,13 @@ def p_pp_ctl_pp(p):
     p[0] = p[1] + '\n'  + p[2] + '\n'
 
 def p_pp_comentario_p(p):
-    'pp : control p'
+    'pp : control pp'
     p[0] = p[1] + '\n'  + p[2] + '\n'
 
-def p_pp_lamda(p):
-    'pp : '
-    p[0] = ''
-
+def p_pp_empty(p):
+    'pp :'
+    p[0] ='' 
+     
 def p_sentencia_var_asig(p):
     'sentencia : var_asig PUNTOYCOMA'
     p[0] = p[1] + ';'
@@ -79,11 +80,11 @@ def p_loop_for(p):
 
 def p_ifelse(p):
     'ifelse : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
-    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n else' + find_and_replace(p[8]) + '\n'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[5]) + '\n else' + find_and_replace(p[8]) + '\n'
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN exp_bool RPAREN bloque'
-    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[6]) + '\n'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[5]) + '\n'
 
 def p_bloque_s(p):
     'bloque : sentencia'
