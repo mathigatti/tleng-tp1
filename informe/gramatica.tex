@@ -14,12 +14,12 @@
 <control>       :   <ifelse>
                 |   <loop>
 
-<loop>          :   'while' '(' <exp_bool> ')' <bloque>
-                |   'do' <bloque> 'while' '(' exp_bool ')' ';' 
-                |   'for' '(' <var_asig> ',' <exp_bool> ',' exp_arit ')' <bloque>
+<loop>          :   'while' '(' <valores> ')' <bloque>
+                |   'do' <bloque> 'while' '(' <valores> ')' ';' 
+                |   'for' '(' <var_asig> ',' <valores> ',' <exp_arit> ')' <bloque>
 
-<ifelse>        :   'if' '(' <exp_bool> ')' <bloque>
-                |   'if' '(' <exp_bool> ')' <bloque> else <bloque>
+<ifelse>        :   'if' '(' <valores> ')' <bloque>
+                |   'if' '(' <valores> ')' <bloque> else <bloque>
 
 <bloque>        :   <sentencia>
                 |   '{' <programa> '}'
@@ -30,20 +30,19 @@
 <func_void>     :   'print' '(' <valores> ')'
 
 <func_ret>      :   <func_ret_int>
-                |   <func_cadena>
-                |   <func_bool>
+                |   <func_ret_cadena>
+                |   <func_ret_bool>
+                |   <func_ret_arreglo>
 
-//En func bool podiramos poner menos producciones y validar sintetizando tipos de los atributos.
-//quedaria 'colineales' '(' <valores> ',' <valores> ')'
-<func_bool>     :   'colineales' '(' VARIABLE ',' VARIABLE ')'
-                |   'colineales' '(' <exp_arreglo> ',' VARIABLE ')'
-                |   'colineales' '(' VARIABLE ',' <exp_arreglo> ')'
-                |   'colineales' '(' <exp_arreglo> ','  <exp_arreglo> ')'
+<func_ret_bool>     :   'colineales' '(' <valores> ',' <valores> ')'
 
-<func_cadena>   :   'capitalizar' '(' exp_cadena ')'
+<func_ret_cadena>   :   'capitalizar' '(' exp_cadena ')'
+                    |   'capitalizar' '(' VARIABLE ')'
 
-<func_ret_int>  :   'multiplicarEscalar' '(' VARIABLE ',' <exp_arit> ',' VARIABLE ')'
-                |   'length' '(' VARIABLE ')'
+<func_ret_arreglo>  :   'multiplicarEscalar' '(' <valores> ',' <valores> ')'
+                    |   'multiplicarEscalar' '(' <valores> ',' <valores> ',' <valores>')'
+<func_ret_int>  :   'length' '(' valores ')'
+
 
 <valores>       :   <exp_arit>
                 |   <exp_bool>
@@ -53,10 +52,9 @@
                 |   <registro>
                 |   VARIABLE
 
-<exp_arreglo>   :   '[' <valores> <lista_arreglo> ']'
+<exp_arreglo>   :   '[' <valores> <exp_arreglo> ']'
                 |   '['']'
-                |   'multiplicacionEscalar' '(' VARIABLE ',' 
-                    <exp_arit> ',' VARIABLE ')'
+                |   func_ret_arreglo
 
 <registro>      :   '{' <reg_item> '}'
 
@@ -73,7 +71,6 @@
                 |   VARIABLE '-=' <valores>
                 |   VARIABLE '=' <valores>
                 |   VARIABLE '[' NUMBER ']' '=' <valores>
-                |   VARIABLE '[' CADENA ']' '=' <valores>
                 |   VARIABLE '.' VARIABLE '=' <valores>
                 |   VARIABLE '=' <op_ternario>
 
@@ -89,24 +86,31 @@
                 |   <exp_arit> '+' <suma_var>
                 |   VARIABLE '+' <term>
                 |   <exp_arit> '-' <term>
+                |   <exp_arit> '-' VARIABLE
                 |   VARIABLE '-' <term>
+                |   VARIABLE '-' VARIABLE
                 |   <term>
 
 
 <term>          :   <term>  '*' <factor>
                 |   VARIABLE '*' <factor>
-                |   <suma_var>
                 |   <term> '*' VARIABLE
                 |   <term>  '/' <factor>
                 |   VARIABLE  '/' <factor>
                 |   <term> '/' VARIABLE
+                |   VARIABLE '/' VARIABLE
                 |   <term>  '%' <factor>
                 |   VARIABLE  '%' <factor>
                 |   <term> '%' VARIABLE
+                |   VARIABLE '%' VARIABLE
                 |   <factor>
 
 <factor>        :   <base> '^' <sigexp>
                 |   '-' <base> 
+                |   <base> '++'
+                |   <base> '--'
+                |   '++' <base>
+                |   '--'<base>
                 |   <base>
 
 <base>          :   '(' <exp_arit> ')'
