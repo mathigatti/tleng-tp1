@@ -67,23 +67,23 @@ def p_control_loop(p):
     p[0] = p[1]
 
 def p_loop_while(p):
-    'loop : WHILE LPAREN exp_bool RPAREN bloque'
+    'loop : WHILE LPAREN valores RPAREN bloque'
     p[0] = 'while('+ p[3] + ')\n' + find_and_replace(p[5])
 
 def p_loop_do(p):
-    'loop : DO bloque WHILE LPAREN exp_bool RPAREN PUNTOYCOMA'
+    'loop : DO bloque WHILE LPAREN valores RPAREN PUNTOYCOMA'
     p[0] = 'do\n' + find_and_replace(p[2]) + 'while(' + p[5] + ');' +')\n'
 
 def p_loop_for(p):
-    'loop : FOR LPAREN var_asig PUNTOYCOMA exp_bool PUNTOYCOMA exp_mat RPAREN bloque'
+    'loop : FOR LPAREN var_asig PUNTOYCOMA valores PUNTOYCOMA exp_arit RPAREN bloque'
     p[0] = 'for(' + p[3] + ';' + p[5] + ';' + p[7] +')\n    ' + find_and_replace(p[9]) + '\n'
 
 def p_ifelse(p):
-    'ifelse : IF LPAREN exp_bool RPAREN THEN bloque ELSE bloque'
+    'ifelse : IF LPAREN valores RPAREN THEN bloque ELSE bloque'
     p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[5]) + '\n else' + find_and_replace(p[8]) + '\n'
 
 def p_ifSinElse(p):
-    'ifelse : IF LPAREN exp_bool RPAREN bloque'
+    'ifelse : IF LPAREN valores RPAREN bloque'
     p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[5]) + '\n'
 
 def p_bloque_s(p):
@@ -111,32 +111,47 @@ def p_funcion_ret_int(p):
     'func_ret : func_ret_int'
     p[0] = p[1]
 
-def p_funcion_ret_int_mult(p):
-    'func_ret_int : MULTIPLICACIONESCALAR LPAREN VARIABLE COMA exp_mat COMA VARIABLE RPAREN'
+def p_funcion_ret_cadena(p):
+    'func_ret : func_ret_cadena'
+    p[0] = p[1]
+
+def p_funcion_ret_bool(p):
+    'func_ret : func_ret_bool'
+    p[0] = p[1]
+
+def p_funcion_ret_arreglo(p):
+    'func_ret : func_ret_arreglo'
+    p[0] = p[1]
+
+def p_funcion_ret_arreglo_3(p):
+    'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores COMA valores RPAREN'
     #Chequear que primer parametro es vector
     p[0] = 'multiplicacionEscalar(' + p[3] + ',' + p[5] + ',' + p[7] + ')'
 
+def p_funcion_ret_arreglo_2(p):
+    'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores RPAREN'
+    #Chequear que primer parametro es vector
+    p[0] = 'multiplicacionEscalar(' + p[3] + ',' + p[5] + ')'
+
 def p_funcion_ret_int_length(p):
-    'func_ret_int : LENGTH LPAREN VARIABLE RPAREN'
+    'func_ret_int : LENGTH LPAREN valores RPAREN'
     #Verificar que VARIABLE sea cadena o vector
     p[0] = 'length(' + p[3] + ')'
 
 def p_funcion_ret_string(p):
-    'func_ret : CAPITALIZAR LPAREN exp_cadena RPAREN'
+    'func_ret_cadena : CAPITALIZAR LPAREN valores RPAREN'
+    #validar parametro tipo cadena 
     p[0] = 'capitalizar(' + p[3] + ')'
 
-def p_funcion_ret_bool(p):
-    'func_ret : COLINEALES LPAREN VARIABLE COMA VARIABLE RPAREN '
-    #verificar variables son  vector
+def p_funcion_ret_bool_f(p):
+    'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
+    #verificar valores son  vector
     p[0] = 'colineales(' + p[3] + ',' + p[5] + ')'
 
 #Producciones para vectores y variables
-def p_valores_exp_mat(p):
-    'valores : exp_mat'
-    if isinstance( p[1], int ):
-        p[0] = str(p[1])
-    else:
-        p[0] = p[1]
+def p_valores_exp_arit(p):
+    'valores : exp_arit'
+    p[0] = toStrIfInt(p[1])
 
 def p_valores_exp_bool(p):
     'valores : exp_bool'
@@ -146,10 +161,6 @@ def p_valores_exp_cadena(p):
     'valores : exp_cadena'
     p[0] = p[1]
 
-#def p_valores_variables(p):
-#    'valores : VARIABLE'
-#    p[0] = p[1]
-
 def p_valores_exp_arreglo(p):
     'valores : exp_arreglo'
     p[0] = p[1]
@@ -158,23 +169,26 @@ def p_valores_reg(p):
     'valores : reg'
     p[0] = p[1]
 
+def p_valores_variables(p):
+    'valores : VARIABLE'
+    p[0] = p[1]
+
+def p_valores_suma_var(p):
+    'valores : suma_var'
+    p[0] = p[1]
+
 def p_exp_arreglo(p):
     'exp_arreglo : LCORCHETE valores exp_arreglo RCORCHETE'
-    p[0] = '[' + p[2]  
-    if isinstance( p[2], int ):
-        p[0] += str(p[2])
-    else:
-        p[0] += p[2]
-    p[0] +=' ' + p[3] + ']' 
+    p[0] = '[' + toStrIfInt(p[2]) + ' ' + toStrIfInt(p[3]) + ']'
 
 def p_exp_arreglo_vacio(p):
     'exp_arreglo : LCORCHETE RCORCHETE'
     p[0] = '[]'   
 
 def p_exp_arreglo_mult_escalar(p):
-    'exp_arreglo : MULTIPLICACIONESCALAR LPAREN VARIABLE COMA exp_mat COMA VARIABLE RPAREN'
+    'exp_arreglo : func_ret_arreglo'
     #Chequear que primer parametro es vector
-    p[0] = 'multiplicacionEscalar(' + p[3] + ',' + p[5] + ',' + p[7] + ')'
+    p[0] = p[1]
 
 #Producciones Registros
 def p_reg(p):
@@ -208,11 +222,11 @@ def p_var_asig_pp_base(p):
 
 def p_var_asig_multipl(p):
     'var_asig : VARIABLE MULTIPL valores'
-    p[0] = p[1] + '=*' + p[3]
+    p[0] = p[1] + '=*' + toStrIfInt(p[3])
 
 def p_var_asig_dividi(p):
     'var_asig : VARIABLE DIVIDI valores'
-    p[0] = p[1] + '=/' + p[3]
+    p[0] = p[1] + '=/' + toStrIfInt(p[3])
 
 def p_var_asig_sigual(p):
     'var_asig : VARIABLE'
@@ -220,23 +234,19 @@ def p_var_asig_sigual(p):
 
 def p_var_asig_agregar(p):
     'var_asig : VARIABLE AGREGAR valores'
-    p[0] = p[1] + '+=' + p[3]
+    p[0] = p[1] + '+=' + toStrIfInt(p[3])
 
 def p_var_asig_sacar(p):
     'var_asig : VARIABLE SACAR valores'
-    p[0] = p[1] + '+=' + p[3]
+    p[0] = p[1] + '-=' + toStrIfInt(p[3])
 
 def p_var_asig(p):
     'var_asig : VARIABLE ASIGNACION valores'
-    p[0] = p[1] + '=' + p[3]
+    p[0] = p[1] + '=' + toStrIfInt(p[3])
 
 def p_var_asig_vec1(p):
     'var_asig : VARIABLE LCORCHETE NUMBER RCORCHETE ASIGNACION valores'
     p[0] = p[1] + '[' + str(p[3]) +  '] =' + p[6]
-
-def p_var_asig_vec2(p):
-    'var_asig : VARIABLE LCORCHETE CADENA RCORCHETE ASIGNACION valores'
-    p[0] = p[1] + '[' + p[3] +  '] =' + p[6]
 
 def p_var_asig_reg(p):
     'var_asig : VARIABLE PUNTO VARIABLE ASIGNACION valores'
@@ -251,37 +261,105 @@ def p_operador_ternarioret_bool(p):
     p[0] = '(' + p[2] + ')? ' + p[5] + ':' + p[7] 
 
 def p_operador_ternarioret_mat(p):
-    'operador_ternario : LPAREN exp_bool RPAREN INTERROGACION exp_mat DOSPUNTOS exp_mat'
+    'operador_ternario : LPAREN exp_bool RPAREN INTERROGACION exp_arit DOSPUNTOS exp_arit'
     p[0] = '(' + p[2] + ')? ' + toStrIfInt(p[5]) + ':' + p[7] 
 
 def p_operador_ternarioret_cadena(p):
     'operador_ternario : LPAREN exp_cadena RPAREN INTERROGACION exp_bool DOSPUNTOS exp_cadena'
     p[0] = '(' + p[2] + ')? ' + p[5] + ':' + p[7] 
 
+def p_suma_var_1(p):
+    'suma_var : VARIABLE PLUS VARIABLE'
+    p[0] = p[1] + ' + ' + p[3]
+
+def p_suma_var_2(p):
+    'suma_var : suma_var PLUS VARIABLE'
+    p[0] = p[1] + ' + ' + p[3]
+
 #Producciones operaciones binarias con enteros
-def p_exp_mat_ept(p):
-    'exp_mat : exp_mat PLUS term'
+def p_exp_arit_ept(p):
+    'exp_arit : exp_arit PLUS term'
     p[0] = p[1] + ' + ' + toStrIfInt(p[3])
 
-def p_exp_mat_emt(p):
-    'exp_mat : exp_mat MINUS term'
+def p_exp_arit_epv(p):
+    'exp_arit : exp_arit PLUS VARIABLE'
+    p[0] = p[1] + ' + ' + p[3]
+
+def p_exp_arit_vps(p):
+    'exp_arit : exp_arit PLUS suma_var'
+    p[0] = p[1] + ' + ' + p[3]
+
+def p_exp_arit_vpt(p):
+    'exp_arit : VARIABLE PLUS term'
+    p[0] = p[1] + ' + ' + toStrIfInt(p[3])
+
+def p_exp_arit_emt(p):
+    'exp_arit : exp_arit MINUS term'
     p[0] = p[1] + ' - ' + toStrIfInt(p[3])
 
-def p_exp_mat_term(p):
-    'exp_mat : term'
+def p_exp_arit_emv(p):
+    'exp_arit : exp_arit MINUS VARIABLE'
+    p[0] = p[1] + ' - ' + p[3]
+
+def p_exp_arit_vmt(p):
+    'exp_arit : VARIABLE MINUS term'
+    p[0] = p[1] + ' - ' + toStrIfInt(p[3])
+
+def p_exp_arit_vmv(p):
+    'exp_arit : VARIABLE MINUS VARIABLE'
+    p[0] = p[1] + ' - ' + toStrIfInt(p[3])
+
+def p_exp_arit_term(p):
+    'exp_arit : term'
     p[0] = toStrIfInt(p[1])
 
 def p_term_tmf(p):
     'term : term TIMES factor'
     p[0] = p[1] + ' * ' + toStrIfInt(p[3])
 
+def p_term_tmv(p):
+    'term : term TIMES VARIABLE'
+    p[0] = p[1] + ' * ' + p[3]
+
+def p_term_vmf(p):
+    'term : VARIABLE  TIMES factor'
+    p[0] = p[1] + ' * ' + toStrIfInt(p[3])
+
+def p_term_vmv(p):
+    'term : VARIABLE TIMES VARIABLE'
+    p[0] = p[1] + ' * ' + p[3]
+
 def p_term_tdf(p):
     'term : term DIV factor'
     p[0] = p[1] + ' / ' + toStrIfInt(p[3])
 
+def p_term_tdv(p):
+    'term : term DIV VARIABLE'
+    p[0] = p[1] + ' / ' + p[3]
+
+def p_term_vdf(p):
+    'term : VARIABLE DIV factor'
+    p[0] = p[1] + ' / ' + toStrIfInt(p[3])
+
+def p_term_vdv(p):
+    'term : VARIABLE DIV VARIABLE'
+    p[0] = p[1] + ' / ' + p[3]
+
 def p_term_tmodf(p):
     'term : term MODULO factor'
     p[0] = p[1] + ' % ' + toStrIfInt(p[3])
+
+def p_term_tmodv(p):
+    'term : term MODULO VARIABLE'
+    p[0] = p[1] + ' % ' + p[3]
+
+def p_term_vmodf(p):
+    'term : VARIABLE MODULO factor'
+    p[0] = p[1] + ' % ' + toStrIfInt(p[3])
+
+def p_term_vmodv(p):
+    'term : VARIABLE MODULO VARIABLE'
+    p[0] = p[1] + ' % ' + p[3]
 
 def p_term_factor(p):
     'term : factor'
@@ -316,7 +394,7 @@ def p_factor_pp_base(p):
     p[0] = '++' + toStrIfInt(p[2])
 
 def p_base_expr(p):
-    'base : LPAREN exp_mat RPAREN'
+    'base : LPAREN exp_arit RPAREN'
     p[0] = '(' + toStrIfInt(p[2]) + ')'
 
 def p_base_valor(p):
@@ -324,10 +402,10 @@ def p_base_valor(p):
     #chequear que el valor sea numerico
     p[0] =  toStrIfInt(p[1]) 
 
-def p_base_var(p):
-    'base : VARIABLE'
+#def p_base_var(p):
+#    'base : VARIABLE'
     #chequear que el valor sea numerico
-    p[0] =  p[1] 
+#    p[0] =  p[1] 
 
 def p_sigexp_m(p):
     'sigexp : MINUS exp'
@@ -348,7 +426,7 @@ def p_exp_valor(p):
     p[0] =  toStrIfInt(p[1]) 
 
 def p_exp__expr(p):
-    'exp : LPAREN exp_mat RPAREN'
+    'exp : LPAREN exp_arit RPAREN'
     p[0] = '(' + toStrIfInt(p[2]) + ')'
 
 
@@ -410,9 +488,9 @@ def p_term_bool_paren(p):
     'term_bool : LPAREN exp_bool RPAREN'
     p[0] = '(' + p[2] + ')'
 
-def p_term_bool_var(p):
-    'term_bool : VARIABLE'
-    p[0] = str(p[1])
+#def p_term_bool_var(p):
+#    'term_bool : VARIABLE'
+#    p[0] = str(p[1])
 
 def p_term_bool_bool(p):
     'term_bool : BOOL'
@@ -438,8 +516,8 @@ def p_comparcion_cadenas(p):
     'comparacion : exp_cadena operador_comp exp_cadena'
     p[0] = p[1] + p[2] + p[3]
 
-def p_comparcion_exp_mat(p):
-    'comparacion : exp_mat operador_comp exp_mat'
+def p_comparcion_exp_arit(p):
+    'comparacion : exp_arit operador_comp exp_arit'
     p[0] = toStrIfInt(p[1]) + p[2] + toStrIfInt(p[3])
 
 def p_error(token):
