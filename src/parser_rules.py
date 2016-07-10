@@ -440,6 +440,14 @@ def p_exp_cadena_concat(p):
     'exp_cadena : exp_cadena PLUS term_cadena'
     p[0] = p[1] + ' + ' +  p[3]
 
+def p_exp_cadena_concat_1(p):
+    'exp_cadena : suma_var PLUS term_cadena'
+    p[0] = p[1] + ' + ' +  p[3]
+
+def p_exp_cadena_concat_2(p):
+    'exp_cadena : exp_cadena PLUS suma_var'
+    p[0] = p[1] + ' + ' +  p[3]
+
 def p_exp_cadena_term(p):
     'exp_cadena : term_cadena'
     p[0] = p[1] 
@@ -460,69 +468,78 @@ def p_exp_cadena_parent(p):
 
 
 #Producciones de operaciones booleanas
-def p_bool_operator_and(p):
-    'bool_operator : AND '
-    p[0] = 'and'
+def p_bool_expr_eat(p):
+    'exp_bool : exp_bool AND term_bool'
+    p[0] = p[1] + ' and '  + p[3]
 
-def p_bool_operator_or(p):
-    'bool_operator : OR'
-    p[0] = 'or'
+def p_bool_expr_vaf(p):
+    'exp_bool : VARIABLE AND term_bool'
+    p[0] = p[1] + ' and '  + p[3]
 
-def p_bool_operator_igual(p):
-    'bool_operator : IGUAL'
-    p[0] = '=='
+def p_bool_expr_eav(p):
+    'exp_bool : exp_bool AND VARIABLE'
+    p[0] = p[1] + ' and '  + p[3]
 
-def p_bool_expr_oper(p):
-    'exp_bool : exp_bool bool_operator term_bool'
-    p[0] = p[1] + p[2] + p[3]
-
-def p_bool_expr_comparacion(p):
-    'exp_bool : comparacion'
-    p[0] = p[1] 
+def p_bool_expr_vav(p):
+    'exp_bool : VARIABLE AND VARIABLE'
+    p[0] = p[1] + ' and '  + p[3]
 
 def p_bool_expr_term(p):
     'exp_bool : term_bool'
     p[0] = p[1] 
 
-def p_bool_expr_not_term(p):
-    'exp_bool : NOT term_bool'
-    p[0] = 'not ' +  p[2] 
+def p_bool_tof(p):
+    'term_bool : term_bool OR factor_bool'
+    p[0] = p[1] + ' or ' + p[3]
 
-def p_term_bool_paren(p):
-    'term_bool : LPAREN exp_bool RPAREN'
-    p[0] = '(' + p[2] + ')'
+def p_bool_tov(p):
+    'term_bool : term_bool OR VARIABLE'
+    p[0] = p[1] + ' or ' + p[3]
+
+def p_bool_vof(p):
+    'term_bool : VARIABLE OR factor_bool'
+    p[0] = p[1] + ' or ' + p[3]
+
+def p_bool_vov(p):
+    'term_bool : VARIABLE OR VARIABLE'
+    p[0] = p[1] + ' or ' + p[3]
+
+def p_bool_term_factor(p):
+    'term_bool : factor_bool'
+    p[0] = p[1] 
 
 #def p_term_bool_var(p):
 #    'term_bool : VARIABLE'
 #    p[0] = str(p[1])
 
 def p_term_bool_bool(p):
-    'term_bool : BOOL'
+    'factor_bool : BOOL'
     p[0] = str(p[1])
 
-def p_operador_comparacion_igual(p):
-    'comparacion : IGUAL'
-    p[0] = ' == '
+#def p_bool_expr_comparacion(p):
+#    'factor_bool : comparacion'
+#    p[0] = p[1] 
 
-def p_operador_comparacion_mayor(p):
-    'operador_comp : MAYOR'
-    p[0] = ' > '
+#def p_operador_comparacion_igual(p):
+#    'comparacion : IGUAL'
+#    p[0] = ' == '
 
-def p_operador_comparacion_menor(p):
-    'operador_comp : MENOR'
-    p[0] = ' < '
+#def p_operador_comparacion_mayor(p):
+#    'operador_comp : MAYOR'
+#    p[0] = ' > '
 
-def p_operador_comparacion_dif(p):
-    'operador_comp : DISTINTO'
-    p[0] = ' != '
+#def p_operador_comparacion_menor(p):
+#    'operador_comp : MENOR'
+#    p[0] = ' < '
 
-def p_comparcion_cadenas(p):
-    'comparacion : exp_cadena operador_comp exp_cadena'
-    p[0] = p[1] + p[2] + p[3]
+#def p_operador_comparacion_dif(p):
+#    'operador_comp : DISTINTO'
+#    p[0] = ' != '
 
-def p_comparcion_exp_arit(p):
-    'comparacion : exp_arit operador_comp exp_arit'
-    p[0] = toStrIfInt(p[1]) + p[2] + toStrIfInt(p[3])
+#def p_comparcion_valores(p):
+#    'comparacion : valores operador_comp valores'
+#    p[0] = p[1] + p[2] + p[3]
+
 
 def p_error(token):
     message = "[Syntax error]"

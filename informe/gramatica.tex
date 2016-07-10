@@ -106,7 +106,7 @@
                 |   <factor>
 
 <factor>        :   <base> '^' <sigexp>
-                |   '-' <base> 
+//                |   '-' <base> 
                 |   <base> '++'
                 |   <base> '--'
                 |   '++' <base>
@@ -125,8 +125,8 @@
                 |   '(' <exp_arit> ')'
 
 <exp_cadena>    :   <exp_cadena> '+' <term_cadena>
-                |   VARIABLE '+' <term_cadena>
-                |   <term_cadena> '+' VARIABLE
+                |   <suma_var> '+' <term_cadena>
+                |   <term_cadena> '+' <suma_var>
                 |   <term_cadena> 
 
 <term_cadena>   :   CADENA
@@ -137,16 +137,21 @@
 <bool_operator> :   'and'
                 |   'or'
 
-<exp_bool>      :   <exp_bool> <bool_operator>  <term_bool>
-                |   VARIABLE <bool_operator>  <term_bool>
-                |   VARIABLE <bool_operator>  <term_bool>
-                |   <comparacion>
+<exp_bool>      :   <exp_bool> AND <term_bool>
+                |   VARIABLE AND <term_bool>
+                |   <exp_bool> AND VARIABLE
                 |   <term_bool>
+
+<term_bool>     :   <term_bool> OR <factor_bool>
+                |   VARIABLE OR <factor_bool>
+                |   <term_bool> OR VARIABLE
+                |   VARIABLE OR VARIABLE
                 |   'not' term_bool
 
-<term_bool>     :   BOOL
+<factor_bool>     :   BOOL
                 |   '(' <exp_bool> ')'
                 |   <func_bool>
+                |   <comparacion>
 
 <op_comp>       :   '=='
                 |   '>'
