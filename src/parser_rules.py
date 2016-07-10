@@ -158,7 +158,7 @@ def p_valores_exp_arit(p):
     p[0] = toStrIfInt(p[1])
 
 def p_valores_exp_bool(p):
-    'valores : exp_bool'
+    'valores : comparacion'
     p[0] = p[1]
 
 def p_valores_exp_cadena(p):
@@ -468,6 +468,18 @@ def p_exp_cadena_parent(p):
 
 
 #Producciones de operaciones booleanas
+def p_comparacionarision_igual(p):
+    'comparacion : comparacion IGUAL exp_bool'
+    p[0] = p[1] + ' == ' + p[3]
+
+def p_comparacionarision_dis(p):
+    'comparacion : comparacion DISTINTO exp_bool'
+    p[0] = p[1] + ' != ' + p[3]
+
+def p_comparacionarision_bool_exp(p):
+    'comparacion : exp_bool'
+    p[0] = p[1]  
+
 def p_bool_expr_eat(p):
     'exp_bool : exp_bool AND term_bool'
     p[0] = p[1] + ' and '  + p[3]
@@ -516,29 +528,59 @@ def p_term_bool_bool(p):
     'factor_bool : BOOL'
     p[0] = str(p[1])
 
+def p_term_bool_func(p):
+    'factor_bool : func_ret_bool'
+    p[0] = str(p[1])
+
 #def p_bool_expr_comparacion(p):
 #    'factor_bool : comparacion'
 #    p[0] = p[1] 
 
-#def p_operador_comparacion_igual(p):
-#    'comparacion : IGUAL'
-#    p[0] = ' == '
+def p_operador_comparacion_igual(p):
+    'operador_comp : IGUAL'
+    p[0] = ' == '
 
-#def p_operador_comparacion_mayor(p):
-#    'operador_comp : MAYOR'
-#    p[0] = ' > '
+def p_operador_comparacion_mayor(p):
+    'operador_comp : MAYOR'
+    p[0] = ' > '
 
-#def p_operador_comparacion_menor(p):
-#    'operador_comp : MENOR'
-#    p[0] = ' < '
+def p_operador_comparacion_menor(p):
+    'operador_comp : MENOR'
+    p[0] = ' < '
 
-#def p_operador_comparacion_dif(p):
-#    'operador_comp : DISTINTO'
-#    p[0] = ' != '
+def p_operador_comparacion_dif(p):
+    'operador_comp : DISTINTO'
+    p[0] = ' != '
 
-#def p_comparcion_valores(p):
-#    'comparacion : valores operador_comp valores'
-#    p[0] = p[1] + p[2] + p[3]
+def p_comparcion_exp_arit(p):
+    'comparacion : exp_arit operador_comp exp_arit'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_acv(p):
+    'comparacion : exp_arit operador_comp VARIABLE'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_vca(p):
+    'comparacion : VARIABLE operador_comp exp_arit'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_exp_cadena(p):
+    'comparacion : exp_cadena operador_comp exp_cadena'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_exp_vcc(p):
+    'comparacion : VARIABLE operador_comp exp_cadena'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_exp_ccv(p):
+    'comparacion : exp_cadena operador_comp VARIABLE'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_exp_vcv(p):
+    'comparacion : VARIABLE operador_comp VARIABLE'
+    p[0] = p[1] + p[2] + p[3]
+
+
 
 
 def p_error(token):

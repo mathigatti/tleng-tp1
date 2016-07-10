@@ -45,7 +45,7 @@
 
 
 <valores>       :   <exp_arit>
-                |   <exp_bool>
+                |   <comparacion>
                 |   <exp_cadena>
                 |   <exp_arreglo>
                 |   <registro>
@@ -106,7 +106,7 @@
                 |   <factor>
 
 <factor>        :   <base> '^' <sigexp>
-//                |   '-' <base> 
+//                |   '-' <base>  ????
                 |   <base> '++'
                 |   <base> '--'
                 |   '++' <base>
@@ -134,12 +134,21 @@
                 |   'capitalizar' '(' exp_cadena ')'
                 |   '(' exp_cadena ')'
 
-<bool_operator> :   'and'
-                |   'or'
+<comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
+                |   VARIABLE <op_comp>  <exp_cadena>
+                |   <exp_cadena> <op_comp> VARIABLE 
+                |   <exp_arit>   <op_comp>   <exp_arit>
+                |   VARIABLE   <op_comp>   <exp_arit>
+                |   <exp_arit>   <op_comp>   VARIABLE
+                |   VARIABLE   <op_comp>  VARIABLE 
+                |   <exp_bool> '==' <exp_bool>
+                |   <exp_bool> '!=' <exp_bool>
+                |   <exp_bool>
 
 <exp_bool>      :   <exp_bool> AND <term_bool>
                 |   VARIABLE AND <term_bool>
                 |   <exp_bool> AND VARIABLE
+                |   VARIABLE AND VARIABLE
                 |   <term_bool>
 
 <term_bool>     :   <term_bool> OR <factor_bool>
@@ -158,9 +167,6 @@
                 |   '<'
                 |   '!='
 
-<comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
-                |   <exp_arit>   <op_comp>   <exp_arit>
-                |   <exp_bool>   <op_comp>   <exp_bool>
 
     
 \end{verbatim}
