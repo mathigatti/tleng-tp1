@@ -48,7 +48,6 @@
                 |   <exp_bool>
                 |   <exp_cadena>
                 |   <exp_arreglo>
-                |   <sumar_var>
                 |   <registro>
                 |   VARIABLE
 
@@ -78,17 +77,18 @@
                 |   '(' <exp_bool> ')' '?' <exp_arit> ':' <exp_arit>
                 |   '(' <exp_bool> ')' '?' <exp_cadena> ':' <exp_cadena>
 
-<suma_var>      : VARIABLE '+' VARIABLE
-                | <suma_var> '+' VARIABLE
+
+<suma_var>      |   VARIABLE
+                |   '+' VARIABLE <suma_var>
 
 <exp_arit>      :   <exp_arit> '+' <term>
-                |   <exp_arit> '+' VARIABLE
+                |   <exp_arit> '+' 
                 |   <exp_arit> '+' <suma_var>
-                |   VARIABLE '+' <term>
+                |   <suma_var> '+' <term>
                 |   <exp_arit> '-' <term>
-                |   <exp_arit> '-' VARIABLE
-                |   VARIABLE '-' <term>
-                |   VARIABLE '-' VARIABLE
+                |   <exp_arit> '-' <suma_var>
+                |   <suma_var> '-' <term>
+                |   <sum_var>  '-' <suma_var>
                 |   <term>
 
 
