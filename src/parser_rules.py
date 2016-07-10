@@ -23,31 +23,35 @@ class ParserException(Exception):
 
 def p_programa_s_pp(p):
     'p : sentencia pp'
-    p[0] = p[1] + '\n'  + p[2] + '\n'
+    p[0] = p[1] + '\n'  + p[2]
 
 def p_programa_coment_pp(p):
     'p : COMENTARIO p'
-    p[0] = p[1] + '\n'  + p[2] + '\n'
+    p[0] = p[1] + '\n'  + p[2]
 
 def p_programa_ctl_p(p):
     'p : control pp'
-    p[0] = p[1] + '\n'  + p[2] + '\n'
+    p[0] = p[1] + '\n'  + p[2]
 
 def p_pp_s_pp(p):
     'pp : sentencia pp'
-    p[0] = p[1] + '\n'  + p[2] + '\n'
+    p[0] = p[1] + '\n'  + p[2]
 
 def p_pp_ctl_pp(p):
     'pp : COMENTARIO pp'
-    p[0] = p[1] + '\n'  + p[2] + '\n'
+    p[0] = p[1] + '\n'  + p[2]
 
 def p_pp_comentario_p(p):
     'pp : control pp'
-    p[0] = p[1] + '\n'  + p[2] + '\n'
+    p[0] = p[1] + '\n'  + p[2]
 
 def p_pp_empty(p):
-    'pp :'
-    p[0] ='' 
+    'pp : empty'
+    p[0] = p[1] 
+
+def p_empty(p):
+    'empty :'
+    p[0] = ''
      
 def p_sentencia_var_asig(p):
     'sentencia : var_asig PUNTOYCOMA'
@@ -79,8 +83,8 @@ def p_loop_for(p):
     p[0] = 'for(' + p[3] + ';' + p[5] + ';' + p[7] +')\n    ' + find_and_replace(p[9]) + '\n'
 
 def p_ifelse(p):
-    'ifelse : IF LPAREN valores RPAREN THEN bloque ELSE bloque'
-    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[5]) + '\n else' + find_and_replace(p[8]) + '\n'
+    'ifelse : IF LPAREN valores RPAREN bloque ELSE bloque'
+    p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[5]) + '\n else' + find_and_replace(p[7]) + '\n'
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN valores RPAREN bloque'
