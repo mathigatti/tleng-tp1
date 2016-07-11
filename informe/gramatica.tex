@@ -111,6 +111,10 @@
                 |   <base> '--'
                 |   '++' <base>
                 |   '--'<base>
+                |   VARIABLE '++'
+                |   '++' VARIABLE
+                |   VARIABLE '--'
+                |   '--' VARIABLE
                 |   <base>
 
 <base>          :   '(' <exp_arit> ')'

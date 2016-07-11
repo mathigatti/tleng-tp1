@@ -208,28 +208,36 @@ def p_reg_item(p):
     p[0] = p[1] + ":" + toStrIfInt(p[3])
 
 #Producciones de asignaciones
+def p_var_asig_l_var(p):
+    'var_asig_l : VARIABLE'
+    p[0] = p[1]
+
+def p_var_asig_l_res(p):
+    'var_asig_l : RES'
+    p[0] = p[1]
+
 def p_var_asig_base_mm(p):
-    'var_asig : VARIABLE LESSLESS'
+    'var_asig : var_asig_l LESSLESS'
     p[0] = toStrIfInt(p[1]) + '--'
 
 def p_var_asig_mm_base(p):
-    'var_asig : LESSLESS VARIABLE'
+    'var_asig : LESSLESS var_asig_l'
     p[0] = '--' + toStrIfInt(p[2])
 
 def p_var_asig_base_pp(p):
-    'var_asig : VARIABLE MASMAS'
+    'var_asig : var_asig_l MASMAS'
     p[0] = toStrIfInt(p[1]) + '++'
 
 def p_var_asig_pp_base(p):
-    'var_asig : MASMAS VARIABLE '
+    'var_asig : MASMAS var_asig_l '
     p[0] = '++' + toStrIfInt(p[2])
 
 def p_var_asig_multipl(p):
-    'var_asig : VARIABLE MULTIPL valores'
+    'var_asig : var_asig_l MULTIPL valores'
     p[0] = p[1] + '=*' + toStrIfInt(p[3])
 
 def p_var_asig_dividi(p):
-    'var_asig : VARIABLE DIVIDI valores'
+    'var_asig : var_asig_l DIVIDI valores'
     p[0] = p[1] + '=/' + toStrIfInt(p[3])
 
 def p_var_asig_sigual(p):
@@ -237,15 +245,15 @@ def p_var_asig_sigual(p):
     p[0] = p[1]
 
 def p_var_asig_agregar(p):
-    'var_asig : VARIABLE AGREGAR valores'
+    'var_asig : var_asig_l AGREGAR valores'
     p[0] = p[1] + '+=' + toStrIfInt(p[3])
 
 def p_var_asig_sacar(p):
-    'var_asig : VARIABLE SACAR valores'
+    'var_asig : var_asig_l SACAR valores'
     p[0] = p[1] + '-=' + toStrIfInt(p[3])
 
 def p_var_asig(p):
-    'var_asig : VARIABLE ASIGNACION valores'
+    'var_asig : var_asig_l ASIGNACION valores'
     p[0] = p[1] + '=' + toStrIfInt(p[3])
 
 def p_var_asig_vec1(p):
@@ -257,7 +265,7 @@ def p_var_asig_reg(p):
     p[0] = p[1] + '.' + p[3] +  ' = ' + p[5]
 
 def p_var_asig_oper_ternario(p):
-    'var_asig : VARIABLE ASIGNACION operador_ternario'
+    'var_asig : var_asig_l ASIGNACION operador_ternario'
     p[0] = p[1] + '=' + p[3]
 
 def p_operador_ternarioret_bool(p):
@@ -274,7 +282,7 @@ def p_operador_ternarioret_cadena(p):
 
 def p_suma_var_p_1(p):
     'suma_var : VARIABLE'
-    p[0] = ' + ' + p[3]
+    p[0] =  p[1]
 
 def p_suma_var_p_2(p):
     'suma_var : PLUS VARIABLE suma_var'
@@ -381,17 +389,33 @@ def p_factor_m_base(p):
     'factor : MINUS base '
     p[0] = '-' + toStrIfInt(p[2])
 
+def p_factor_var_mm(p):
+    'factor : VARIABLE LESSLESS'
+    p[0] = toStrIfInt(p[1]) + '--'
+
 def p_factor_base_mm(p):
     'factor : base LESSLESS'
     p[0] = toStrIfInt(p[1]) + '--'
+
+def p_factor_mm_var(p):
+    'factor : LESSLESS VARIABLE'
+    p[0] = '--' + toStrIfInt(p[2])
 
 def p_factor_mm_base(p):
     'factor : LESSLESS base '
     p[0] = '--' + toStrIfInt(p[2])
 
+def p_factor_var_pp(p):
+    'factor : VARIABLE MASMAS'
+    p[0] = toStrIfInt(p[1]) + '++'
+
 def p_factor_base_pp(p):
     'factor : base MASMAS'
     p[0] = toStrIfInt(p[1]) + '++'
+
+def p_factor_pp_var(p):
+    'factor : MASMAS VARIABLE'
+    p[0] = '++' + toStrIfInt(p[2])
 
 def p_factor_pp_base(p):
     'factor : MASMAS base '
@@ -403,6 +427,11 @@ def p_base_expr(p):
 
 def p_base_valor(p):
     'base : NUMBER'
+    #chequear que el valor sea numerico
+    p[0] =  toStrIfInt(p[1]) 
+
+def p_base_func_ret_int(p):
+    'base : func_ret_int'
     #chequear que el valor sea numerico
     p[0] =  toStrIfInt(p[1]) 
 
