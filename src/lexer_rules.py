@@ -68,7 +68,7 @@ tokens = [
 ] + list(reserved.values())
 
 def t_NUMBER(token):
-	r"(-?[0-9]+(\.[0-9][0-9]*)?)"
+	r"([0-9]+(\.[0-9][0-9]*)?)"
 	return token
 
 def t_NEWLINE(token):
