@@ -1,0 +1,6 @@
+inicio = "Hola";
+i =0;
+do{ i++;
+inicio += " "; # Se agrega un espacio
+j = length(inicio) * i;
+}while (j % 32 != 0); print ("Mundo!");

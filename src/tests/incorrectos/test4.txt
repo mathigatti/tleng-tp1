@@ -1,0 +1,4 @@
+unNumero = "uno";
+nombres = [ "hola", "que", "tal"];
+segundaPalabra = nombres[unNumero];
+

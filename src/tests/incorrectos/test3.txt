@@ -1,0 +1,9 @@
+r = 18;
+pi = 3.14159;
+a = pi * r^2;
+i = a * 10;
+if(a > i)
+i=-0.5;
+print("Se redujo 0.5");
+else
+print("No fue necesario reducir nada");

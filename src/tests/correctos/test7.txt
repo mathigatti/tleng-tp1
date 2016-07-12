@@ -1,0 +1,13 @@
+i = 0;
+while(true)
+#Comentario antes del if
+if (i<2)
+{
+#Algo sobre el then del if
+valores[i]=i;
+i++;}
+else
+#Algo sobre el else
+valores[i] = valores[i-1]+valores[i-2];
+res = valores;
+ 
