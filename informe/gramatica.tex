@@ -59,35 +59,36 @@
 <reg_item>      :   CADENA ':' <valores> ',' <reg_item>
                 |   CADENA ':' <valores> 
 
-<var_asig>      :   VARIABLE '++'
-                |   '++' VARIABLE
-                |   VARIABLE '--'
-                |   '--' VARIABLE
-                |   VARIABLE '*=' <valores>
-                |   VARIABLE '/=' <valores>
-                |   VARIABLE '+=' <valores>
-                |   VARIABLE '-=' <valores>
-                |   VARIABLE '=' <valores>
+<var_asig_l>    :   VARIABLE
+                |   RES
+
+<var_asig>      :   <var_asig_l> '++'
+                |   '++' <var_asig_l>
+                |   <var_asig_l> '--'
+                |   '--' <var_asig_l>
+                |   <var_asig_l> '*=' <valores>
+                |   <var_asig_l> '/=' <valores>
+                |   <var_asig_l> '+=' <valores>
+                |   <var_asig_l> '-=' <valores>
+                |   <var_asig_l> '=' <valores>
                 |   VARIABLE '[' NUMBER ']' '=' <valores>
                 |   VARIABLE '.' VARIABLE '=' <valores>
-                |   VARIABLE '=' <op_ternario>
+                |   <var_asig_l> '=' <op_ternario>
 
 <op_ternario>   :   '(' <exp_bool> ')' '?' <exp_bool> ':' <exp_bool>
                 |   '(' <exp_bool> ')' '?' <exp_arit> ':' <exp_arit>
                 |   '(' <exp_bool> ')' '?' <exp_cadena> ':' <exp_cadena>
 
 
-<suma_var>      |   VARIABLE
-                |   '+' VARIABLE <suma_var>
-
 <exp_arit>      :   <exp_arit> '+' <term>
                 |   <exp_arit> '+' 
-                |   <exp_arit> '+' <suma_var>
-                |   <suma_var> '+' <term>
+                |   <exp_arit> '+' VARIABLE
+                |   VARIABLE '+' <term>
+                |   VARIABLE '+' VARIABLE
                 |   <exp_arit> '-' <term>
-                |   <exp_arit> '-' <suma_var>
-                |   <suma_var> '-' <term>
-                |   <sum_var>  '-' <suma_var>
+                |   <exp_arit> '-' VARIABLE
+                |   VARIABLE '-' <term>
+                |   VAIABLE  '-' VARIABLE
                 |   <term>
 
 
