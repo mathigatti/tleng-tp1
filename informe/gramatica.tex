@@ -21,8 +21,10 @@
 <ifelse>        :   'if' '(' <valores> ')' <bloque>
                 |   'if' '(' <valores> ')' <bloque> else <bloque>
 
-<bloque>        :   <sentencia>
-                |   '{' <programa> '}'
+<bloque>        :   COMENTARIO <bloque>
+                |   <sentencia>
+                |   <control>
+                |   '{' <programa'> '}'
 
 <funcion>       :   func_ret
                 |   func_void
@@ -49,10 +51,16 @@
                 |   <exp_arreglo>
                 |   <registro>
                 |   VARIABLE
+                |   VARIABLE '[' <exp_arit> ']' 
+                |   VARIABLE '[' VARIABLE ']' 
+                |   VARIABLE '.' VARIABLE 
 
-<exp_arreglo>   :   '[' <valores> <exp_arreglo> ']'
+<exp_arreglo>   :   '[' <list_valores> ']'
                 |   '['']'
                 |   func_ret_arreglo
+
+<lista_valores> :  <valores>
+                |  <valores> ',' <lista_valores>
 
 <registro>      :   '{' <reg_item> '}'
 
@@ -61,6 +69,9 @@
 
 <var_asig_l>    :   VARIABLE
                 |   RES
+                |   VARIABLE '[' <exp_arit> ']' 
+                |   VARIABLE '[' VARIABLE ']' 
+                |   VARIABLE '.' VARIABLE 
 
 <var_asig>      :   <var_asig_l> '++'
                 |   '++' <var_asig_l>
@@ -71,7 +82,8 @@
                 |   <var_asig_l> '+=' <valores>
                 |   <var_asig_l> '-=' <valores>
                 |   <var_asig_l> '=' <valores>
-                |   VARIABLE '[' NUMBER ']' '=' <valores>
+                |   VARIABLE '[' <exp_arit> ']' '=' <valores>
+                |   VARIABLE '[' VARIABLE ']' '=' <valores>
                 |   VARIABLE '.' VARIABLE '=' <valores>
                 |   <var_asig_l> '=' <op_ternario>
 
@@ -80,33 +92,45 @@
                 |   '(' <exp_bool> ')' '?' <exp_cadena> ':' <exp_cadena>
 
 
+<var_oper>      :   VARIABLE '[' <exp_arit> ']' 
+                |   VARIABLE '[' VARIABLE ']' 
+                |   VARIABLE '.' VARIABLE 
+
+ 
 <exp_arit>      :   <exp_arit> '+' <term>
-                |   <exp_arit> '+' 
                 |   <exp_arit> '+' VARIABLE
+                |   <exp_arit> '+' <var_oper>
                 |   VARIABLE '+' <term>
+                |   <var_oper> '+' <term>
                 |   VARIABLE '+' VARIABLE
+                |   <var_oper> '+' <var_oper>
                 |   <exp_arit> '-' <term>
                 |   <exp_arit> '-' VARIABLE
+                |   <exp_arit> '-' <var_oper>
                 |   VARIABLE '-' <term>
+                |   <var_oper> '-' <term>
                 |   VAIABLE  '-' VARIABLE
+                |   VAIABLE  '-' <var_oper>
                 |   <term>
 
 
-<term>          :   <term>  '*' <factor>
-                |   VARIABLE '*' <factor>
-                |   <term> '*' VARIABLE
-                |   <term>  '/' <factor>
-                |   VARIABLE  '/' <factor>
-                |   <term> '/' VARIABLE
-                |   VARIABLE '/' VARIABLE
-                |   <term>  '%' <factor>
-                |   VARIABLE  '%' <factor>
-                |   <term> '%' VARIABLE
-                |   VARIABLE '%' VARIABLE
+<arit_oper_2>   :   '*'
+                |   '/'
+                |   '%'
+
+<term>          :   <term>  <arti_oper_2> <factor>
+                |   VARIABLE <arit_oper_2> <factor>
+                |   <var_oper> <arit_oper_2> <factor>
+                |   <term> <arit_oper_2> VARIABLE
+                |   <term> <arit_oper_2> <var_oper>
+                |   VARIABLE <arit_oper_2> VARIABLE
+                |   <var_oper> <arit_oper_2> <var_oper> 
                 |   <factor>
 
 <factor>        :   <base> '^' <sigexp>
-//                |   '-' <base>  ????
+                |   <var_oper> '^' <sigexp>
+                |   VARIABLE '^' <sigexp>
+                |   '-' <base>  
                 |   <base> '++'
                 |   <base> '--'
                 |   '++' <base>
@@ -115,6 +139,10 @@
                 |   '++' VARIABLE
                 |   VARIABLE '--'
                 |   '--' VARIABLE
+                |   <var_oper> '++'
+                |   '++' <var_oper>
+                |   <var_oper> '--'
+                |   '--' <var_oper>
                 |   <base>
 
 <base>          :   '(' <exp_arit> ')'
@@ -139,28 +167,39 @@
 
 <comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
                 |   VARIABLE <op_comp>  <exp_cadena>
+                |   <var_oper> <op_comp>  <exp_cadena>
                 |   <exp_cadena> <op_comp> VARIABLE 
+                |   <exp_cadena> <op_comp> <var_oper> 
                 |   <exp_arit>   <op_comp>   <exp_arit>
                 |   VARIABLE   <op_comp>   <exp_arit>
+                |   <var_oper>   <op_comp>   <exp_arit>
                 |   <exp_arit>   <op_comp>   VARIABLE
+                |   <exp_arit>   <op_comp>   <var_oper>
                 |   VARIABLE   <op_comp>  VARIABLE 
+                |   <var_oper>   <op_comp>  <var_oper> 
                 |   <exp_bool> '==' <exp_bool>
                 |   <exp_bool> '!=' <exp_bool>
                 |   <exp_bool>
 
 <exp_bool>      :   <exp_bool> AND <term_bool>
                 |   VARIABLE AND <term_bool>
+                |   <var_oper> AND <term_bool>
                 |   <exp_bool> AND VARIABLE
+                |   <exp_bool> AND <var_oper>
                 |   VARIABLE AND VARIABLE
+                |   <var_oper> AND <var_oper>
                 |   <term_bool>
 
 <term_bool>     :   <term_bool> OR <factor_bool>
                 |   VARIABLE OR <factor_bool>
+                |   <var_oper> OR <factor_bool>
                 |   <term_bool> OR VARIABLE
+                |   <term_bool> OR <var_oper>
                 |   VARIABLE OR VARIABLE
-                |   'not' term_bool
+                |   <var_oper> OR <var_oper>
+                |   'not' factor_bool
 
-<factor_bool>     :   BOOL
+<factor_bool>   :   BOOL
                 |   '(' <exp_bool> ')'
                 |   <func_bool>
                 |   <comparacion>

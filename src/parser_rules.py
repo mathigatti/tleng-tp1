@@ -433,11 +433,11 @@ def p_factor_base_exp(p):
     'factor : base ELEVADO sigexp'
     p[0] = p[1] + ' ^' + toStrIfInt(p[3])
 
-def p_factor_base_exp(p):
+def p_factor_var_exp(p):
     'factor : VARIABLE ELEVADO sigexp'
     p[0] = p[1] + ' ^' + toStrIfInt(p[3])
 
-def p_factor_base_exp(p):
+def p_factor_var_op__exp(p):
     'factor : var_oper ELEVADO sigexp'
     p[0] = p[1] + ' ^' + toStrIfInt(p[3])
 
@@ -453,12 +453,20 @@ def p_factor_var_mm(p):
     'factor : VARIABLE LESSLESS'
     p[0] = toStrIfInt(p[1]) + '--'
 
+def p_factor_var_op_mm(p):
+    'factor : var_oper LESSLESS'
+    p[0] = toStrIfInt(p[1]) + '--'
+
 def p_factor_base_mm(p):
     'factor : base LESSLESS'
     p[0] = toStrIfInt(p[1]) + '--'
 
 def p_factor_mm_var(p):
     'factor : LESSLESS VARIABLE'
+    p[0] = '--' + toStrIfInt(p[2])
+
+def p_factor_mm_var_op(p):
+    'factor : LESSLESS var_oper'
     p[0] = '--' + toStrIfInt(p[2])
 
 def p_factor_mm_base(p):
@@ -469,12 +477,20 @@ def p_factor_var_pp(p):
     'factor : VARIABLE MASMAS'
     p[0] = toStrIfInt(p[1]) + '++'
 
+def p_factor_var_op_pp(p):
+    'factor : var_oper MASMAS'
+    p[0] = toStrIfInt(p[1]) + '++'
+
 def p_factor_base_pp(p):
     'factor : base MASMAS'
     p[0] = toStrIfInt(p[1]) + '++'
 
 def p_factor_pp_var(p):
     'factor : MASMAS VARIABLE'
+    p[0] = '++' + toStrIfInt(p[2])
+
+def p_factor_pp_var_op(p):
+    'factor : MASMAS var_oper'
     p[0] = '++' + toStrIfInt(p[2])
 
 def p_factor_pp_base(p):
@@ -495,11 +511,6 @@ def p_base_func_ret_int(p):
     #chequear que el valor sea numerico
     p[0] =  toStrIfInt(p[1]) 
 
-#def p_base_var(p):
-#    'base : VARIABLE'
-    #chequear que el valor sea numerico
-#    p[0] =  p[1] 
-
 def p_sigexp_m(p):
     'sigexp : MINUS exp'
     p[0] = '-' + p[2]
@@ -513,7 +524,7 @@ def p_exp_var(p):
     #chequear que el valor sea numerico
     p[0] =  p[1] 
 
-def p_exp_var(p):
+def p_exp_var_op(p):
     'exp : var_oper'
     #chequear que el valor sea numerico
     p[0] =  p[1] 
@@ -562,6 +573,7 @@ def p_exp_cadena_parent(p):
 
 
 #Producciones de operaciones booleanas
+
 def p_comparacionarision_igual(p):
     'comparacion : comparacion IGUAL exp_bool'
     p[0] = p[1] + ' == ' + p[3]
@@ -582,8 +594,20 @@ def p_bool_expr_vaf(p):
     'exp_bool : VARIABLE AND term_bool'
     p[0] = p[1] + ' and '  + p[3]
 
+def p_bool_expr_v2af(p):
+    'exp_bool : var_oper AND term_bool'
+    p[0] = p[1] + ' and '  + p[3]
+
 def p_bool_expr_eav(p):
     'exp_bool : exp_bool AND VARIABLE'
+    p[0] = p[1] + ' and '  + p[3]
+
+def p_bool_expr_eav2(p):
+    'exp_bool : exp_bool AND var_oper'
+    p[0] = p[1] + ' and '  + p[3]
+
+def p_bool_expr_v2av2(p):
+    'exp_bool : var_oper AND var_oper'
     p[0] = p[1] + ' and '  + p[3]
 
 def p_bool_expr_vav(p):
@@ -602,8 +626,20 @@ def p_bool_tov(p):
     'term_bool : term_bool OR VARIABLE'
     p[0] = p[1] + ' or ' + p[3]
 
+def p_bool_tov2(p):
+    'term_bool : term_bool OR var_oper'
+    p[0] = p[1] + ' or ' + p[3]
+
 def p_bool_vof(p):
     'term_bool : VARIABLE OR factor_bool'
+    p[0] = p[1] + ' or ' + p[3]
+
+def p_bool_v2of(p):
+    'term_bool : var_oper OR factor_bool'
+    p[0] = p[1] + ' or ' + p[3]
+
+def p_bool_v2ov2(p):
+    'term_bool : var_oper OR var_oper'
     p[0] = p[1] + ' or ' + p[3]
 
 def p_bool_vov(p):
@@ -614,9 +650,13 @@ def p_bool_term_factor(p):
     'term_bool : factor_bool'
     p[0] = p[1] 
 
-#def p_term_bool_var(p):
-#    'term_bool : VARIABLE'
-#    p[0] = str(p[1])
+def p_term_not(p):
+    'term_bool : NOT factor_bool'
+    p[0] = 'not ' + p[2]
+
+def p_term_bool_parentesis(p):
+    'factor_bool : LPAREN exp_bool RPAREN'
+    p[0] = '(' + p[2] + ')'
 
 def p_term_bool_bool(p):
     'factor_bool : BOOL'
@@ -654,8 +694,16 @@ def p_comparcion_acv(p):
     'comparacion : exp_arit operador_comp VARIABLE'
     p[0] = p[1] + p[2] + p[3]
 
+def p_comparcion_acv2(p):
+    'comparacion : exp_arit operador_comp var_oper'
+    p[0] = p[1] + p[2] + p[3]
+
 def p_comparcion_vca(p):
     'comparacion : VARIABLE operador_comp exp_arit'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_v2ca(p):
+    'comparacion : var_oper operador_comp exp_arit'
     p[0] = p[1] + p[2] + p[3]
 
 def p_comparcion_exp_cadena(p):
@@ -666,12 +714,24 @@ def p_comparcion_exp_vcc(p):
     'comparacion : VARIABLE operador_comp exp_cadena'
     p[0] = p[1] + p[2] + p[3]
 
+def p_comparcion_exp_v2cc(p):
+    'comparacion : var_oper operador_comp exp_cadena'
+    p[0] = p[1] + p[2] + p[3]
+
 def p_comparcion_exp_ccv(p):
     'comparacion : exp_cadena operador_comp VARIABLE'
     p[0] = p[1] + p[2] + p[3]
 
+def p_comparcion_exp_ccv2(p):
+    'comparacion : exp_cadena operador_comp var_oper'
+    p[0] = p[1] + p[2] + p[3]
+
 def p_comparcion_exp_vcv(p):
     'comparacion : VARIABLE operador_comp VARIABLE'
+    p[0] = p[1] + p[2] + p[3]
+
+def p_comparcion_exp_v2cv2(p):
+    'comparacion : var_oper operador_comp var_oper'
     p[0] = p[1] + p[2] + p[3]
 
 
