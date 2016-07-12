@@ -90,8 +90,16 @@ def p_ifSinElse(p):
     'ifelse : IF LPAREN valores RPAREN bloque'
     p[0] = 'If(' + p[3] + ')\n    ' + find_and_replace(p[5]) + '\n'
 
+def p_bloque_cb(p):
+    'bloque : COMENTARIO bloque'
+    p[0] = p[1]
+
 def p_bloque_s(p):
     'bloque : sentencia'
+    p[0] = p[1]
+
+def p_bloque_c(p):
+    'bloque : control'
     p[0] = p[1]
 
 def p_bloque_p(p):
@@ -174,12 +182,12 @@ def p_valores_reg(p):
     p[0] = p[1]
 
 def p_valores_variables(p):
-    'valores : VARIABLE'
+    'valores : var_asig_l'
     p[0] = p[1]
 
 def p_exp_arreglo(p):
-    'exp_arreglo : LCORCHETE valores exp_arreglo RCORCHETE'
-    p[0] = '[' + toStrIfInt(p[2]) + ' ' + toStrIfInt(p[3]) + ']'
+    'exp_arreglo : LCORCHETE lista_valores RCORCHETE'
+    p[0] = '[' + toStrIfInt(p[2]) +  ']'
 
 def p_exp_arreglo_vacio(p):
     'exp_arreglo : LCORCHETE RCORCHETE'
@@ -189,6 +197,15 @@ def p_exp_arreglo_mult_escalar(p):
     'exp_arreglo : func_ret_arreglo'
     #Chequear que primer parametro es vector
     p[0] = p[1]
+
+def p_lista_valores_end(p):
+    'lista_valores : valores'
+    p[0] = p[1]
+
+def p_lista_valores_lista(p):
+    'lista_valores : valores COMA lista_valores'
+    p[0] = p[1] + ',' + p[3] 
+
 
 #Producciones Registros
 def p_reg(p):
@@ -211,6 +228,19 @@ def p_var_asig_l_var(p):
 def p_var_asig_l_res(p):
     'var_asig_l : RES'
     p[0] = p[1]
+
+def p_var_asig_l_vec(p):
+    'var_asig_l : VARIABLE LCORCHETE exp_arit RCORCHETE'
+    p[0] = p[1] + '[' + str(p[3]) +  ']'
+
+def p_var_asig_l_vec1(p):
+    'var_asig_l : VARIABLE LCORCHETE VARIABLE RCORCHETE'
+    #Chequear tipo de variable sea NAT
+    p[0] = p[1] + '[' + p[3] +  ']'
+
+def p_var_asig_l_reg(p):
+    'var_asig_l : VARIABLE PUNTO VARIABLE'
+    p[0] = p[1] + '.' + p[3] 
 
 def p_var_asig_base_mm(p):
     'var_asig : var_asig_l LESSLESS'
@@ -236,9 +266,9 @@ def p_var_asig_dividi(p):
     'var_asig : var_asig_l DIVIDI valores'
     p[0] = p[1] + '=/' + toStrIfInt(p[3])
 
-def p_var_asig_sigual(p):
-    'var_asig : VARIABLE'
-    p[0] = p[1]
+#def p_var_asig_sigual(p):
+#    'var_asig : VARIABLE'
+#    p[0] = p[1]
 
 def p_var_asig_agregar(p):
     'var_asig : var_asig_l AGREGAR valores'
@@ -252,13 +282,18 @@ def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
     p[0] = p[1] + '=' + toStrIfInt(p[3])
 
-def p_var_asig_vec1(p):
-    'var_asig : VARIABLE LCORCHETE NUMBER RCORCHETE ASIGNACION valores'
-    p[0] = p[1] + '[' + str(p[3]) +  '] =' + p[6]
+#def p_var_asig_vec1(p):
+#    'var_asig : VARIABLE LCORCHETE exp_arit RCORCHETE ASIGNACION valores'
+#    p[0] = p[1] + '[' + str(p[3]) +  '] =' + p[6]
 
-def p_var_asig_reg(p):
-    'var_asig : VARIABLE PUNTO VARIABLE ASIGNACION valores'
-    p[0] = p[1] + '.' + p[3] +  ' = ' + p[5]
+#def p_var_asig_vec2(p):
+#    'var_asig : VARIABLE LCORCHETE VARIABLE RCORCHETE ASIGNACION valores'
+    #Chequear tipo de variable sea NAT
+#    p[0] = p[1] + '[' + p[3] +  '] =' + p[6]
+
+#def p_var_asig_reg(p):
+#    'var_asig : VARIABLE PUNTO VARIABLE ASIGNACION valores'
+#    p[0] = p[1] + '.' + p[3] +  ' = ' + p[5]
 
 def p_var_asig_oper_ternario(p):
     'var_asig : var_asig_l ASIGNACION operador_ternario'
@@ -278,6 +313,19 @@ def p_operador_ternarioret_cadena(p):
 
 
 
+def p_oper_var_reg(p):
+    'var_oper : VARIABLE PUNTO  VARIABLE'
+    p[0] = p[1] + '.' + p[3]
+
+def p_oper_var_vec(p):
+    'var_oper : VARIABLE LCORCHETE VARIABLE RCORCHETE'
+    p[0] = p[1] + '[' + p[3] + ']'
+
+def p_oper_var_vec2(p):
+    'var_oper : VARIABLE LCORCHETE exp_arit RCORCHETE'
+    p[0] = p[1] + '[' + p[3] + ']'
+
+
 #Producciones operaciones binarias con enteros
 def p_exp_arit_ept(p):
     'exp_arit : exp_arit PLUS term'
@@ -287,12 +335,24 @@ def p_exp_arit_epv(p):
     'exp_arit : exp_arit PLUS VARIABLE'
     p[0] = p[1] + ' + ' + p[3]
 
+def p_exp_arit_epv2(p):
+    'exp_arit : exp_arit PLUS var_oper'
+    p[0] = p[1] + ' + ' + p[3]
+
 def p_exp_arit_vpt(p):
     'exp_arit : VARIABLE PLUS term'
     p[0] = p[1] + ' + ' + toStrIfInt(p[3])
 
+def p_exp_arit_v2pt(p):
+    'exp_arit : var_oper PLUS term'
+    p[0] = p[1] + ' + ' + toStrIfInt(p[3])
+
 def p_exp_arit_vpv(p):
     'exp_arit : VARIABLE PLUS VARIABLE'
+    p[0] = p[1] + ' + ' + toStrIfInt(p[3])
+
+def p_exp_arit_v2pv2(p):
+    'exp_arit : var_oper PLUS var_oper'
     p[0] = p[1] + ' + ' + toStrIfInt(p[3])
 
 def p_exp_arit_emt(p):
@@ -303,65 +363,67 @@ def p_exp_arit_emv(p):
     'exp_arit : exp_arit MINUS VARIABLE'
     p[0] = p[1] + ' - ' + p[3]
 
+def p_exp_arit_emv2(p):
+    'exp_arit : exp_arit MINUS var_oper'
+    p[0] = p[1] + ' - ' + p[3]
+
 def p_exp_arit_vmt(p):
     'exp_arit : VARIABLE MINUS term'
+    p[0] = p[1] + ' - ' + toStrIfInt(p[3])
+
+def p_exp_arit_v2mt(p):
+    'exp_arit : var_oper MINUS term'
     p[0] = p[1] + ' - ' + toStrIfInt(p[3])
 
 def p_exp_arit_vmv(p):
     'exp_arit : VARIABLE MINUS VARIABLE'
     p[0] = p[1] + ' - ' + toStrIfInt(p[3])
 
+def p_exp_arit_v2mv2(p):
+    'exp_arit : var_oper MINUS var_oper'
+    p[0] = p[1] + ' - ' + toStrIfInt(p[3])
+
 def p_exp_arit_term(p):
     'exp_arit : term'
     p[0] = toStrIfInt(p[1])
 
+def p_arit_oper2_times(p):
+    'arit_oper_2 : TIMES'
+
+def p_arit_oper2_div(p):
+    'arit_oper_2 : DIV'
+
+def p_arit_oper2_mod(p):
+    'arit_oper_2 : MODULO'
+
 def p_term_tmf(p):
-    'term : term TIMES factor'
-    p[0] = p[1] + ' * ' + toStrIfInt(p[3])
+    'term : term arit_oper_2 factor'
+    p[0] = p[1] + p[2] + toStrIfInt(p[3])
 
 def p_term_tmv(p):
-    'term : term TIMES VARIABLE'
+    'term : term arit_oper_2 VARIABLE'
+    p[0] = p[1] + ' * ' + p[3]
+
+def p_term_tmv2(p):
+    'term : term arit_oper_2 var_oper'
     p[0] = p[1] + ' * ' + p[3]
 
 def p_term_vmf(p):
-    'term : VARIABLE  TIMES factor'
+    'term : VARIABLE  arit_oper_2 factor'
+    p[0] = p[1] + ' * ' + toStrIfInt(p[3])
+
+def p_term_v2mf(p):
+    'term : var_oper arit_oper_2 factor'
     p[0] = p[1] + ' * ' + toStrIfInt(p[3])
 
 def p_term_vmv(p):
-    'term : VARIABLE TIMES VARIABLE'
+    'term : VARIABLE arit_oper_2 VARIABLE'
     p[0] = p[1] + ' * ' + p[3]
 
-def p_term_tdf(p):
-    'term : term DIV factor'
-    p[0] = p[1] + ' / ' + toStrIfInt(p[3])
+def p_term_v2mv2(p):
+    'term : var_oper arit_oper_2 var_oper'
+    p[0] = p[1] + ' * ' + p[3]
 
-def p_term_tdv(p):
-    'term : term DIV VARIABLE'
-    p[0] = p[1] + ' / ' + p[3]
-
-def p_term_vdf(p):
-    'term : VARIABLE DIV factor'
-    p[0] = p[1] + ' / ' + toStrIfInt(p[3])
-
-def p_term_vdv(p):
-    'term : VARIABLE DIV VARIABLE'
-    p[0] = p[1] + ' / ' + p[3]
-
-def p_term_tmodf(p):
-    'term : term MODULO factor'
-    p[0] = p[1] + ' % ' + toStrIfInt(p[3])
-
-def p_term_tmodv(p):
-    'term : term MODULO VARIABLE'
-    p[0] = p[1] + ' % ' + p[3]
-
-def p_term_vmodf(p):
-    'term : VARIABLE MODULO factor'
-    p[0] = p[1] + ' % ' + toStrIfInt(p[3])
-
-def p_term_vmodv(p):
-    'term : VARIABLE MODULO VARIABLE'
-    p[0] = p[1] + ' % ' + p[3]
 
 def p_term_factor(p):
     'term : factor'
@@ -369,6 +431,14 @@ def p_term_factor(p):
 
 def p_factor_base_exp(p):
     'factor : base ELEVADO sigexp'
+    p[0] = p[1] + ' ^' + toStrIfInt(p[3])
+
+def p_factor_base_exp(p):
+    'factor : VARIABLE ELEVADO sigexp'
+    p[0] = p[1] + ' ^' + toStrIfInt(p[3])
+
+def p_factor_base_exp(p):
+    'factor : var_oper ELEVADO sigexp'
     p[0] = p[1] + ' ^' + toStrIfInt(p[3])
 
 def p_factor_base(p):
@@ -440,6 +510,11 @@ def p_sigexp_exp(p):
 
 def p_exp_var(p):
     'exp : VARIABLE'
+    #chequear que el valor sea numerico
+    p[0] =  p[1] 
+
+def p_exp_var(p):
+    'exp : var_oper'
     #chequear que el valor sea numerico
     p[0] =  p[1] 
 
