@@ -36,8 +36,7 @@
 
 <func_ret_bool>     :   'colineales' '(' <valores> ',' <valores> ')'
 
-<func_ret_cadena>   :   'capitalizar' '(' exp_cadena ')'
-                    |   'capitalizar' '(' VARIABLE ')'
+<func_ret_cadena>   :   'capitalizar' '(' <valores> ')'
 
 <func_ret_arreglo>  :   'multiplicarEscalar' '(' <valores> ',' <valores> ')'
                     |   'multiplicarEscalar' '(' <valores> ',' <valores> ',' <valores>')'
@@ -129,14 +128,13 @@
                 |   '(' <exp_arit> ')'
 
 <exp_cadena>    :   <exp_cadena> '+' <term_cadena>
-                |   <suma_var> '+' <term_cadena>
-                |   <term_cadena> '+' <suma_var>
+                |   VARIABLE '+' <term_cadena>
+                |   <term_cadena> '+' VARIABLE
                 |   <term_cadena> 
 
 <term_cadena>   :   CADENA
-                |   'capitalizar' '(' VARIABLE ')'
-                |   'capitalizar' '(' exp_cadena ')'
-                |   '(' exp_cadena ')'
+                |   'capitalizar' '(' <valores> ')'
+                |   '(' <exp_cadena> ')'
 
 <comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
                 |   VARIABLE <op_comp>  <exp_cadena>

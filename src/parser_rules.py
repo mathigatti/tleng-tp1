@@ -177,10 +177,6 @@ def p_valores_variables(p):
     'valores : VARIABLE'
     p[0] = p[1]
 
-#def p_valores_suma_var(p):
-#    'valores : suma_var'
-#    p[0] = p[1]
-
 def p_exp_arreglo(p):
     'exp_arreglo : LCORCHETE valores exp_arreglo RCORCHETE'
     p[0] = '[' + toStrIfInt(p[2]) + ' ' + toStrIfInt(p[3]) + ']'
@@ -280,29 +276,23 @@ def p_operador_ternarioret_cadena(p):
     'operador_ternario : LPAREN exp_cadena RPAREN INTERROGACION exp_bool DOSPUNTOS exp_cadena'
     p[0] = '(' + p[2] + ')? ' + p[5] + ':' + p[7] 
 
-def p_suma_var_p_1(p):
-    'suma_var : VARIABLE'
-    p[0] =  p[1]
 
-def p_suma_var_p_2(p):
-    'suma_var : PLUS VARIABLE suma_var'
-    p[0] = p[1] + ' + ' + p[3]
 
 #Producciones operaciones binarias con enteros
 def p_exp_arit_ept(p):
     'exp_arit : exp_arit PLUS term'
     p[0] = p[1] + ' + ' + toStrIfInt(p[3])
 
-#def p_exp_arit_epv(p):
-#    'exp_arit : exp_arit PLUS VARIABLE'
-#    p[0] = p[1] + ' + ' + p[3]
-
-def p_exp_arit_vps(p):
-    'exp_arit : exp_arit PLUS suma_var'
+def p_exp_arit_epv(p):
+    'exp_arit : exp_arit PLUS VARIABLE'
     p[0] = p[1] + ' + ' + p[3]
 
 def p_exp_arit_vpt(p):
-    'exp_arit : suma_var PLUS term'
+    'exp_arit : VARIABLE PLUS term'
+    p[0] = p[1] + ' + ' + toStrIfInt(p[3])
+
+def p_exp_arit_vpv(p):
+    'exp_arit : VARIABLE PLUS VARIABLE'
     p[0] = p[1] + ' + ' + toStrIfInt(p[3])
 
 def p_exp_arit_emt(p):
@@ -314,11 +304,11 @@ def p_exp_arit_emv(p):
     p[0] = p[1] + ' - ' + p[3]
 
 def p_exp_arit_vmt(p):
-    'exp_arit : suma_var MINUS term'
+    'exp_arit : VARIABLE MINUS term'
     p[0] = p[1] + ' - ' + toStrIfInt(p[3])
 
 def p_exp_arit_vmv(p):
-    'exp_arit : suma_var MINUS suma_var'
+    'exp_arit : VARIABLE MINUS VARIABLE'
     p[0] = p[1] + ' - ' + toStrIfInt(p[3])
 
 def p_exp_arit_term(p):
@@ -470,11 +460,11 @@ def p_exp_cadena_concat(p):
     p[0] = p[1] + ' + ' +  p[3]
 
 def p_exp_cadena_concat_1(p):
-    'exp_cadena : suma_var PLUS term_cadena'
+    'exp_cadena : VARIABLE PLUS term_cadena'
     p[0] = p[1] + ' + ' +  p[3]
 
 def p_exp_cadena_concat_2(p):
-    'exp_cadena : exp_cadena PLUS suma_var'
+    'exp_cadena : exp_cadena PLUS VARIABLE'
     p[0] = p[1] + ' + ' +  p[3]
 
 def p_exp_cadena_term(p):
@@ -487,7 +477,7 @@ def p_exp_cadena_cadena(p):
 
 
 def p_exp_cadena_funct_ret_string(p):
-    'term_cadena : CAPITALIZAR LPAREN exp_cadena RPAREN'
+    'term_cadena : CAPITALIZAR LPAREN valores RPAREN'
     p[0] = 'capitalizar(' + p[1] + ')'
 
 def p_exp_cadena_parent(p):
