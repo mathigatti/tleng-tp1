@@ -34,7 +34,7 @@ if __name__ == "__main__":
 			else:
 				text = argv[3]
 			salida = parser.parse(text,lexer)
-			output_file.write(salida)
+			output_file.write(salida[0])
 			output_file.close()       
 
 
@@ -43,12 +43,12 @@ if __name__ == "__main__":
 			text = src.read()
 			src.close()
 			salida = parser.parse(text,lexer)
-			print salida
+			print salida[0]
 
 		else:
 			text = argv[1]
 			salida = parser.parse(text,lexer)
-			print salida
+			print salida[0]
 
     except parser_rules.ParserException as exception:
             print "Semantic error: " + str(exception)

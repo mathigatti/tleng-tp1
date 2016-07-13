@@ -114,9 +114,9 @@ def t_BOOL(token) :
     return token
 
 def t_VARIABLE(token):
-	r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])*"
-	token.type = reserved.get(token.value.lower(),'VARIABLE')
-	return token
+  r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])*"
+  token.type = reserved.get(token.value.lower(),'VARIABLE')
+  return token
 
 t_ASIGNACION = r"="
 
