@@ -1,0 +1,19 @@
+a = true ? 1 : 2;
+
+a = true ? AND NOT FALSE;
+
+a = ("") + "a";
+
+a = length("a");
+
+length("a");
+
+length([1]);
+
+a = colineales(a,a);
+
+multiplicacionEscalar(a,a);
+
+a = capitalizar("a");
+
+do{a=0;} while (true);

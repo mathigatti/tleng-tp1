@@ -27,7 +27,7 @@ def p_programa_s_pp(p):
 
 def p_programa_coment_pp(p):
     'p : COMENTARIO p'
-    p[0] = [p[1][0] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1] + '\n'  + p[2][0], ' COMPLETAR ']
 
 def p_programa_ctl_p(p):
     'p : control pp'
@@ -39,7 +39,7 @@ def p_pp_s_pp(p):
 
 def p_pp_ctl_pp(p):
     'pp : COMENTARIO pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1] + '\n'  + p[2][0], ' COMPLETAR ']
 
 def p_pp_comentario_p(p):
     'pp : control pp'
@@ -80,7 +80,7 @@ def p_loop_do(p):
 
 def p_loop_for(p):
     'loop : FOR LPAREN var_asig PUNTOYCOMA valores PUNTOYCOMA exp_arit RPAREN bloque'
-    p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9]) + '\n', ' COMPLETAR ']
+    p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]) + '\n', ' COMPLETAR ']
 
 def p_ifelse(p):
     'ifelse : IF LPAREN valores RPAREN bloque ELSE bloque'
@@ -92,7 +92,7 @@ def p_ifSinElse(p):
 
 def p_bloque_cb(p):
     'bloque : COMENTARIO bloque'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1], ' COMPLETAR ']
 
 def p_bloque_s(p):
     'bloque : sentencia'
@@ -213,11 +213,11 @@ def p_reg(p):
 
 def p_reg_item_list(p):
     'reg_item : CADENA DOSPUNTOS valores COMA reg_item' 
-    p[0] = [p[1][0] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0],' COMPLETAR']
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0],' COMPLETAR']
 
 def p_reg_item(p):
     'reg_item : CADENA DOSPUNTOS valores' 
-    p[0] = [p[1][0] + ":" + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), ' COMPLETAR ']
 
 #Producciones de asignaciones
 def p_var_asig_l_var(p):
@@ -569,7 +569,7 @@ def p_exp_cadena_term(p):
 
 def p_exp_cadena_cadena(p):
     'term_cadena : CADENA'
-    p[0] = [p[1][0], ' COMPLETAR ' ]
+    p[0] = [p[1], ' COMPLETAR ' ]
 
 
 def p_exp_cadena_funct_ret_string(p):

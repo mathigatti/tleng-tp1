@@ -16,7 +16,7 @@ reserved = {
 	'capitalizar':'CAPITALIZAR',
 	'length':'LENGTH',
 	'print':'PRINT',
-	'multiplicacionEscalar':'MULTIPLICACIONESCALAR',
+	'multiplicacionescalar':'MULTIPLICACIONESCALAR',
 	'colineales':'COLINEALES',
 	'and':'AND',
 	'or':'OR',
