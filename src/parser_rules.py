@@ -246,26 +246,60 @@ def p_var_asig_base_mm(p):
     'var_asig : var_asig_l LESSLESS'
     p[0] = [toStrIfInt(p[1][0]) + '--', ' COMPLETAR ']
 
+    if p[1][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
+
 def p_var_asig_mm_base(p):
     'var_asig : LESSLESS var_asig_l'
     p[0] = ['--' + toStrIfInt(p[2][0]), ' COMPLETAR ']
+
+    if p[2][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
 
 def p_var_asig_base_pp(p):
     'var_asig : var_asig_l MASMAS'
     p[0] = [toStrIfInt(p[1][0]) + '++', ' COMPLETAR ']
     # p[0] = toStrIfInt(p[1]) + str(type(p[1]))
+    if p[1][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
 
 def p_var_asig_pp_base(p):
     'var_asig : MASMAS var_asig_l '
     p[0] = ['++' + toStrIfInt(p[2][0]), ' COMPLETAR ']
+    if p[2][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
 
 def p_var_asig_multipl(p):
     'var_asig : var_asig_l MULTIPL valores'
     p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    if p[1][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
+    if p[3][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
 
 def p_var_asig_dividi(p):
     'var_asig : var_asig_l DIVIDI valores'
     p[0] = [p[1][0] + '=/' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    if p[1][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
+    if p[3][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
 
 #def p_var_asig_sigual(p):
 #    'var_asig : VARIABLE'
@@ -274,15 +308,31 @@ def p_var_asig_dividi(p):
 def p_var_asig_agregar(p):
     'var_asig : var_asig_l AGREGAR valores'
     p[0] = [p[1][0] + '+=' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    if (p[1][1] == "NUMBER" and p[1][1] == "NUMBER") or (p[1][1] == "STRING" and p[3][1] == "STRING")  :
+        pass
+    else:
+        print 'Error de semantica.'
+
 
 def p_var_asig_sacar(p):
     'var_asig : var_asig_l SACAR valores'
     p[0] = [p[1][0] + '-=' + toStrIfInt(p[3][0], ' COMPLETAR ')]
+def p_var_asig_multipl(p):
+    'var_asig : var_asig_l MULTIPL valores'
+    p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    if p[1][1] == "NUMBER" and p[3][1] == "NUMBER" :
+        pass
+    else:
+        print 'Error de semantica.'
 
 
 def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
     p[0] = [p[1][0] + '=' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    if (p[1][1] == "NUMBER" and p[1][1] == "NUMBER") or (p[1][1] == "STRING" and p[3][1] == "STRING") or (p[1][1] == "BOOL" and p[3][1] == "BOOL")  :
+        pass
+    else:
+        print 'Error de semantica.'
 
 
 #def p_var_asig_vec1(p):
