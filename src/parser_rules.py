@@ -441,20 +441,20 @@ def p_exp_arit_term(p):
     p[0] = [toStrIfInt(p[1][0]), ' COMPLETAR']
 
 
-# ESTO ESTA INCOMPLETO ?
 
-# ??????????????????????????
 
 def p_arit_oper2_times(p):
     'arit_oper_2 : TIMES'
+    p[0] = [p[1], 'ND' ]
 
 def p_arit_oper2_div(p):
     'arit_oper_2 : DIV'
+    p[0] = [p[1], 'ND' ]
 
 def p_arit_oper2_mod(p):
     'arit_oper_2 : MODULO'
+    p[0] = [p[1], 'ND' ]
 
-# ??????????????????????????
 
 def p_term_tmf(p):
     'term : term arit_oper_2 factor'
@@ -462,27 +462,27 @@ def p_term_tmf(p):
 
 def p_term_tmv(p):
     'term : term arit_oper_2 VARIABLE'
-    p[0] = [p[1][0] + ' * ' + p[3], ' COMPLETAR ']
+    p[0] = [p[1][0] + p[2][0] + p[3], ' COMPLETAR ']
 
 def p_term_tmv2(p):
     'term : term arit_oper_2 var_oper'
-    p[0] = [p[1][0] + ' * ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + p[2][0] + p[3][0], ' COMPLETAR ']
 
 def p_term_vmf(p):
     'term : VARIABLE  arit_oper_2 factor'
-    p[0] = [p[1] + ' * ' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1] + p[2][0] + toStrIfInt(p[3][0]), ' COMPLETAR ']
 
 def p_term_v2mf(p):
     'term : var_oper arit_oper_2 factor'
-    p[0] = [p[1][0] + ' * ' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1][0] + p[2][0] + toStrIfInt(p[3][0]), ' COMPLETAR ']
 
 def p_term_vmv(p):
     'term : VARIABLE arit_oper_2 VARIABLE'
-    p[0] = [p[1] + ' * ' + p[3], ' COMPLETAR ']
+    p[0] = [p[1] + p[2][0] + p[3], ' COMPLETAR ']
 
 def p_term_v2mv2(p):
     'term : var_oper arit_oper_2 var_oper'
-    p[0] = [p[1][0] + ' * ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + p[2][0] + p[3][0], ' COMPLETAR ']
 
 
 def p_term_factor(p):
