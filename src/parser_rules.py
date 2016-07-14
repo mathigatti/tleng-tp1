@@ -84,7 +84,7 @@ def p_loop_for(p):
 
 def p_ifelse(p):
     'ifelse : IF LPAREN valores RPAREN bloque ELSE bloque'
-    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7]) + '\n', 'COMPLETAR']
+    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7][0]) + '\n', 'COMPLETAR']
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN valores RPAREN bloque'
@@ -222,25 +222,25 @@ def p_reg_item(p):
 #Producciones de asignaciones
 def p_var_asig_l_var(p):
     'var_asig_l : VARIABLE'
-    p[0] = [p[1][0], 'sin tipo' ]
+    p[0] = [p[1], 'ND' ]
 
 def p_var_asig_l_res(p):
     'var_asig_l : RES'
-    p[0] = [p[1][0], 'sin tipo' ]
+    p[0] = [p[1], 'ND' ]
 
 def p_var_asig_l_vec(p):
     'var_asig_l : VARIABLE LCORCHETE exp_arit RCORCHETE'
-    p[0] = [p[1][0] + '[' + str(p[3][0]) +  ']',' COMPLETAR ']
+    p[0] = [p[1] + '[' + str(p[3][0]) +  ']',' COMPLETAR ']
 
 
 def p_var_asig_l_vec1(p):
     'var_asig_l : VARIABLE LCORCHETE VARIABLE RCORCHETE'
     #Chequear tipo de variable sea NAT
-    p[0] = [p[1][0] + '[' + p[3][0] +  ']', ' COMPLETAR ']
+    p[0] = [p[1] + '[' + p[3] +  ']', ' COMPLETAR ']
 
 def p_var_asig_l_reg(p):
     'var_asig_l : VARIABLE PUNTO VARIABLE'
-    p[0] = [p[1][0] + '.' + p[3][0], ' COMPLETAR ' ]
+    p[0] = [p[1] + '.' + p[3], ' COMPLETAR ' ]
 
 def p_var_asig_base_mm(p):
     'var_asig : var_asig_l LESSLESS'
@@ -318,15 +318,15 @@ def p_operador_ternarioret_cadena(p):
 
 def p_oper_var_reg(p):
     'var_oper : VARIABLE PUNTO  VARIABLE'
-    p[0] = [p[1][0] + '.' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + '.' + p[3], ' COMPLETAR ']
 
 def p_oper_var_vec(p):
     'var_oper : VARIABLE LCORCHETE VARIABLE RCORCHETE'
-    p[0] = [p[1][0] + '[' + p[3][0] + ']', ' COMPLETAR ']
+    p[0] = [p[1] + '[' + p[3] + ']', ' COMPLETAR ']
 
 def p_oper_var_vec2(p):
     'var_oper : VARIABLE LCORCHETE exp_arit RCORCHETE'
-    p[0] = [p[1][0] + '[' + p[3][0] + ']', ' COMPLETAR ']
+    p[0] = [p[1] + '[' + p[3][0] + ']', ' COMPLETAR ']
 
 
 #Producciones operaciones binarias con enteros
@@ -336,7 +336,7 @@ def p_exp_arit_ept(p):
 
 def p_exp_arit_epv(p):
     'exp_arit : exp_arit PLUS VARIABLE'
-    p[0] = [p[1][0] + ' + ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + ' + ' + p[3], ' COMPLETAR ']
 
 def p_exp_arit_epv2(p):
     'exp_arit : exp_arit PLUS var_oper'
@@ -344,7 +344,7 @@ def p_exp_arit_epv2(p):
 
 def p_exp_arit_vpt(p):
     'exp_arit : VARIABLE PLUS term'
-    p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), ' COMPLETAR']
+    p[0] = [p[1] + ' + ' + toStrIfInt(p[3][0]), ' COMPLETAR']
 
 def p_exp_arit_v2pt(p):
     'exp_arit : var_oper PLUS term'
@@ -352,7 +352,7 @@ def p_exp_arit_v2pt(p):
 
 def p_exp_arit_vpv(p):
     'exp_arit : VARIABLE PLUS VARIABLE'
-    p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), ' COMPLETAR']
+    p[0] = [p[1] + ' + ' + toStrIfInt(p[3]), ' COMPLETAR']
 
 def p_exp_arit_v2pv2(p):
     'exp_arit : var_oper PLUS var_oper'
@@ -364,7 +364,7 @@ def p_exp_arit_emt(p):
 
 def p_exp_arit_emv(p):
     'exp_arit : exp_arit MINUS VARIABLE'
-    p[0] = [p[1][0] + ' - ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + ' - ' + p[3], ' COMPLETAR ']
 
 def p_exp_arit_emv2(p):
     'exp_arit : exp_arit MINUS var_oper'
@@ -372,7 +372,7 @@ def p_exp_arit_emv2(p):
 
 def p_exp_arit_vmt(p):
     'exp_arit : VARIABLE MINUS term'
-    p[0] = [p[1][0] + ' - ' + toStrIfInt(p[3][0]), ' COMPLETAR']
+    p[0] = [p[1] + ' - ' + toStrIfInt(p[3][0]), ' COMPLETAR']
 
 def p_exp_arit_v2mt(p):
     'exp_arit : var_oper MINUS term'
@@ -380,7 +380,7 @@ def p_exp_arit_v2mt(p):
 
 def p_exp_arit_vmv(p):
     'exp_arit : VARIABLE MINUS VARIABLE'
-    p[0] = [p[1][0] + ' - ' + toStrIfInt(p[3][0]), ' COMPLETAR']
+    p[0] = [p[1] + ' - ' + toStrIfInt(p[3]), ' COMPLETAR']
 
 def p_exp_arit_v2mv2(p):
     'exp_arit : var_oper MINUS var_oper'
@@ -412,7 +412,7 @@ def p_term_tmf(p):
 
 def p_term_tmv(p):
     'term : term arit_oper_2 VARIABLE'
-    p[0] = [p[1][0] + ' * ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + ' * ' + p[3], ' COMPLETAR ']
 
 def p_term_tmv2(p):
     'term : term arit_oper_2 var_oper'
@@ -420,7 +420,7 @@ def p_term_tmv2(p):
 
 def p_term_vmf(p):
     'term : VARIABLE  arit_oper_2 factor'
-    p[0] = [p[1][0] + ' * ' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1] + ' * ' + toStrIfInt(p[3][0]), ' COMPLETAR ']
 
 def p_term_v2mf(p):
     'term : var_oper arit_oper_2 factor'
@@ -428,7 +428,7 @@ def p_term_v2mf(p):
 
 def p_term_vmv(p):
     'term : VARIABLE arit_oper_2 VARIABLE'
-    p[0] = [p[1][0] + ' * ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + ' * ' + p[3], ' COMPLETAR ']
 
 def p_term_v2mv2(p):
     'term : var_oper arit_oper_2 var_oper'
@@ -445,7 +445,7 @@ def p_factor_base_exp(p):
 
 def p_factor_var_exp(p):
     'factor : VARIABLE ELEVADO sigexp'
-    p[0] = [p[1][0] + ' ^' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1] + ' ^' + toStrIfInt(p[3][0]), ' COMPLETAR ']
 
 def p_factor_var_op__exp(p):
     'factor : var_oper ELEVADO sigexp'
@@ -461,7 +461,7 @@ def p_factor_m_base(p):
 
 def p_factor_var_mm(p):
     'factor : VARIABLE LESSLESS'
-    p[0] = [toStrIfInt(p[1][0]) + '--', ' COMPLETAR']
+    p[0] = [toStrIfInt(p[1]) + '--', ' COMPLETAR']
 
 def p_factor_var_op_mm(p):
     'factor : var_oper LESSLESS'
@@ -473,7 +473,7 @@ def p_factor_base_mm(p):
 
 def p_factor_mm_var(p):
     'factor : LESSLESS VARIABLE'
-    p[0] = ['--' + toStrIfInt(p[2][0]), ' COMPLETAR']
+    p[0] = ['--' + toStrIfInt(p[2]), ' COMPLETAR']
 
 def p_factor_mm_var_op(p):
     'factor : LESSLESS var_oper'
@@ -485,7 +485,7 @@ def p_factor_mm_base(p):
 
 def p_factor_var_pp(p):
     'factor : VARIABLE MASMAS'
-    p[0] = [toStrIfInt(p[1][0]) + '++', ' COMPLETAR']
+    p[0] = [toStrIfInt(p[1]) + '++', ' COMPLETAR']
 
 def p_factor_var_op_pp(p):
     'factor : var_oper MASMAS'
@@ -497,7 +497,7 @@ def p_factor_base_pp(p):
 
 def p_factor_pp_var(p):
     'factor : MASMAS VARIABLE'
-    p[0] = ['++' + toStrIfInt(p[2][0]), ' COMPLETAR']
+    p[0] = ['++' + toStrIfInt(p[2]), ' COMPLETAR']
 
 def p_factor_pp_var_op(p):
     'factor : MASMAS var_oper'
@@ -514,7 +514,7 @@ def p_base_expr(p):
 def p_base_valor(p):
     'base : NUMBER'
     #chequear que el valor sea numerico
-    p[0] =  [toStrIfInt(p[1][0]), ' COMPLETAR '] 
+    p[0] =  [toStrIfInt(p[1]), 'NUMBER'] 
 
 def p_base_func_ret_int(p):
     'base : func_ret_int'
@@ -532,7 +532,7 @@ def p_sigexp_exp(p):
 def p_exp_var(p):
     'exp : VARIABLE'
     #chequear que el valor sea numerico
-    p[0] =  [p[1][0], ' COMPLETAR ' ]
+    p[0] =  [p[1], ' COMPLETAR ' ]
 
 def p_exp_var_op(p):
     'exp : var_oper'
@@ -542,7 +542,7 @@ def p_exp_var_op(p):
 def p_exp_valor(p):
     'exp : NUMBER'
     #chequear que el valor sea numerico
-    p[0] =  [toStrIfInt(p[1][0]), ' COMPLETAR ' ]
+    p[0] =  [toStrIfInt(p[1]), 'NUMBER' ]
 
 def p_exp__expr(p):
     'exp : LPAREN exp_arit RPAREN'
@@ -557,11 +557,11 @@ def p_exp_cadena_concat(p):
 
 def p_exp_cadena_concat_1(p):
     'exp_cadena : VARIABLE PLUS term_cadena'
-    p[0] = [p[1][0] + ' + ' +  p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + ' + ' +  p[3][0], ' COMPLETAR ']
 
 def p_exp_cadena_concat_2(p):
     'exp_cadena : exp_cadena PLUS VARIABLE'
-    p[0] = [p[1][0] + ' + ' +  p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + ' + ' +  p[3], ' COMPLETAR ']
 
 def p_exp_cadena_term(p):
     'exp_cadena : term_cadena'
@@ -602,7 +602,7 @@ def p_bool_expr_eat(p):
 
 def p_bool_expr_vaf(p):
     'exp_bool : VARIABLE AND term_bool'
-    p[0] = [p[1][0] + ' and ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + ' and ' + p[3][0], ' COMPLETAR ']
 
 def p_bool_expr_v2af(p):
     'exp_bool : var_oper AND term_bool'
@@ -610,7 +610,7 @@ def p_bool_expr_v2af(p):
 
 def p_bool_expr_eav(p):
     'exp_bool : exp_bool AND VARIABLE'
-    p[0] = [p[1][0] + ' and ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + ' and ' + p[3], ' COMPLETAR ']
 
 def p_bool_expr_eav2(p):
     'exp_bool : exp_bool AND var_oper'
@@ -622,7 +622,7 @@ def p_bool_expr_v2av2(p):
 
 def p_bool_expr_vav(p):
     'exp_bool : VARIABLE AND VARIABLE'
-    p[0] = [p[1][0] + ' and ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + ' and ' + p[3], ' COMPLETAR ']
 
 def p_bool_expr_term(p):
     'exp_bool : term_bool'
@@ -634,7 +634,7 @@ def p_bool_tof(p):
 
 def p_bool_tov(p):
     'term_bool : term_bool OR VARIABLE'
-    p[0] = [p[1][0] + ' or ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + ' or ' + p[3], ' COMPLETAR ']
 
 def p_bool_tov2(p):
     'term_bool : term_bool OR var_oper'
@@ -642,7 +642,7 @@ def p_bool_tov2(p):
 
 def p_bool_vof(p):
     'term_bool : VARIABLE OR factor_bool'
-    p[0] = [p[1][0] + ' or ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + ' or ' + p[3][0], ' COMPLETAR ']
 
 def p_bool_v2of(p):
     'term_bool : var_oper OR factor_bool'
@@ -654,7 +654,7 @@ def p_bool_v2ov2(p):
 
 def p_bool_vov(p):
     'term_bool : VARIABLE OR VARIABLE'
-    p[0] = [p[1][0] + ' or ' + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + ' or ' + p[3], ' COMPLETAR ']
 
 def p_bool_term_factor(p):
     'term_bool : factor_bool'
@@ -670,7 +670,7 @@ def p_term_bool_parentesis(p):
 
 def p_term_bool_bool(p):
     'factor_bool : BOOL'
-    p[0] = [str(p[1][0]), ' COMPLETAR ']
+    p[0] = [str(p[1]), 'BOOL']
 
 def p_term_bool_func(p):
     'factor_bool : func_ret_bool'
@@ -702,7 +702,7 @@ def p_comparcion_exp_arit(p):
 
 def p_comparcion_acv(p):
     'comparacion : exp_arit operador_comp VARIABLE'
-    p[0] = [p[1][0] + p[2][0] + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + p[2][0] + p[3], ' COMPLETAR ']
 
 def p_comparcion_acv2(p):
     'comparacion : exp_arit operador_comp var_oper'
@@ -710,7 +710,7 @@ def p_comparcion_acv2(p):
 
 def p_comparcion_vca(p):
     'comparacion : VARIABLE operador_comp exp_arit'
-    p[0] = [p[1][0] + p[2][0] + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + p[2][0] + p[3][0], ' COMPLETAR ']
 
 def p_comparcion_v2ca(p):
     'comparacion : var_oper operador_comp exp_arit'
@@ -722,7 +722,7 @@ def p_comparcion_exp_cadena(p):
 
 def p_comparcion_exp_vcc(p):
     'comparacion : VARIABLE operador_comp exp_cadena'
-    p[0] = [p[1][0] + p[2][0] + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + p[2][0] + p[3][0], ' COMPLETAR ']
 
 def p_comparcion_exp_v2cc(p):
     'comparacion : var_oper operador_comp exp_cadena'
@@ -730,7 +730,7 @@ def p_comparcion_exp_v2cc(p):
 
 def p_comparcion_exp_ccv(p):
     'comparacion : exp_cadena operador_comp VARIABLE'
-    p[0] = [p[1][0] + p[2][0] + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + p[2][0] + p[3], ' COMPLETAR ']
 
 def p_comparcion_exp_ccv2(p):
     'comparacion : exp_cadena operador_comp var_oper'
@@ -738,7 +738,7 @@ def p_comparcion_exp_ccv2(p):
 
 def p_comparcion_exp_vcv(p):
     'comparacion : VARIABLE operador_comp VARIABLE'
-    p[0] = [p[1][0] + p[2][0] + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + p[2][0] + p[3], ' COMPLETAR ']
 
 def p_comparcion_exp_v2cv2(p):
     'comparacion : var_oper operador_comp var_oper'

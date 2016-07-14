@@ -6,9 +6,10 @@ reserved = {
 	'while':'WHILE',
 	'for':'FOR',
 	'if':'IF',
-	'then':'THEN',
 	'else':'ELSE',
 	'res':'RES',
+	'true':'TRUE',
+	'false':'FALSE',
 	'return':'RETURN',
 	'begin':'BEGIN',
 	'end':'END',
@@ -104,10 +105,10 @@ t_PUNTO = r"\."
 t_DOSPUNTOS = r"\:"
 t_PUNTOYCOMA = r"\;"
 t_COMA = r"\,"
-t_COMENTARIO = r"\#([a-z]|[A-Z]|\_|[ \t]|[0-9]|\=|\;|\,|\+|\*|\%|\#|\$|\/|\(|\)|\?|\{|\}|\-|\_|\'|\"|[|]|\.|\:|\<|\>|\|\!)*"
+t_COMENTARIO = r"\#.*"
 
 
-t_CADENA = r"\" ([a-z]|[A-Z]|\_|[ \t]|[0-9]|!)* \" "
+t_CADENA = r"\" .* \" "
 
 def t_BOOL(token) : 
     r"true | false | FALSE | TRUE"
