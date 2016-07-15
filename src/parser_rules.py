@@ -51,18 +51,9 @@ def estaDefinida(key):
 		return variables_dict[key]
 	else: return 'ND'
 
-# hay diferencia entre arreglo y vector o deberian ser lo mismo?
-# ?????????????????????????????????
-
 # Funcion que devuelve True si tiene como prefijo a VECTOR
 def esVector(palabra):
 	return len(palabra) >= 6 and palabra[0:6] == 'VECTOR'
-
-# Funcion que devuelve True si tiene como prefijo a ARREGLO
-def esArreglo(palabra):
-	return len(palabra) >= 7 and palabra[0:7] == 'ARREGLO'
-# ???????????????????????????
-
 
 # Funcion que convierte a str su entrada en caso que sea un int
 def toStrIfInt(var):
@@ -221,35 +212,35 @@ def p_bloque_p(p):
 #Producciones para funciones
 def p_funcion_ret(p):
     'funcion : func_ret'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], p[1][1]]
 
 def p_funcion_void(p):
     'funcion : func_void '
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], 'ND']
 
 def p_func_void(p):
     'func_void : PRINT LPAREN valores RPAREN'
-    p[0] = ['print(' + p[3][0] + ')', ' COMPLETAR ']
+    p[0] = ['print(' + p[3][0] + ')', 'ND']
 
 def p_funcion_ret_int(p):
     'func_ret : func_ret_int'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], p[1][1]]
 
 def p_funcion_ret_cadena(p):
     'func_ret : func_ret_cadena'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], p[1][1]]
 
 def p_funcion_ret_bool(p):
     'func_ret : func_ret_bool'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], p[1][1]]
 
 def p_funcion_ret_arreglo(p):
     'func_ret : func_ret_arreglo'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], p[1][1]]
 
 def p_funcion_ret_arreglo_3(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores COMA valores RPAREN'
-    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ',' + p[7][0] + ')', ' COMPLETAR ']
+    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ',' + p[7][0] + ')', 'VECTOR_NUMBER']
 
     if (p[3][1] != "VECTOR_NUMBER" or not esNumber(p[5][1]) or p[7][1] != "BOOL"):
         message = "[Semantic error]"
@@ -264,7 +255,7 @@ def p_funcion_ret_arreglo_3(p):
 
 def p_funcion_ret_arreglo_2(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores RPAREN'
-    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ')', ' COMPLETAR ']
+    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ')', 'VECTOR_NUMBER']
 
     if (p[3][1] != "VECTOR_NUMBER" or not esNumber(p[5][1])):
         message = "[Semantic error]"
@@ -327,7 +318,7 @@ def p_funcion_ret_bool_f(p):
 #Producciones para vectores y variables
 def p_valores_exp_arit(p):
     'valores : exp_arit'
-    p[0] = [toStrIfInt(p[1][0]), 'NUMBER']
+    p[0] = [toStrIfInt(p[1][0]), p[1][1]]
 
 def p_valores_exp_bool(p):
     'valores : comparacion'
@@ -339,11 +330,11 @@ def p_valores_exp_cadena(p):
 
 def p_valores_exp_arreglo(p):
     'valores : exp_arreglo'
-    p[0] = [p[1][0], 'ARREGLO']
+    p[0] = [p[1][0], p[1][1]]
 
 def p_valores_reg(p):
     'valores : reg'
-    p[0] = [p[1][0], 'REGISTRO']
+    p[0] = [p[1][0], p[1][1]]
 
 def p_valores_variables(p):
     'valores : var_asig_l'
@@ -351,11 +342,11 @@ def p_valores_variables(p):
 
 def p_exp_arreglo(p):
     'exp_arreglo : LCORCHETE lista_valores RCORCHETE'
-    p[0] = ['[' + toStrIfInt(p[2][0]) +  ']', 'ARREGLO_' + p[2][1]]
+    p[0] = ['[' + toStrIfInt(p[2][0]) +  ']', 'VECTOR_' + p[2][1]]
 
 def p_exp_arreglo_vacio(p):
     'exp_arreglo : LCORCHETE RCORCHETE'
-    p[0] = ['[]', 'ARREGLO_VACIO']
+    p[0] = ['[]', 'VECTOR_VACIO']
 
 def p_exp_arreglo_mult_escalar(p):
     'exp_arreglo : func_ret_arreglo'
@@ -693,7 +684,7 @@ def p_oper_var_vec(p):
     'var_oper : VARIABLE LCORCHETE VARIABLE RCORCHETE'
     p[0] = [p[1] + '[' + p[3] + ']', tipo(estaDefinida(p[1]))]
 
-    if not esArreglo(estaDefinida(p[1])) or estaDefinida(p[3]) != "NUMBER_ENTERO":
+    if not esVector(estaDefinida(p[1])) or estaDefinida(p[3]) != "NUMBER_ENTERO":
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
@@ -709,7 +700,7 @@ def p_oper_var_vec2(p):
     'var_oper : VARIABLE LCORCHETE exp_arit RCORCHETE'
     p[0] = [p[1] + '[' + p[3][0] + ']', tipo(estaDefinida(p[1]))]
 
-    if not esArreglo(estaDefinida(p[1])) or p[3][1] != "NUMBER_ENTERO":
+    if not esVector(estaDefinida(p[1])) or p[3][1] != "NUMBER_ENTERO":
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
@@ -1218,7 +1209,6 @@ def p_exp_var(p):
             message += "\nvalue:" + p[0][0]
             # message += "\nline:" + str(p.lineno)
             # message += "\nposition:" + str(p.lexpos)
-
 
         raise Exception(message)
 
