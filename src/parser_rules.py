@@ -242,7 +242,7 @@ def p_funcion_ret_arreglo_3(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores COMA valores RPAREN'
     p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ',' + p[7][0] + ')', 'VECTOR_NUMBER']
 
-    if (p[3][1] != "VECTOR_NUMBER" or not esNumber(p[5][1]) or p[7][1] != "BOOL"):
+    if ((p[3][1] != "VECTOR_NUMBER" and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1]) or p[7][1] != "BOOL"):
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
@@ -257,7 +257,7 @@ def p_funcion_ret_arreglo_2(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores RPAREN'
     p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ')', 'VECTOR_NUMBER']
 
-    if (p[3][1] != "VECTOR_NUMBER" or not esNumber(p[5][1])):
+    if ((p[3][1] != "VECTOR_NUMBER" and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1])):
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
@@ -304,7 +304,7 @@ def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
     p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', ' COMPLETAR ']
 
-    if (p[3][1] != 'VECTOR_NUMBER' or p[5][1] != 'VECTOR_NUMBER'):
+    if ((p[3][1] != 'VECTOR_NUMBER' and p[3][1] != "VECTOR_VACIO") or (p[5][1] != 'VECTOR_NUMBER' and p[3][1] != "VECTOR_VACIO")):
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
