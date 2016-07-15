@@ -1,8 +1,11 @@
 from lexer_rules import tokens
 import ply.yacc as yacc
 
+
+# Diccionario donde se almacenaran las variables declaradas junto con su tipo
 variables_dict = dict()
 
+# Funcion que reemplaza los '\n' por '\n    ' o sea agrega un tab en cada salto de linea
 def find_and_replace(palabra):
     j = 0
     res = ''
@@ -12,6 +15,7 @@ def find_and_replace(palabra):
             j = i+1
     return res + palabra[j:]
 
+# Funcion que devuelve lo que esta despues de un guion bajo en un string, por ejemplo si palabra = NUMBER_INT devuelve INT
 def tipo(palabra):
 	j = len(palabra)
 	for i in xrange(len(palabra)):
@@ -22,6 +26,7 @@ def tipo(palabra):
 		return 'SINTIPO'
 	return palabra[j:len(palabra)]
 
+# Funcion que devuelve NUMBER_FLOAT o NUMBER_INT segun si en su entrada tiene algun FLOAT o no
 def tipoNumber(*args):
 	if len(args) == 2:
 		palabra1 = args[0]
@@ -35,9 +40,12 @@ def tipoNumber(*args):
 			return 'NUMBER_FLOAT'
 		else: return 'NUMBER_INT'
 
+# Funcion que devuelve True si tiene como prefijo a NUMBER
 def esNumber(palabra):
 	return len(palabra) >= 6 and palabra[0:6] == 'NUMBER'
 
+# Funcion que accede al diccionario de variables y devuelve su tipo (Si esta definida)
+# Si no esta definida devuelve ND
 def estaDefinida(key):
 	if key in variables_dict:
 		return variables_dict[key]
@@ -45,13 +53,18 @@ def estaDefinida(key):
 
 # hay diferencia entre arreglo y vector o deberian ser lo mismo?
 # ?????????????????????????????????
+
+# Funcion que devuelve True si tiene como prefijo a VECTOR
 def esVector(palabra):
 	return len(palabra) >= 6 and palabra[0:6] == 'VECTOR'
 
+# Funcion que devuelve True si tiene como prefijo a ARREGLO
 def esArreglo(palabra):
 	return len(palabra) >= 7 and palabra[0:7] == 'ARREGLO'
 # ???????????????????????????
 
+
+# Funcion que convierte a str su entrada en caso que sea un int
 def toStrIfInt(var):
     if isinstance( var, int ):
        return str(var)
