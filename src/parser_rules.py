@@ -806,6 +806,15 @@ def p_exp_arit_v2pv2(p):
     'exp_arit : var_oper PLUS var_oper'
     p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
+    if not esNumber(p[1][1]) or not esNumber(p[3][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
+
 def p_exp_arit_emt(p):
     'exp_arit : exp_arit MINUS term'
     p[0] = [p[1][0] + ' - ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
@@ -830,6 +839,14 @@ def p_exp_arit_emv2(p):
     'exp_arit : exp_arit MINUS var_oper'
     p[0] = [p[1][0] + ' - ' + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
+    if not esNumber(p[3][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
 def p_exp_arit_vmt(p):
     'exp_arit : VARIABLE MINUS term'
     p[0] = [p[1] + ' - ' + toStrIfInt(p[3][0]), tipoNumber(estaDefinida(p[1]),p[3][1])]
@@ -849,6 +866,14 @@ def p_exp_arit_v2mt(p):
     'exp_arit : var_oper MINUS term'
     p[0] = [p[1][0] + ' - ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
+    if not esNumber(p[1][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
 def p_exp_arit_vmv(p):
     'exp_arit : VARIABLE MINUS VARIABLE'
     p[0] = [p[1] + ' - ' + toStrIfInt(p[3]), tipoNumber(estaDefinida(p[1]),estaDefinida(p[3]))]
@@ -867,6 +892,14 @@ def p_exp_arit_vmv(p):
 def p_exp_arit_v2mv2(p):
     'exp_arit : var_oper MINUS var_oper'
     p[0] = [p[1][0] + ' - ' + toStrIfInt(p[3][0]),  tipoNumber(p[1][1],p[3][1])]
+
+    if not esNumber(p[1][1]) or not esNumber(p[3][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
 
 def p_exp_arit_term(p):
     'exp_arit : term'
@@ -923,6 +956,14 @@ def p_term_tmv2(p):
     'term : term arit_oper_2 var_oper'
     p[0] = [p[1][0] + p[2][0] + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
+    if not esNumber(p[3][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
 def p_term_vmf(p):
     'term : VARIABLE  arit_oper_2 factor'
     p[0] = [p[1] + p[2][0] + toStrIfInt(p[3][0]), tipoNumber(estaDefinida(p[3]),p[3][1])]
@@ -941,6 +982,14 @@ def p_term_vmf(p):
 def p_term_v2mf(p):
     'term : var_oper arit_oper_2 factor'
     p[0] = [p[1][0] + p[2][0] + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
+
+    if not esNumber(p[1][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
 
 def p_term_vmv(p):
     'term : VARIABLE arit_oper_2 VARIABLE'
@@ -961,6 +1010,13 @@ def p_term_v2mv2(p):
     'term : var_oper arit_oper_2 var_oper'
     p[0] = [p[1][0] + p[2][0] + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
+    if not esNumber(p[1][1]) or not esNumber(p[3][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
 
 def p_term_factor(p):
     'term : factor'
@@ -989,6 +1045,14 @@ def p_factor_var_op__exp(p):
     'factor : var_oper ELEVADO sigexp'
     p[0] = [p[1][0] + ' ^' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
+    if not esNumber(p[1][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
 def p_factor_base(p):
     'factor : base '
     p[0] = [toStrIfInt(p[1][0]), p[1][1]]
@@ -1016,6 +1080,14 @@ def p_factor_var_op_mm(p):
     'factor : var_oper LESSLESS'
     p[0] = [toStrIfInt(p[1][0]) + '--', p[1][1]]
 
+    if not esNumber(p[1][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
 def p_factor_base_mm(p):
     'factor : base LESSLESS'
     p[0] = [toStrIfInt(p[1][0]) + '--', p[1][1]]
@@ -1038,6 +1110,14 @@ def p_factor_mm_var(p):
 def p_factor_mm_var_op(p):
     'factor : LESSLESS var_oper'
     p[0] = ['--' + toStrIfInt(p[2][0]), p[2][1]]
+
+    if not esNumber(p[2][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
 
 def p_factor_mm_base(p):
     'factor : LESSLESS base '
@@ -1062,6 +1142,14 @@ def p_factor_var_op_pp(p):
     'factor : var_oper MASMAS'
     p[0] = [toStrIfInt(p[1][0]) + '++', p[1][1]]
 
+    if not esNumber(p[1][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
 def p_factor_base_pp(p):
     'factor : base MASMAS'
     p[0] = [toStrIfInt(p[1][0]) + '++', p[1][1]]
@@ -1084,6 +1172,14 @@ def p_factor_pp_var(p):
 def p_factor_pp_var_op(p):
     'factor : MASMAS var_oper'
     p[0] = ['++' + toStrIfInt(p[2][0]), p[2][1]]
+
+    if not esNumber(p[2][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
 
 def p_factor_pp_base(p):
     'factor : MASMAS base '
