@@ -76,7 +76,7 @@ def p_loop_while(p):
 
 def p_loop_do(p):
     'loop : DO bloque WHILE LPAREN valores RPAREN PUNTOYCOMA'
-    p[0] = ['do\n' + find_and_replace(p[2][0]) + 'while(' + p[5][0] + ');' +')\n', ' COMPLETAR ']
+    p[0] = ['do\n    ' + find_and_replace(p[2][0]) + '\nwhile(' + p[5][0] + ');' +'\n', ' COMPLETAR ']
 
 def p_loop_for(p):
     'loop : FOR LPAREN var_asig PUNTOYCOMA valores PUNTOYCOMA exp_arit RPAREN bloque'
@@ -187,7 +187,7 @@ def p_valores_variables(p):
 
 def p_exp_arreglo(p):
     'exp_arreglo : LCORCHETE lista_valores RCORCHETE'
-    p[0] = ['[' + toStrIfInt(p[2]) +  ']', ' COMPLETAR ']
+    p[0] = ['[' + toStrIfInt(p[2][0]) +  ']', ' COMPLETAR ']
 
 def p_exp_arreglo_vacio(p):
     'exp_arreglo : LCORCHETE RCORCHETE'
@@ -353,17 +353,16 @@ def p_var_asig_oper_ternario(p):
     p[0] = [p[1][0] + '=' + p[3][0], ' COMPLETAR '] 
 
 def p_operador_ternarioret_bool(p):
-    'operador_ternario : LPAREN exp_bool RPAREN INTERROGACION exp_bool DOSPUNTOS exp_bool'
-    p[0] = ['(' + p[2][0] + ')? ' + p[5][0] + ':' + p[7][0] , ' COMPLETAR ']
+    'operador_ternario : exp_bool INTERROGACION exp_bool DOSPUNTOS exp_bool'
+    p[0] = [ p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0] , ' COMPLETAR ']
 
 def p_operador_ternarioret_mat(p):
-    'operador_ternario : LPAREN exp_bool RPAREN INTERROGACION exp_arit DOSPUNTOS exp_arit'
-    p[0] = ['(' + p[2][0] + ')? ' + toStrIfInt(p[5][0]) + ':' + p[7][0], ' COMPLETAR ']
+    'operador_ternario : exp_bool INTERROGACION exp_arit DOSPUNTOS exp_arit'
+    p[0] = [ p[1][0] + ' ? ' + toStrIfInt(p[3][0]) + ':' + p[5][0], ' COMPLETAR ']
 
 def p_operador_ternarioret_cadena(p):
-    'operador_ternario : LPAREN exp_cadena RPAREN INTERROGACION exp_bool DOSPUNTOS exp_cadena'
-    p[0] = ['(' + p[2][0] + ')? ' + p[5][0] + ':' + p[7][0], ' COMEPLTAR ']
-
+    'operador_ternario : exp_cadena INTERROGACION exp_bool DOSPUNTOS exp_cadena'
+    p[0] = [p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0], ' COMPLETAR ']
 
 
 def p_oper_var_reg(p):
@@ -624,11 +623,11 @@ def p_exp_cadena_cadena(p):
 
 def p_exp_cadena_funct_ret_string(p):
     'term_cadena : CAPITALIZAR LPAREN valores RPAREN'
-    p[0] = ['capitalizar(' + p[1][0] + ')', ' COMPLETAR ']
+    p[0] = ['capitalizar(' + p[3][0] + ')', ' COMPLETAR ']
 
 def p_exp_cadena_parent(p):
     'term_cadena : LPAREN exp_cadena RPAREN'
-    p[0] = ['(' + p[1][0] + ')', ' COMPLETAR']
+    p[0] = ['(' + p[2][0] + ')', ' COMPLETAR']
 
 
 

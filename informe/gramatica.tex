@@ -87,9 +87,9 @@
                 |   VARIABLE '.' VARIABLE '=' <valores>
                 |   <var_asig_l> '=' <op_ternario>
 
-<op_ternario>   :   '(' <exp_bool> ')' '?' <exp_bool> ':' <exp_bool>
-                |   '(' <exp_bool> ')' '?' <exp_arit> ':' <exp_arit>
-                |   '(' <exp_bool> ')' '?' <exp_cadena> ':' <exp_cadena>
+<op_ternario>   :   <exp_bool> '?' <exp_bool> ':' <exp_bool>
+                |   <exp_bool> '?' <exp_arit> ':' <exp_arit>
+                |   <exp_bool> '?' <exp_cadena> ':' <exp_cadena>
 
 
 <var_oper>      :   VARIABLE '[' <exp_arit> ']' 
