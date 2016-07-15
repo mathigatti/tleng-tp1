@@ -376,8 +376,6 @@ def p_lista_valores_lista(p):
 
         raise Exception(message)
 
-#INCOMPLETO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-
 #Producciones Registros
 def p_reg(p):
     'reg : LLAVEIZQ reg_item LLAVEDER'
@@ -448,7 +446,7 @@ def p_var_asig_l_reg(p):
 
 def p_var_asig_base_mm(p):
     'var_asig : var_asig_l LESSLESS'
-    p[0] = [toStrIfInt(p[1][0]) + '--', ' COMPLETAR ']
+    p[0] = [toStrIfInt(p[1][0]) + '--', p[1][1]]
 
     if not esNumber(p[1][1]):
         message = "[Semantic error]"
@@ -464,7 +462,7 @@ def p_var_asig_base_mm(p):
 
 def p_var_asig_mm_base(p):
     'var_asig : LESSLESS var_asig_l'
-    p[0] = ['--' + toStrIfInt(p[2][0]), ' COMPLETAR ']
+    p[0] = ['--' + toStrIfInt(p[2][0]), p[2][1]]
 
     if not esNumber(p[2][1]):
         message = "[Semantic error]"
@@ -480,7 +478,7 @@ def p_var_asig_mm_base(p):
 
 def p_var_asig_base_pp(p):
     'var_asig : var_asig_l MASMAS'
-    p[0] = [toStrIfInt(p[1][0]) + '++', ' COMPLETAR ']
+    p[0] = [toStrIfInt(p[1][0]) + '++', p[1][1]]
     # p[0] = toStrIfInt(p[1]) + str(type(p[1]))
 
     if not esNumber(p[1][1]):
@@ -497,7 +495,7 @@ def p_var_asig_base_pp(p):
 
 def p_var_asig_pp_base(p):
     'var_asig : MASMAS var_asig_l '
-    p[0] = ['++' + toStrIfInt(p[2][0]), ' COMPLETAR ']
+    p[0] = ['++' + toStrIfInt(p[2][0]), p[2][1]]
 
     if not esNumber(p[2][1]):
         message = "[Semantic error]"
@@ -513,7 +511,7 @@ def p_var_asig_pp_base(p):
 
 def p_var_asig_multipl(p):
     'var_asig : var_asig_l MULTIPL valores'
-    p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         message = "[Semantic error]"
@@ -528,7 +526,7 @@ def p_var_asig_multipl(p):
 
 def p_var_asig_dividi(p):
     'var_asig : var_asig_l DIVIDI valores'
-    p[0] = [p[1][0] + '=/' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1][0] + '=/' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         message = "[Semantic error]"
@@ -547,7 +545,7 @@ def p_var_asig_dividi(p):
 
 def p_var_asig_agregar(p):
     'var_asig : var_asig_l AGREGAR valores'
-    p[0] = [p[1][0] + '+=' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1][0] + '+=' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if (esNumber(p[1][1]) and esNumber(p[1][1])) or (p[1][1] == "STRING" and p[3][1] == "STRING")  :
         pass
@@ -564,7 +562,7 @@ def p_var_asig_agregar(p):
 
 def p_var_asig_sacar(p):
     'var_asig : var_asig_l SACAR valores'
-    p[0] = [p[1][0] + '-=' + toStrIfInt(p[3][0], ' COMPLETAR ')]
+    p[0] = [p[1][0] + '-=' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         message = "[Semantic error]"
@@ -579,7 +577,7 @@ def p_var_asig_sacar(p):
 
 def p_var_asig_multipl(p):
     'var_asig : var_asig_l MULTIPL valores'
-    p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         message = "[Semantic error]"
@@ -594,7 +592,7 @@ def p_var_asig_multipl(p):
 
 def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
-    p[0] = [p[1][0] + '=' + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1][0] + '=' + toStrIfInt(p[3][0]), 'ASIGNACION']
 
 # En asignacion no importa el tipo, por mas que tengas una variable 'aux' del tipo que sea
 # aux = 10; deberia ser valido
@@ -618,22 +616,11 @@ def p_var_asig(p):
 
 def p_var_asig_oper_ternario(p):
     'var_asig : var_asig_l ASIGNACION operador_ternario'
-    p[0] = [p[1][0] + '=' + p[3][0], ' COMPLETAR ']
-
-    if (p[1][1] != "OPERADOR_TERNARIO"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        raise Exception(message)
+    p[0] = [p[1][0] + '=' + p[3][0], 'ASIGNACION']
 
 def p_operador_ternarioret_bool(p):
     'operador_ternario : exp_bool INTERROGACION exp_bool DOSPUNTOS exp_bool'
-    p[0] = [ p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0] , ' COMPLETAR ']
+    p[0] = [ p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0] , 'BOOL']
 
     if (p[1][1] != "BOOL" or p[3][1] != "BOOL" or p[5][1] != "BOOL"):
         message = "[Semantic error]"
@@ -648,7 +635,7 @@ def p_operador_ternarioret_bool(p):
 
 def p_operador_ternarioret_mat(p):
     'operador_ternario : exp_bool INTERROGACION exp_arit DOSPUNTOS exp_arit'
-    p[0] = [ p[1][0] + ' ? ' + toStrIfInt(p[3][0]) + ':' + p[5][0], ' COMPLETAR ']
+    p[0] = [ p[1][0] + ' ? ' + toStrIfInt(p[3][0]) + ':' + p[5][0], tipoNumber(p[3][1],p[5][1])]
 
     if (p[1][1] != "BOOL" or p[3][1] != "NUMBER" or p[5][1] != "NUMBER"):
         message = "[Semantic error]"
@@ -663,7 +650,7 @@ def p_operador_ternarioret_mat(p):
 
 def p_operador_ternarioret_cadena(p):
     'operador_ternario : exp_cadena INTERROGACION exp_cadena DOSPUNTOS exp_cadena'
-    p[0] = [p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0], 'STRING']
 
     if (p[1][1] != "BOOL" or p[3][1] != "STRING" or p[5][1] != "STRING"):
         message = "[Semantic error]"
@@ -678,13 +665,13 @@ def p_operador_ternarioret_cadena(p):
 
 def p_oper_var_reg(p):
     'var_oper : VARIABLE PUNTO  VARIABLE'
-    p[0] = [p[1] + '.' + p[3], ' COMPLETAR ']
+    p[0] = [p[1] + '.' + p[3], 'ND']
 
 def p_oper_var_vec(p):
     'var_oper : VARIABLE LCORCHETE VARIABLE RCORCHETE'
     p[0] = [p[1] + '[' + p[3] + ']', tipo(estaDefinida(p[1]))]
 
-    if not esVector(estaDefinida(p[1])) or estaDefinida(p[3]) != "NUMBER_ENTERO":
+    if not esVector(estaDefinida(p[1])) or estaDefinida(p[3]) != "NUMBER_INT":
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
@@ -700,7 +687,7 @@ def p_oper_var_vec2(p):
     'var_oper : VARIABLE LCORCHETE exp_arit RCORCHETE'
     p[0] = [p[1] + '[' + p[3][0] + ']', tipo(estaDefinida(p[1]))]
 
-    if not esVector(estaDefinida(p[1])) or p[3][1] != "NUMBER_ENTERO":
+    if not esVector(estaDefinida(p[1])) or p[3][1] != "NUMBER_INT":
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
