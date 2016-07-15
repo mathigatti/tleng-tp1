@@ -304,7 +304,7 @@ def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
     p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', ' COMPLETAR ']
 
-    if ((p[3][1] != 'VECTOR_NUMBER' and p[3][1] != "VECTOR_VACIO") or (p[5][1] != 'VECTOR_NUMBER' and p[3][1] != "VECTOR_VACIO")):
+    if ((p[3][1] != 'VECTOR_NUMBER' and p[3][1] != "VECTOR_VACIO") or (p[5][1] != 'VECTOR_NUMBER' and p[5][1] != "VECTOR_VACIO")):
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
