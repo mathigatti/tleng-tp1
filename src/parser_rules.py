@@ -332,9 +332,14 @@ def p_valores_exp_arreglo(p):
     'valores : exp_arreglo'
     p[0] = [p[1][0], p[1][1]]
 
+
 def p_valores_reg(p):
     'valores : reg'
     p[0] = [p[1][0], p[1][1]]
+
+def p_valores_reg2(p):
+    'valores : reg PUNTO VARIABLE'
+    p[0] = [p[1][0] + '.' + p[3][0], p[1][1]]
 
 def p_valores_variables(p):
     'valores : var_asig_l'
@@ -382,11 +387,11 @@ def p_reg(p):
     p[0] = ['{' + p[1][0] + '}','REGISTRO']
 
 def p_reg_item_list(p):
-    'reg_item : CADENA DOSPUNTOS valores COMA reg_item' 
+    'reg_item : VARIABLE DOSPUNTOS valores COMA reg_item' 
     p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0],'REGISTRO']
 
 def p_reg_item(p):
-    'reg_item : CADENA DOSPUNTOS valores' 
+    'reg_item : VARIABLE DOSPUNTOS valores' 
     p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), 'REGISTRO']
 
 #Producciones de asignaciones

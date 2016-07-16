@@ -50,6 +50,7 @@
                 |   <exp_cadena>
                 |   <exp_arreglo>
                 |   <registro>
+                |   <registro>.VARIABLE
                 |   VARIABLE
                 |   VARIABLE '[' <exp_arit> ']' 
                 |   VARIABLE '[' VARIABLE ']' 
@@ -64,13 +65,15 @@
 
 <registro>      :   '{' <reg_item> '}'
 
-<reg_item>      :   CADENA ':' <valores> ',' <reg_item>
-                |   CADENA ':' <valores> 
+<reg_item>      :   VARIABLE ':' <valores> ',' <reg_item>
+                |   VARIABLE ':' <valores> 
 
 <var_asig_l>    :   VARIABLE
                 |   RES
                 |   VARIABLE '[' <exp_arit> ']' 
+                |   <exp_arreglo> '[' <exp_arit> ']' 
                 |   VARIABLE '[' VARIABLE ']' 
+                |   <exp_arreglo> '[' VARIABLE ']' 
                 |   VARIABLE '.' VARIABLE 
 
 <var_asig>      :   <var_asig_l> '++'

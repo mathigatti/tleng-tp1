@@ -108,7 +108,7 @@ t_COMA = r"\,"
 t_COMENTARIO = r"\#.*"
 
 
-t_CADENA = r"\" .* \" "
+t_CADENA = r"\" .*? \" "
 
 def t_BOOL(token) : 
     r"true | false | FALSE | TRUE"
