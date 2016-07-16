@@ -69,57 +69,57 @@ class ParserException(Exception):
 
 def p_programa_s_pp(p):
     'p : sentencia pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_programa_coment_pp(p):
     'p : COMENTARIO p'
-    p[0] = [p[1] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1] + '\n'  + p[2][0], 'ND']
 
 def p_programa_ctl_p(p):
     'p : control pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_pp_s_pp(p):
     'pp : sentencia pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_pp_ctl_pp(p):
     'pp : COMENTARIO pp'
-    p[0] = [p[1] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1] + '\n'  + p[2][0], 'ND']
 
 def p_pp_comentario_p(p):
     'pp : control pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], ' COMPLETAR ']
+    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_pp_empty(p):
     'pp : empty'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], 'ND']
 
 def p_empty(p):
     'empty :'
-    p[0] = ['', ' COMPLETAR ']
+    p[0] = ['', 'ND']
      
 def p_sentencia_var_asig(p):
     'sentencia : var_asig PUNTOYCOMA'
-    p[0] = [p[1][0] + ';', ' COMPLETAR ']
+    p[0] = [p[1][0] + ';', 'ND']
 
 
 def p_sentencia_func(p):
     'sentencia : funcion PUNTOYCOMA'
-    p[0] = [p[1][0] + ';', ' COMPLETAR ']
+    p[0] = [p[1][0] + ';', 'ND']
 
 #Producciones para estructuras de control
 def p_control_ifelse(p):
     'control : ifelse'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], 'ND']
 
 def p_control_loop(p):
     'control : loop'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], 'ND']
 
 def p_loop_while(p):
     'loop : WHILE LPAREN valores RPAREN bloque'
-    p[0] = ['while('+ p[3][0] + ')\n' + find_and_replace(p[5][0]), ' COMPLETAR ']
+    p[0] = ['while('+ p[3][0] + ')\n' + find_and_replace(p[5][0]), 'ND']
 
     if (p[3][1] != "BOOL"):
         message = "[Semantic error]"
@@ -135,7 +135,7 @@ def p_loop_while(p):
 
 def p_loop_do(p):
     'loop : DO bloque WHILE LPAREN valores RPAREN PUNTOYCOMA'
-    p[0] = ['do\n    ' + find_and_replace(p[2][0]) + '\nwhile(' + p[5][0] + ');' +'\n', ' COMPLETAR ']
+    p[0] = ['do\n    ' + find_and_replace(p[2][0]) + '\nwhile(' + p[5][0] + ');' +'\n', 'ND']
 
     if (p[5][1] != "BOOL"):
         message = "[Semantic error]"
@@ -150,7 +150,7 @@ def p_loop_do(p):
 
 def p_loop_for(p):
     'loop : FOR LPAREN var_asig PUNTOYCOMA valores PUNTOYCOMA exp_arit RPAREN bloque'
-    p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]) + '\n', ' COMPLETAR ']
+    p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]) + '\n', 'ND']
 
     if (p[5][1] != "BOOL"):
         message = "[Semantic error]"
@@ -165,7 +165,7 @@ def p_loop_for(p):
 
 def p_ifelse(p):
     'ifelse : IF LPAREN valores RPAREN bloque ELSE bloque'
-    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7][0]) + '\n', 'COMPLETAR']
+    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7][0]) + '\n', 'ND']
 
     if (p[3][1] != "BOOL"):
         message = "[Semantic error]"
@@ -180,7 +180,7 @@ def p_ifelse(p):
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN valores RPAREN bloque'
-    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\n', ' COMPLETAR ']
+    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\n', 'ND']
 
     if (p[3][1] != "BOOL"):
         message = "[Semantic error]"
@@ -195,19 +195,19 @@ def p_ifSinElse(p):
 
 def p_bloque_cb(p):
     'bloque : COMENTARIO bloque'
-    p[0] = [p[1], ' COMPLETAR ']
+    p[0] = [p[1], 'ND']
 
 def p_bloque_s(p):
     'bloque : sentencia'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], 'ND']
 
 def p_bloque_c(p):
     'bloque : control'
-    p[0] = [p[1][0], ' COMPLETAR ']
+    p[0] = [p[1][0], 'ND']
 
 def p_bloque_p(p):
     'bloque : LLAVEIZQ p LLAVEDER'
-    p[0] = ['{' + p[2][0] + '}', ' COMPLETAR ']
+    p[0] = ['{' + p[2][0] + '}', 'ND']
 
 #Producciones para funciones
 def p_funcion_ret(p):
@@ -379,15 +379,15 @@ def p_lista_valores_lista(p):
 #Producciones Registros
 def p_reg(p):
     'reg : LLAVEIZQ reg_item LLAVEDER'
-    p[0] = ['{' + p[1][0] + '}',' COMPLETAR']
+    p[0] = ['{' + p[1][0] + '}','REGISTRO']
 
 def p_reg_item_list(p):
     'reg_item : CADENA DOSPUNTOS valores COMA reg_item' 
-    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0],' COMPLETAR']
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0],'REGISTRO']
 
 def p_reg_item(p):
     'reg_item : CADENA DOSPUNTOS valores' 
-    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), ' COMPLETAR ']
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), 'REGISTRO']
 
 #Producciones de asignaciones
 def p_var_asig_l_var(p):
@@ -593,6 +593,7 @@ def p_var_asig_multipl(p):
 def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
     p[0] = [p[1][0] + '=' + toStrIfInt(p[3][0]), 'ASIGNACION']
+    variables_dict[p[1][0]] = p[1][1]
 
 # En asignacion no importa el tipo, por mas que tengas una variable 'aux' del tipo que sea
 # aux = 10; deberia ser valido
@@ -617,6 +618,8 @@ def p_var_asig(p):
 def p_var_asig_oper_ternario(p):
     'var_asig : var_asig_l ASIGNACION operador_ternario'
     p[0] = [p[1][0] + '=' + p[3][0], 'ASIGNACION']
+    variables_dict[p[1][0]] = p[1][1]
+
 
 def p_operador_ternarioret_bool(p):
     'operador_ternario : exp_bool INTERROGACION exp_bool DOSPUNTOS exp_bool'
@@ -694,7 +697,6 @@ def p_oper_var_vec2(p):
             message += "\nvalue:" + p[0][0]
             # message += "\nline:" + str(p.lineno)
             # message += "\nposition:" + str(p.lexpos)
-
 
         raise Exception(message)
 
@@ -1619,7 +1621,7 @@ def p_comparcion_exp_cadena(p):
 
 def p_comparcion_exp_vcc(p):
     'comparacion : VARIABLE operador_comp exp_cadena'
-    p[0] = [p[1] + p[2][0] + p[3][0], ' COMPLETAR ']
+    p[0] = [p[1] + p[2][0] + p[3][0], 'BOOL']
 
     if estaDefinida(p[1]) != 'STRING':
         message = "[Semantic error]"
