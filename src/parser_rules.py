@@ -593,7 +593,7 @@ def p_var_asig_multipl(p):
 def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
     p[0] = [p[1][0] + '=' + toStrIfInt(p[3][0]), 'ASIGNACION']
-    variables_dict[p[1][0]] = p[1][1]
+    variables_dict[p[1][0]] = p[3][1]
 
 # En asignacion no importa el tipo, por mas que tengas una variable 'aux' del tipo que sea
 # aux = 10; deberia ser valido
@@ -618,7 +618,7 @@ def p_var_asig(p):
 def p_var_asig_oper_ternario(p):
     'var_asig : var_asig_l ASIGNACION operador_ternario'
     p[0] = [p[1][0] + '=' + p[3][0], 'ASIGNACION']
-    variables_dict[p[1][0]] = p[1][1]
+    variables_dict[p[1][0]] = p[3][1]
 
 
 def p_operador_ternarioret_bool(p):
