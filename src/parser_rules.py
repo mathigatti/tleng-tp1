@@ -416,9 +416,40 @@ def p_var_asig_l_vec(p):
 
 def p_var_asig_l_vec1(p):
     'var_asig_l : VARIABLE LCORCHETE VARIABLE RCORCHETE'
-    p[0] = [p[1] + '[' + p[3] +  ']',tipo(estaDefinida(p[1]))]
+    p[0] = [p[1][0] + '[' + p[3] +  ']',tipo(estaDefinida(p[1]))]
 
-    if not (p[1] in variables_dict) or not (p[3] in variables_dict) or tipo(estaDefinida(p[3])) != 'INT':
+    if not (p[1] in variables_dict) or not (p[3] in variables_dict) or tipo(estaDefinida(p[3][0])) != 'INT':
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
+
+        raise Exception(message)
+
+def p_var_asig_l_vec2(p):
+    'var_asig_l : exp_arreglo LCORCHETE exp_arit RCORCHETE'
+    p[0] = [p[1][0] + '[' + str(p[3][0]) +  ']',tipo(estaDefinida(p[1][0]))]
+
+    if tipo(p[3][1]) != 'INT':
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
+
+        raise Exception(message)
+
+
+def p_var_asig_l_vec3(p):
+    'var_asig_l : exp_arreglo  LCORCHETE VARIABLE RCORCHETE'
+    p[0] = [p[1][0] + '[' + p[3][0] +  ']',tipo(estaDefinida(p[1][0]))]
+
+    if not (p[3][0] in variables_dict) or tipo(estaDefinida(p[3][0])) != 'INT':
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
