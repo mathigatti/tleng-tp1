@@ -392,12 +392,12 @@ def p_reg_item(p):
 #Producciones de asignaciones
 def p_var_asig_l_var(p):
     'var_asig_l : VARIABLE'
-    p[0] = [p[1], 'ND' ]
+    p[0] = [p[1], estaDefinida(p[1])]
 
 
 def p_var_asig_l_res(p):
     'var_asig_l : RES'
-    p[0] = [p[1], 'ND' ]
+    p[0] = [p[1], estaDefinida(p[1])]
 
 def p_var_asig_l_vec(p):
     'var_asig_l : VARIABLE LCORCHETE exp_arit RCORCHETE'
@@ -946,7 +946,7 @@ def p_term_tmv2(p):
 
 def p_term_vmf(p):
     'term : VARIABLE  arit_oper_2 factor'
-    p[0] = [p[1] + p[2][0] + toStrIfInt(p[3][0]), tipoNumber(estaDefinida(p[3]),p[3][1])]
+    p[0] = [p[1] + p[2][0] + toStrIfInt(p[3][0]), tipoNumber(estaDefinida(p[1]))]
 
     if not esNumber(estaDefinida(p[1])):
         message = "[Semantic error]"
@@ -1588,7 +1588,7 @@ def p_comparcion_vca(p):
     'comparacion : VARIABLE operador_comp exp_arit'
     p[0] = [p[1] + p[2][0] + p[3][0], 'BOOL']
 
-    if esNumber(estaDefinida(p[1])):
+    if not esNumber(estaDefinida(p[1])):
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]

@@ -10,9 +10,15 @@ length("a");
 
 length([1]);
 
-a = colineales(a,a);
+b = [1];
 
-multiplicacionEscalar(a,a);
+c = [2,3];
+
+a = colineales(b,c);
+
+d = 10
+
+multiplicacionEscalar(c,d);
 
 a = capitalizar("a");
 

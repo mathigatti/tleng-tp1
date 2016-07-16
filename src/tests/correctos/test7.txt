@@ -4,6 +4,7 @@ while(true){
 if (i<2)
 {
 #Algo sobre el then del if
+valores=[10,11];
 valores[i]=i;
 i++;}
 else{
