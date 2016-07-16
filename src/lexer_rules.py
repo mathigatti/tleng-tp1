@@ -80,7 +80,7 @@ def t_NEWLINE(token):
 t_IGUAL = r"=="
 t_DISTINTO = r"\!="
 t_AGREGAR = r"\+="
-t_SACAR = r"-="
+t_SACAR = r"\-="
 t_DIVIDI = r"/="
 t_MULTIPL = r"\*="
 t_MINUS = r"\-"
