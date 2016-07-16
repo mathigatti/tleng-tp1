@@ -359,13 +359,13 @@ def p_lista_valores_end(p):
 def p_lista_valores_lista(p):
     'lista_valores : valores COMA lista_valores'
 
-    tipo = p[3][1]
+    tipo_lista = p[3][1]
     if p[1][1] != 'ND':
-    	tipo = p[1][1]
+    	tipo_lista = p[1][1]
 
-    p[0] = [p[1][0] + ',' + p[3][0], tipo]
+    p[0] = [p[1][0] + ',' + p[3][0], tipo_lista]
 
-    if (p[1][1] != p[3][1] or p[1][1] == 'ND' or p[3][1] == 'ND'):
+    if (p[1][1] != p[3][1] and p[1][1] != 'ND' and p[3][1] != 'ND'):
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
@@ -403,7 +403,7 @@ def p_var_asig_l_vec(p):
     'var_asig_l : VARIABLE LCORCHETE exp_arit RCORCHETE'
     p[0] = [p[1] + '[' + str(p[3][0]) +  ']',tipo(estaDefinida(p[1]))]
 
-    if not p[1] in variables_dict or tipo(estaDefinida(p[3])) != 'INT':
+    if not p[1] in variables_dict or tipo(p[3][1]) != 'INT':
         message = "[Semantic error]"
         if p is not None:
             message += "\ntype:" + p[0][1]
