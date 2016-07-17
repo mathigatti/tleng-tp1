@@ -16,7 +16,7 @@ c = [2,3];
 
 a = colineales(b,c);
 
-d = 10
+d = 10;
 
 multiplicacionEscalar(c,d);
 
