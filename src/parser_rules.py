@@ -313,6 +313,10 @@ def p_exp_arreglo(p):
     'exp_arreglo : LCORCHETE lista_valores RCORCHETE'
     p[0] = ['[' + toStrIfInt(p[2][0]) +  ']', 'VECTOR_' + p[2][1]]
 
+def p_exp_arregloMatriz(p):
+    'exp_arreglo : LCORCHETE lista_valores RCORCHETE exp_arreglo'
+    p[0] = ['[' + toStrIfInt(p[2][0]) +  ']' + p[4][0], 'VECTOR_' + p[2][1]]
+
 def p_exp_arreglo_vacio(p):
     'exp_arreglo : LCORCHETE RCORCHETE'
     p[0] = ['[]', 'VECTOR_VACIO']
