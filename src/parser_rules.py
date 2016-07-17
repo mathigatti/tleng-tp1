@@ -69,27 +69,39 @@ class ParserException(Exception):
 
 def p_programa_s_pp(p):
     'p : sentencia pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
+    if (p.lineno(1) == p.lineno(2)) and p[2][1] == 'COMENTARIO':    	
+        p[0] = [p[1][0] + ' '  + p[2][0], 'ND']
+    else:
+        p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_programa_coment_pp(p):
     'p : COMENTARIO p'
-    p[0] = [p[1] + '\n'  + p[2][0], 'ND']
+    p[0] = [p[1] + '\n'  + p[2][0], 'COMENTARIO']
 
 def p_programa_ctl_p(p):
     'p : control pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
+    if (p.lineno(1) == p.lineno(2)) and p[2][1] == 'COMENTARIO':    	
+        p[0] = [p[1][0] + ' '  + p[2][0], 'ND']
+    else:
+        p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_pp_s_pp(p):
     'pp : sentencia pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
+    if (p.lineno(1) == p.lineno(2)) and p[2][1] == 'COMENTARIO':    	
+        p[0] = [p[1][0] + ' '  + p[2][0], 'ND']
+    else:
+        p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_pp_ctl_pp(p):
     'pp : COMENTARIO pp'
-    p[0] = [p[1] + '\n'  + p[2][0], 'ND']
+    p[0] = [p[1] + '\n'  + p[2][0], 'COMENTARIO']
 
 def p_pp_comentario_p(p):
     'pp : control pp'
-    p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
+    if (p.lineno(1) == p.lineno(2)) and p[2][1] == 'COMENTARIO':    	
+        p[0] = [p[1][0] + ' '  + p[2][0], 'ND']
+    else:
+        p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
 
 def p_pp_empty(p):
     'pp : empty'
@@ -206,7 +218,7 @@ def p_ifSinElse(p):
 
 def p_bloque_cb(p):
     'bloque : COMENTARIO bloque'
-    p[0] = [p[1], 'ND']
+    p[0] = [p[1] + '\n'  + p[2][0], 'COMENTARIO']
 
 def p_bloque_s(p):
     'bloque : sentencia'
