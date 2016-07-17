@@ -119,7 +119,7 @@ def p_control_loop(p):
 
 def p_loop_while(p):
     'loop : WHILE LPAREN valores RPAREN bloque'
-    p[0] = ['while('+ p[3][0] + ')\n' + find_and_replace(p[5][0]), 'ND']
+    p[0] = ['while('+ p[3][0] + ')\n    ' + find_and_replace(p[5][0]), 'ND']
 
     if (p[3][1] != "BOOL"):
         message = "[Semantic error]"
