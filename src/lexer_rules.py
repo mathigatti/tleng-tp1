@@ -76,8 +76,11 @@ def t_NEWLINE(token):
   r"\n+"
   token.lexer.lineno += len(token.value)
 
+def t_IGUAL(token):
+    r"=(\n)*="
+    token.value = '=='
+    return token
 
-t_IGUAL = r"=="
 t_DISTINTO = r"\!="
 t_AGREGAR = r"\+="
 t_SACAR = r"\-="
@@ -119,7 +122,7 @@ def t_VARIABLE(token):
   token.type = reserved.get(token.value.lower(),'VARIABLE')
   return token
 
-t_ASIGNACION = r"="
+#t_ASIGNACION = r"="
 
 t_ignore = " \t"
 
