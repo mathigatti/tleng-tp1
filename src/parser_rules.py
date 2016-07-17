@@ -846,7 +846,7 @@ def p_exp_cadena_concat_1(p):
 
 def p_exp_cadena_concat_2(p):
     'exp_cadena : exp_cadena PLUS var_oper'
-    p[0] = [p[1][0] + ' + ' +  p[3], 'STRING']
+    p[0] = [p[1][0] + ' + ' +  p[3][0], 'STRING']
 
     if estaDefinida(p[2]) != 'STRING':
         pass
