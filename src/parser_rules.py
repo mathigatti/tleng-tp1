@@ -415,7 +415,7 @@ def p_lista_valores_lista(p):
 #Producciones Registros
 def p_reg(p):
     'reg : LLAVEIZQ reg_item LLAVEDER'
-    p[0] = ['{' + p[1][0] + '}','REGISTRO']
+    p[0] = ['{' + p[2][0] + '}','REGISTRO']
 
 def p_reg_item_list(p):
     'reg_item : VARIABLE DOSPUNTOS valores COMA reg_item' 
