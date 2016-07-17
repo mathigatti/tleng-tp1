@@ -1,0 +1,147 @@
+A continuación presentaremos una serie de casos correctos e incorrectos respecto a la sintáxis del programa. 
+
+\subsection{Casos Correctos.}
+\subsubsection{Caso 1:}
+
+
+
+\begin{verbatim}
+
+
+#NADA
+z = [a.edad + length("doce"+capitalizar("2")) / 2, 1.0 + (siete ? ((aa OR bb AND (2!=length(""))?1:2)):
+g*12 %3) , NOT aa ? b / -5 : c]; while(dos);
+
+a = 0;
+b = 1;
+a = b;
+c = 2.5;
+d = "Hola";
+e = d;
+
+f = [1, 2, 3];
+a = f[1];
+b = f[2];
+
+g = [1, a, 2, b, 3];
+g[a] = b;
+g[b] = a;
+
+h = [f[g[a]], g[g[b]]];
+h[f[g[a]]] = g[f[g[g[b]]]];
+
+
+\end{verbatim}
+
+\subsubsection{Caso 2:}
+
+\begin{verbatim}
+for (i=0; i<10; i++) {
+while(true) {
+for(;true;) {
+do {
+a=0;
+}
+while(false);
+}
+}
+}
+
+\end{verbatim}
+
+\subsubsection{Caso 3:}
+
+\begin{verbatim}
+
+a = -10;
+b = 2 + 3 - 8 + 1;
+c = 3 * 5 % 4 / 6;
+d = 2.0 ^ 9.0;
+e = -3 * (4 / ((3) + 8 ^ ((1))) - -5 + -(7) * 6);
+
+f = -a * (b / ((a) + d ^ ((c))) - -b + -(c) * a);
+
+g = [1.5, 2 * (7) + 5 / 0, a * d, 8 ^ 1.0, (6) / (6), (3 + 3) + 0.0, e - 5, 2 * -f];
+h = [1,b,3];
+
+g[2 * 4] = 10 + (3 * 2/1);
+g[b ^ b] = (g[7 * (5) + (h[(2)])]);
+g[9 - (5 % 3)] = g[b % h[b]];
+
+while (true) {
+	d = 1;
+	a = 0;
+}
+
+do {
+	# Co
+	# men
+	# tario
+	b = 2;
+	c = 3;
+} while ((d > 10) AND NOT false);
+
+usuario = {nombre:"Al", edad:50};
+print(capitalizar(usuario.nombre));
+nacimiento = 2016;
+nacimiento -= usuario.edad;
+usuarios = [{nombre:"Mr.X", edad:10}, usuario];
+
+suma = 0;
+for (i = 0; i < length(usuarios); i++) {
+	print(usuarios[i].nombre);
+	suma += usuarios[i].edad;
+}
+
+
+\end{verbatim}
+
+
+\subsection{Casos incorrectos.}
+\subsubsection{Caso 1.}
+
+\begin{verbatim}
+else
+  b=0;
+
+\end{verbatim}
+
+\subsubsection{Caso 2.}
+
+\begin{verbatim}
+while(true){
+#comentario sin sentencias
+}
+
+\end{verbatim}
+
+\subsubsection{Caso 3.}
+
+\begin{verbatim}
+for(true){}
+\end{verbatim}
+
+\subsubsection{Caso 4.}
+
+\begin{verbatim}
+While = 10;
+\end{verbatim}
+
+\subsubsection{Caso 5.}
+
+\begin{verbatim}
+a = 5
+\end{verbatim}
+
+\subsubsection{Caso 6.}
+
+\begin{verbatim}
+multiplicacionEscalar("1,2,3");
+\end{verbatim}
+
+\subsubsection{Caso 7.}
+
+\begin{verbatim}
+multiplicacionEscalar();
+\end{verbatim}
+
