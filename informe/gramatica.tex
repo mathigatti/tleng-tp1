@@ -50,11 +50,8 @@
                 |   <exp_cadena>
                 |   <exp_arreglo>
                 |   <registro>
-                |   <registro>.VARIABLE
-                |   VARIABLE
-                |   VARIABLE '[' <exp_arit> ']' 
-                |   VARIABLE '[' VARIABLE ']' 
-                |   VARIABLE '.' VARIABLE 
+                |   '(' <op_ternario> ')'
+                |   <var_asig_l>
 
 <exp_arreglo>   :   '[' <list_valores> ']'
                 |   '['']'
@@ -89,14 +86,11 @@
                 |   <var_asig_l> '+=' <valores>
                 |   <var_asig_l> '-=' <valores>
                 |   <var_asig_l> '=' <valores>
-                |   VARIABLE '[' <exp_arit> ']' '=' <valores>
-                |   VARIABLE '[' VARIABLE ']' '=' <valores>
-                |   VARIABLE '.' VARIABLE '=' <valores>
                 |   <var_asig_l> '=' <op_ternario>
 
-<op_ternario>   :   <exp_bool> '?' <exp_bool> ':' <exp_bool>
-                |   <exp_bool> '?' <exp_arit> ':' <exp_arit>
-                |   <exp_bool> '?' <exp_cadena> ':' <exp_cadena>
+<op_ternario>   :   <comparacion> '?' <exp_bool> ':' <exp_bool>
+                |   <comparacion> '?' <exp_arit> ':' <exp_arit>
+                |   <comparacion> '?' <exp_cadena> ':' <exp_cadena>
 
 
 <var_oper>      :   VARIABLE '[' <exp_arit> ']' 
@@ -105,19 +99,13 @@
 
  
 <exp_arit>      :   <exp_arit> '+' <term>
-                |   <exp_arit> '+' VARIABLE
                 |   <exp_arit> '+' <var_oper>
-                |   VARIABLE '+' <term>
                 |   <var_oper> '+' <term>
-                |   VARIABLE '+' VARIABLE
                 |   <var_oper> '+' <var_oper>
                 |   <exp_arit> '-' <term>
-                |   <exp_arit> '-' VARIABLE
                 |   <exp_arit> '-' <var_oper>
-                |   VARIABLE '-' <term>
                 |   <var_oper> '-' <term>
-                |   VAIABLE  '-' VARIABLE
-                |   VAIABLE  '-' <var_oper>
+                |   <var_oper> '-' <var_oper>
                 |   <term>
 
 
@@ -165,45 +153,35 @@
                 |   '(' <exp_arit> ')'
 
 <exp_cadena>    :   <exp_cadena> '+' <term_cadena>
-                |   VARIABLE '+' <term_cadena>
-                |   <term_cadena> '+' VARIABLE
+                |   <var_oper> '+' <term_cadena>
+                |   <term_cadena> '+' <var_oper> 
                 |   <term_cadena> 
 
 <term_cadena>   :   CADENA
                 |   'capitalizar' '(' <valores> ')'
+                |   'capitalizar' '(' op_ternario ')
                 |   '(' <exp_cadena> ')'
 
 <comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
-                |   VARIABLE <op_comp>  <exp_cadena>
                 |   <var_oper> <op_comp>  <exp_cadena>
-                |   <exp_cadena> <op_comp> VARIABLE 
                 |   <exp_cadena> <op_comp> <var_oper> 
                 |   <exp_arit>   <op_comp>   <exp_arit>
-                |   VARIABLE   <op_comp>   <exp_arit>
                 |   <var_oper>   <op_comp>   <exp_arit>
-                |   <exp_arit>   <op_comp>   VARIABLE
                 |   <exp_arit>   <op_comp>   <var_oper>
-                |   VARIABLE   <op_comp>  VARIABLE 
                 |   <var_oper>   <op_comp>  <var_oper> 
                 |   <exp_bool> '==' <exp_bool>
                 |   <exp_bool> '!=' <exp_bool>
                 |   <exp_bool>
 
 <exp_bool>      :   <exp_bool> AND <term_bool>
-                |   VARIABLE AND <term_bool>
                 |   <var_oper> AND <term_bool>
-                |   <exp_bool> AND VARIABLE
                 |   <exp_bool> AND <var_oper>
-                |   VARIABLE AND VARIABLE
                 |   <var_oper> AND <var_oper>
                 |   <term_bool>
 
 <term_bool>     :   <term_bool> OR <factor_bool>
-                |   VARIABLE OR <factor_bool>
                 |   <var_oper> OR <factor_bool>
-                |   <term_bool> OR VARIABLE
                 |   <term_bool> OR <var_oper>
-                |   VARIABLE OR VARIABLE
                 |   <var_oper> OR <var_oper>
                 |   'not' factor_bool
 
