@@ -149,7 +149,11 @@ def p_loop_do(p):
         #raise Exception(message)
 
 def p_loop_for(p):
-    'loop : FOR LPAREN var_asig PUNTOYCOMA valores PUNTOYCOMA exp_arit RPAREN bloque'
+    'loop : for'
+    p[0] = [ p[1][0],'ND']
+
+def p_for_main(p):
+    'for : FOR LPAREN form_term PUNTOYCOMA valores PUNTOYCOMA form_term RPAREN bloque'
     p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]) + '\n', 'ND']
 
     if (p[5][1] != "BOOL"):
@@ -162,6 +166,13 @@ def p_loop_for(p):
 
 
         #raise Exception(message)
+def p_for_term(p):
+    'form_term : var_asig '
+    p[0] = [ p[1][0],p[1][1]]
+
+def p_for_term_empty(p):
+    'form_term : '
+    p[0] = ['','ND']
 
 def p_ifelse(p):
     'ifelse : IF LPAREN valores RPAREN bloque ELSE bloque'

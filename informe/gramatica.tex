@@ -16,7 +16,13 @@
 
 <loop>          :   'while' '(' <valores> ')' <bloque>
                 |   'do' <bloque> 'while' '(' <valores> ')' ';' 
-                |   'for' '(' <var_asig> ',' <valores> ',' <exp_arit> ')' <bloque>
+                |   <for>
+                
+<for>           :   'for' '(' <for_term> ',' <valores> ',' <for_term> ')' <bloque>
+
+
+<for_term>    :   <var_asig> 
+                |   <empty>
 
 <ifelse>        :   'if' '(' <valores> ')' <bloque>
                 |   'if' '(' <valores> ')' <bloque> else <bloque>
