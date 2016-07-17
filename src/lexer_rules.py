@@ -122,7 +122,7 @@ def t_VARIABLE(token):
   token.type = reserved.get(token.value.lower(),'VARIABLE')
   return token
 
-#t_ASIGNACION = r"="
+t_ASIGNACION = r"="
 
 t_ignore = " \t"
 
