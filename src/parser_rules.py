@@ -134,15 +134,8 @@ def p_loop_while(p):
     p[0] = ['while('+ p[3][0] + ')\n    ' + find_and_replace(p[5][0]), 'ND']
 
     if (p[3][1] != "BOOL"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_loop_do(p):
@@ -150,15 +143,8 @@ def p_loop_do(p):
     p[0] = ['do\n    ' + find_and_replace(p[2][0]) + '\nwhile(' + p[5][0] + ');' +'\n', 'ND']
 
     if (p[5][1] != "BOOL"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_loop_for(p):
     'loop : for'
@@ -169,15 +155,8 @@ def p_for_main(p):
     p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]) + '\n', 'ND']
 
     if (p[5][1] != "BOOL"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 def p_for_term(p):
     'form_term : var_asig '
     p[0] = [ p[1][0],p[1][1]]
@@ -191,30 +170,16 @@ def p_ifelse(p):
     p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7][0]) + '\n', 'ND']
 
     if (p[3][1] != "BOOL"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN valores RPAREN bloque'
     p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\n', 'ND']
 
     if (p[3][1] != "BOOL"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_bloque_cb(p):
     'bloque : COMENTARIO bloque'
@@ -266,45 +231,24 @@ def p_funcion_ret_arreglo_3(p):
     p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ',' + p[7][0] + ')', 'VECTOR_' + tipoNumber(tipo(p[3][1]),p[5][1])]
 
     if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1]) or p[7][1] != "BOOL"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_funcion_ret_arreglo_2(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores RPAREN'
     p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ')', 'VECTOR_' + tipoNumber(tipo(p[3][1]),p[5][1])]
 
     if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1])):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_funcion_ret_int_length(p):
     'func_ret_int : LENGTH LPAREN valores RPAREN'
     p[0] = ['length(' + p[3][0] + ')', 'NUMBER_INT']
 
     if (p[3][1] != "STRING" and not esVector(p[3][1])):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_funcion_ret_string(p):
@@ -312,15 +256,8 @@ def p_funcion_ret_string(p):
     p[0] = ['capitalizar(' + p[3][0] + ')', 'STRING']
 
     if (p[3][1] != "STRING"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_funcion_ret_bool_f(p):
@@ -328,15 +265,8 @@ def p_funcion_ret_bool_f(p):
     p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', 'VECTOR_' + tipoNumber(tipo(p[3][1]),tipo(p[5][1]))]
 
     if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or (not esNumber(tipo(p[5][1])) and p[5][1] != "VECTOR_VACIO")):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 #Producciones para vectores y variables
 def p_valores_exp_arit(p):
@@ -363,6 +293,9 @@ def p_valores_reg(p):
 def p_valores_reg2(p):
     'valores : reg PUNTO VARIABLE'
     p[0] = [p[1][0] + '.' + p[3][0], p[1][1]]
+    if not p[3] in estaDefinida(p[1][0]):
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_valores_variables(p):
     'valores : var_asig_l'
@@ -402,15 +335,8 @@ def p_lista_valores_lista(p):
     p[0] = [p[1][0] + ',' + p[3][0], tipo_lista]
 
     if (p[1][1] != p[3][1] and p[1][1] != 'ND' and p[3][1] != 'ND'):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 #Producciones Registros
 def p_reg(p):
@@ -438,20 +364,24 @@ def p_var_asig_l_res(p):
 def p_var_asig_l_var_mem(p):
     'var_asig_l : VARIABLE var_member'
     p[0] = [p[1] + p[2][0],'ND']
+    if not esVector(estaDefinida(p[1])) and estaDefinida(p[1]) != 'REGISTRO':
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+    	
 
 def p_var_member_vec_item(p):
     'var_member : LCORCHETE VARIABLE RCORCHETE'
     p[0] = ['[' + p[2] + ']','ND']
     if tipo(estaDefinida(p[2])) != 'INT':
         pass
-        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
 
 def p_var_member_vec_item_rec(p):
     'var_member : LCORCHETE VARIABLE RCORCHETE var_member'
     p[0] = ['[' + p[2] + ']' + p[4][0],'ND']
     if tipo(estaDefinida(p[2])) != 'INT':
         pass
-        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
 
     
 def p_var_member_vec_item_2(p):
@@ -459,44 +389,38 @@ def p_var_member_vec_item_2(p):
     p[0] = ['[' + p[2][0] + ']','ND']
     if tipo(p[2][1]) != 'INT':
         pass
-        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
     
 def p_var_member_vec_item_2_rec(p):
     'var_member : LCORCHETE exp_arit RCORCHETE var_member'
     p[0] = ['[' + p[2][0] + ']' + p[4][0],'ND']
     if tipo(p[2][1]) != 'INT':
         pass
-        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
     
 def p_var_member_vec_item_3(p):
     'var_member : LCORCHETE var_asig_l RCORCHETE'
     p[0] = ['[' + p[2][0] + ']','ND']
     if tipo(p[2][1]) != 'INT':
         pass
-        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
 
 def p_var_member_reg_item(p):
     'var_member : PUNTO VARIABLE'
-    p[0] = [ '.' + p[2],'ND']
+    p[0] = [ '.' + p[2],p[2]]
+
     
 def p_var_member_reg_item_rec(p):
     'var_member : PUNTO VARIABLE var_member'
-    p[0] = [ '.' + p[2] + p[3][0],'ND']
+    p[0] = [ '.' + p[2] + p[3][0],p[2]]
     
 def p_var_asig_base_mm(p):
     'var_asig : var_asig_l LESSLESS'
     p[0] = [toStrIfInt(p[1][0]) + '--', p[1][1]]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_var_asig_mm_base(p):
@@ -504,15 +428,8 @@ def p_var_asig_mm_base(p):
     p[0] = ['--' + toStrIfInt(p[2][0]), p[2][1]]
 
     if not esNumber(p[2][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_var_asig_base_pp(p):
@@ -521,15 +438,8 @@ def p_var_asig_base_pp(p):
     # p[0] = toStrIfInt(p[1]) + str(type(p[1]))
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_var_asig_pp_base(p):
@@ -537,15 +447,8 @@ def p_var_asig_pp_base(p):
     p[0] = ['++' + toStrIfInt(p[2][0]), p[2][1]]
 
     if not esNumber(p[2][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_var_asig_multipl(p):
@@ -553,30 +456,16 @@ def p_var_asig_multipl(p):
     p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_var_asig_dividi(p):
     'var_asig : var_asig_l DIVIDI valores'
     p[0] = [p[1][0] + '=/' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 #def p_var_asig_sigual(p):
 #    'var_asig : VARIABLE'
@@ -589,30 +478,16 @@ def p_var_asig_agregar(p):
     if (esNumber(p[1][1]) and esNumber(p[1][1])) or (p[1][1] == "STRING" and p[3][1] == "STRING")  :
         pass
     else:
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_var_asig_sacar(p):
     'var_asig : var_asig_l SACAR valores'
     p[0] = [p[1][0] + '-=' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
@@ -721,43 +596,25 @@ def p_exp_arit_epv2(p):
     p[0] = [p[1][0] + ' + ' + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_exp_arit_v2pt(p):
     'exp_arit : var_oper PLUS term'
     p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_exp_arit_v2pv2(p):
     'exp_arit : var_oper PLUS var_oper'
     p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-            #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+
 
 def p_exp_arit_emt(p):
     'exp_arit : exp_arit MINUS term'
@@ -769,26 +626,18 @@ def p_exp_arit_emv2(p):
     p[0] = [p[1][0] + ' - ' + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-            #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+
 
 def p_exp_arit_v2mt(p):
     'exp_arit : var_oper MINUS term'
     p[0] = [p[1][0] + ' - ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-            #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+
 
 def p_exp_arit_v2mv2(p):
     'exp_arit : var_oper MINUS var_oper'
@@ -821,64 +670,38 @@ def p_arit_oper2_mod(p):
     'arit_oper_2 : MODULO'
     p[0] = [p[1], 'ND' ]
 
-
 def p_term_tmf(p):
     'term : term arit_oper_2 factor'
     p[0] = [p[1][0] + p[2][0] + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if p[2][0] == '/' and not p[3][0]:
-        message = "[Math Error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
-
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_term_tmv2(p):
     'term : term arit_oper_2 var_oper'
     p[0] = [p[1][0] + p[2][0] + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_term_v2mf(p):
     'term : var_oper arit_oper_2 factor'
     p[0] = [p[1][0] + p[2][0] + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-        #raise Exception(message)
-
-
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_term_v2mv2(p):
     'term : var_oper arit_oper_2 var_oper'
     p[0] = [p[1][0] + p[2][0] + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+
 def p_term_factor(p):
     'term : factor'
     p[0] = [toStrIfInt(p[1][0]), p[1][1]]
@@ -893,12 +716,9 @@ def p_factor_var_op__exp(p):
     p[0] = [p[1][0] + ' ^' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+
 
 def p_factor_base(p):
     'factor : base '
@@ -917,12 +737,9 @@ def p_factor_var_op_mm(p):
     p[0] = [toStrIfInt(p[1][0]) + '--', p[1][1]]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+
         
 def p_factor_base_mm(p):
     'factor : base LESSLESS'
@@ -933,12 +750,8 @@ def p_factor_mm_var_op(p):
     p[0] = ['--' + toStrIfInt(p[2][0]), p[2][1]]
 
     if not esNumber(p[2][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_factor_mm_base(p):
     'factor : LESSLESS base '
@@ -949,12 +762,8 @@ def p_factor_var_op_pp(p):
     p[0] = [toStrIfInt(p[1][0]) + '++', p[1][1]]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_factor_base_pp(p):
     'factor : base MASMAS'
@@ -965,12 +774,8 @@ def p_factor_pp_var_op(p):
     p[0] = ['++' + toStrIfInt(p[2][0]), p[2][1]]
 
     if not esNumber(p[2][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_factor_pp_base(p):
     'factor : MASMAS base '
@@ -1007,15 +812,8 @@ def p_exp_var_op(p):
     p[0] =  [p[1][0], p[1][1]]
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_exp_valor(p):
@@ -1038,15 +836,8 @@ def p_exp_cadena_concat_1(p):
     p[0] = [p[1][0] + ' + ' +  p[3][0], 'STRING']
 
     if estaDefinida(p[1][0]) != 'STRING':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_exp_cadena_concat_2(p):
@@ -1054,15 +845,8 @@ def p_exp_cadena_concat_2(p):
     p[0] = [p[1][0] + ' + ' +  p[3], 'STRING']
 
     if estaDefinida(p[2]) != 'STRING':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_exp_cadena_term(p):
@@ -1082,15 +866,8 @@ def p_exp_cadena_funct_ret_string(p):
     p[0] = ['capitalizar(' + p[3][0] + ')', 'STRING']
 
     if p[3][1] != 'STRING':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_exp_cadena_parent(p):
     'term_cadena : LPAREN exp_cadena RPAREN'
@@ -1132,15 +909,8 @@ def p_bool_expr_v2af(p):
     p[0] = [p[1][0] + ' and ' + p[3][0], 'BOOL']
 
     if p[1][1] != 'BOOL':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_bool_expr_eav2(p):
@@ -1148,15 +918,8 @@ def p_bool_expr_eav2(p):
     p[0] = [p[1][0] + ' and ' + p[3][0], 'BOOL']
 
     if p[3][1] != 'BOOL':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_bool_expr_v2av2(p):
@@ -1164,15 +927,8 @@ def p_bool_expr_v2av2(p):
     p[0] = [p[1][0] + ' and ' + p[3][0], 'BOOL']
 
     if p[3][1] != 'BOOL' or p[1][1] != 'BOOL':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_bool_expr_term(p):
@@ -1188,15 +944,8 @@ def p_bool_tov2(p):
     p[0] = [p[1][0] + ' or ' + p[3][0], 'BOOL']
 
     if p[3][1] != 'BOOL':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_bool_v2of(p):
@@ -1204,15 +953,8 @@ def p_bool_v2of(p):
     p[0] = [p[1][0] + ' or ' + p[3][0], 'BOOL']
 
     if p[1][1] != 'BOOL':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_bool_v2ov2(p):
@@ -1220,15 +962,8 @@ def p_bool_v2ov2(p):
     p[0] = [p[1][0] + ' or ' + p[3][0], 'BOOL']
 
     if p[1][1] != 'BOOL' or p[3][1] != 'BOOL':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_bool_term_factor(p):
     'term_bool : factor_bool'
@@ -1284,15 +1019,8 @@ def p_comparcion_acv2(p):
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
 
     if not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 
@@ -1301,15 +1029,8 @@ def p_comparcion_v2ca(p):
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
 
     if not esNumber(p[1][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_comparcion_exp_cadena(p):
     'comparacion : exp_cadena operador_comp exp_cadena'
@@ -1321,30 +1042,16 @@ def p_comparcion_exp_v2cc(p):
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
 
     if p[1][1] != 'STRING':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_comparcion_exp_ccv2(p):
     'comparacion : exp_cadena operador_comp var_oper'
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
 
     if p[3][1] != 'STRING':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 
 def p_comparcion_exp_v2cv2(p):
@@ -1352,15 +1059,8 @@ def p_comparcion_exp_v2cv2(p):
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
 
     if p[1][1] != 'STRING' or p[3][1] != 'STRING':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_error(token):
     message = "[Syntax error]"

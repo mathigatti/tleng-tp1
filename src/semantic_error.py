@@ -10,5 +10,5 @@ semantic_errors =  {
         }
 
 class SemanticException(Exception):
-    def __init__(self,msg_id,lineno):
-        super(SemanticException,self).__init__('Semantic Error:' + str(lineno) + ":" + semantic_errors.get(msg_id))
+    def __init__(self,msg_id,lineno,lexpos):
+        super(SemanticException,self).__init__('Error semantico en la linea ' + str(lineno) + ' posicion ' + str(lexpos) + ". " + semantic_errors.get(msg_id))
