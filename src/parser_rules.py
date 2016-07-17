@@ -345,9 +345,13 @@ def p_valores_variables(p):
     'valores : var_asig_l'
     p[0] = [p[1][0], p[1][1]]
 
-def p_valor_perador_corchetes(p):
-    'valores : LPAREN operador_ternario RPAREN '
-    p[0] = [ '(' + p[2][0] + ')',p[2][1]]
+def p_valor_corchetes(p):
+    'valores : operador_ternario '
+    p[0] = [  p[1][0] ,p[1][1]]
+
+#def p_valor_perador(p):
+#    'valores : operador_ternario '
+#    p[0] = [ '(' + p[2][0] + ')',p[2][1]]
 
 def p_exp_arreglo(p):
     'exp_arreglo : LCORCHETE lista_valores RCORCHETE'
@@ -612,51 +616,61 @@ def p_var_asig(p):
 
 
 
-def p_var_asig_oper_ternario(p):
-    'var_asig : var_asig_l ASIGNACION operador_ternario'
-    p[0] = [p[1][0] + '=' + p[3][0], 'ASIGNACION']
-    variables_dict[p[1][0]] = p[3][1]
+#def p_var_asig_oper_ternario(p):
+#    'var_asig : var_asig_l ASIGNACION operador_ternario'
+#    p[0] = [p[1][0] + '=' + p[3][0], 'ASIGNACION']
+#    variables_dict[p[1][0]] = p[3][1]
 
 
-def p_operador_ternarioret_bool(p):
-    'operador_ternario : comparacion INTERROGACION exp_bool DOSPUNTOS exp_bool'
-    p[0] = [ p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0] , 'BOOL']
+def p_operador_ternario(p):
+    'operador_ternario : op_ternario_1'
+    p[0] = [  p[1][0] ,p[1][1]]
 
-    if (p[1][1] != "BOOL" or p[3][1] != "BOOL" or p[5][1] != "BOOL"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
+def p_operador_ternario_corchete2(p):
+    'operador_ternario : op_ternario_paren '
+    p[0] = [  p[1][0] ,p[1][1]]
+
+def p_operador_ternario_corchete(p):
+    'op_ternario_paren : LPAREN op_ternario_1 RPAREN'
+    p[0] = [  '(' + p[2][0] + ')'  ,p[2][1]]
+
+def p_operador_ternario_term1(p):
+    'op_ternario_1 : valores INTERROGACION op_ternario_2'
+    p[0] = [  p[1][0] + ' ? ' + p[3][0] ,p[3][1]]
+
+def p_operador_ternario_term2(p):
+    'op_ternario_2 : valores DOSPUNTOS op_ternario_3'
+    #Hay que verificar que valores y op_ternario_3 sean de mismo tipo
+    p[0] = [  p[1][0] + ' : ' + p[3][0] ,p[3][1]]
+
+def p_operador_ternario_term3(p):
+    'op_ternario_3 : valores '
+    p[0] = [  p[1][0] ,p[1][1]]
+
+#def p_operador_ternarioret_mat(p):
+#    'operador_ternario : comparacion INTERROGACION exp_arit DOSPUNTOS exp_arit'
+#    p[0] = [ p[1][0] + ' ? ' + toStrIfInt(p[3][0]) + ':' + p[5][0], tipoNumber(p[3][1],p[5][1])]
+#
+#    if (p[1][1] != "BOOL" or p[3][1] != "NUMBER" or p[5][1] != "NUMBER"):
+#        message = "[Semantic error]"
+#        if p is not None:
+#            message += "\ntype:" + p[0][1]
+#            message += "\nvalue:" + p[0][0]
             # message += "\nline:" + str(p.lineno)
             # message += "\nposition:" + str(p.lexpos)
 
 
         #raise Exception(message)
 
-def p_operador_ternarioret_mat(p):
-    'operador_ternario : comparacion INTERROGACION exp_arit DOSPUNTOS exp_arit'
-    p[0] = [ p[1][0] + ' ? ' + toStrIfInt(p[3][0]) + ':' + p[5][0], tipoNumber(p[3][1],p[5][1])]
+#def p_operador_ternarioret_cadena(p):
+#    'operador_ternario : comparacion INTERROGACION exp_cadena DOSPUNTOS exp_cadena'
+#    p[0] = [p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0], 'STRING']
 
-    if (p[1][1] != "BOOL" or p[3][1] != "NUMBER" or p[5][1] != "NUMBER"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        #raise Exception(message)
-
-def p_operador_ternarioret_cadena(p):
-    'operador_ternario : comparacion INTERROGACION exp_cadena DOSPUNTOS exp_cadena'
-    p[0] = [p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0], 'STRING']
-
-    if (p[1][1] != "BOOL" or p[3][1] != "STRING" or p[5][1] != "STRING"):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
+#    if (p[1][1] != "BOOL" or p[3][1] != "STRING" or p[5][1] != "STRING"):
+#        message = "[Semantic error]"
+#        if p is not None:
+#            message += "\ntype:" + p[0][1]
+#            message += "\nvalue:" + p[0][0]
             # message += "\nline:" + str(p.lineno)
             # message += "\nposition:" + str(p.lexpos)
 
@@ -668,9 +682,9 @@ def p_oper_var(p):
     p[0] = [p[1][0] , 'ND']
 
 def p_oper_ternaerio(p):
-    'var_oper : LPAREN operador_ternario RPAREN'
+    'var_oper : op_ternario_paren '
     #Seria lindo que tipo de operador ternario sea el tipo de los valores que develve
-    p[0] = [ '(' + p[2][0] + ')', p[2][1]]
+    p[0] = [  p[1][0] , p[1][1]]
 
 
 #Producciones operaciones binarias con enteros
@@ -1036,9 +1050,9 @@ def p_exp_cadena_cadena(p):
     'term_cadena : CADENA'
     p[0] = [p[1], 'STRING' ]
 
-def p_exp_cadena_funct_ret_string_2(p):
-    'term_cadena : CAPITALIZAR LPAREN operador_ternario RPAREN'
-    p[0] = ['capitalizar(' + p[3][0] + ')', p[3][1]]
+#def p_exp_cadena_funct_ret_string_2(p):
+#    'term_cadena : CAPITALIZAR LPAREN operador_ternario RPAREN'
+#    p[0] = ['capitalizar(' + p[3][0] + ')', p[3][1]]
 
 def p_exp_cadena_funct_ret_string(p):
     'term_cadena : CAPITALIZAR LPAREN valores RPAREN'
@@ -1199,6 +1213,10 @@ def p_bool_term_factor(p):
 
 def p_term_not(p):
     'term_bool : NOT factor_bool'
+    p[0] = ['not ' + p[2][0], 'BOOL']
+
+def p_term_not_var_oper(p):
+    'term_bool : NOT var_oper'
     p[0] = ['not ' + p[2][0], 'BOOL']
 
 def p_term_bool_parentesis(p):

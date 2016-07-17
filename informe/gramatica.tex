@@ -50,7 +50,7 @@
                 |   <exp_cadena>
                 |   <exp_arreglo>
                 |   <registro>
-                |   '(' <op_ternario> ')'
+                |   <op_ternario>
                 |   <var_asig_l>
 
 <exp_arreglo>   :   '[' <list_valores> ']'
@@ -86,11 +86,14 @@
                 |   <var_asig_l> '+=' <valores>
                 |   <var_asig_l> '-=' <valores>
                 |   <var_asig_l> '=' <valores>
-                |   <var_asig_l> '=' <op_ternario>
 
-<op_ternario>   :   <comparacion> '?' <exp_bool> ':' <exp_bool>
-                |   <comparacion> '?' <exp_arit> ':' <exp_arit>
-                |   <comparacion> '?' <exp_cadena> ':' <exp_cadena>
+<op_ternario>   :   <op_ternario_1>
+                |   <op_ternario_paren>
+                
+<op_ternario_paren>     :   '(' <op_ternario_1> ')'
+<op_ternario_1>         :   <valores> '?' <op_ternario_2>
+<op_ternario_2>         :   <valores> ':' <op_ternario_3>
+<op_ternario_3>         :   <valores>
 
 
 <var_oper>      :   VARIABLE '[' <exp_arit> ']' 
@@ -159,7 +162,6 @@
 
 <term_cadena>   :   CADENA
                 |   'capitalizar' '(' <valores> ')'
-                |   'capitalizar' '(' op_ternario ')
                 |   '(' <exp_cadena> ')'
 
 <comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
