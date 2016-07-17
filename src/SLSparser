@@ -9,6 +9,7 @@
 import lexer_rules
 
 import parser_rules
+import semantic_error
 from sys import argv, exit 
 from ply.lex import lex        
 from ply.yacc import yacc      
@@ -35,7 +36,7 @@ if __name__ == "__main__":
 				src.close()
 			else:
 				text = argv[3]
-			salida = parser.parse(text,lexer)
+			salida = parser.parse(text,lexer,tracking=True)
 			output_file.write(salida[0])
 			output_file.close()       
 
@@ -44,16 +45,18 @@ if __name__ == "__main__":
 			src = open(argv[2], "r")
 			text = src.read()
 			src.close()
-			salida = parser.parse(text,lexer)
+			salida = parser.parse(text,lexer,tracking=True)
 			print salida[0]
 
 		else:
 			text = argv[1]
-			salida = parser.parse(text,lexer)
+			salida = parser.parse(text,lexer,tracking=True)
 			print salida[0]
 
     except parser_rules.ParserException as exception:
-            print "Semantic error: " + str(exception)
+            print "Syntax error: " + str(exception)
+    except semantic_error.SemanticException as exception:
+            print str(exception)
     else:
             print "Syntax is valid."
 

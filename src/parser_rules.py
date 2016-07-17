@@ -1,6 +1,6 @@
 from lexer_rules import tokens
 import ply.yacc as yacc
-
+from semantic_error import SemanticException
 
 # Diccionario donde se almacenaran las variables declaradas junto con su tipo
 variables_dict = dict()
@@ -130,7 +130,7 @@ def p_loop_while(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_loop_do(p):
@@ -146,7 +146,7 @@ def p_loop_do(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_loop_for(p):
     'loop : FOR LPAREN var_asig PUNTOYCOMA valores PUNTOYCOMA exp_arit RPAREN bloque'
@@ -161,7 +161,7 @@ def p_loop_for(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_ifelse(p):
     'ifelse : IF LPAREN valores RPAREN bloque ELSE bloque'
@@ -176,7 +176,7 @@ def p_ifelse(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN valores RPAREN bloque'
@@ -191,7 +191,7 @@ def p_ifSinElse(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_bloque_cb(p):
     'bloque : COMENTARIO bloque'
@@ -251,7 +251,7 @@ def p_funcion_ret_arreglo_3(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_funcion_ret_arreglo_2(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores RPAREN'
@@ -266,7 +266,7 @@ def p_funcion_ret_arreglo_2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_funcion_ret_int_length(p):
     'func_ret_int : LENGTH LPAREN valores RPAREN'
@@ -281,7 +281,7 @@ def p_funcion_ret_int_length(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_funcion_ret_string(p):
@@ -297,7 +297,7 @@ def p_funcion_ret_string(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_funcion_ret_bool_f(p):
@@ -313,7 +313,7 @@ def p_funcion_ret_bool_f(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 #Producciones para vectores y variables
 def p_valores_exp_arit(p):
@@ -379,7 +379,7 @@ def p_lista_valores_lista(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 #Producciones Registros
 def p_reg(p):
@@ -397,89 +397,61 @@ def p_reg_item(p):
 #Producciones de asignaciones
 def p_var_asig_l_var(p):
     'var_asig_l : VARIABLE'
-    p[0] = [p[1], estaDefinida(p[1])]
+    p[0] = [p[1],'ND']
 
 
 def p_var_asig_l_res(p):
     'var_asig_l : RES'
-    p[0] = [p[1], estaDefinida(p[1])]
+    p[0] = [p[1],'ND']
 
-def p_var_asig_l_vec(p):
-    'var_asig_l : VARIABLE LCORCHETE exp_arit RCORCHETE'
-    p[0] = [p[1] + '[' + str(p[3][0]) +  ']',tipo(estaDefinida(p[1]))]
+def p_var_asig_l_var_mem(p):
+    'var_asig_l : VARIABLE var_member'
+    p[0] = [p[1] + p[2][0],'ND']
 
-    if not p[1] in variables_dict or tipo(p[3][1]) != 'INT':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
+def p_var_member_vec_item(p):
+    'var_member : LCORCHETE VARIABLE RCORCHETE'
+    p[0] = ['[' + p[2] + ']','ND']
+    if tipo(estaDefinida(p[2])) != 'INT':
+        pass
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
 
+def p_var_member_vec_item_rec(p):
+    'var_member : LCORCHETE VARIABLE RCORCHETE var_member'
+    p[0] = ['[' + p[2] + ']' + p[4][0],'ND']
+    if tipo(estaDefinida(p[2])) != 'INT':
+        pass
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
 
-        raise Exception(message)
+    
+def p_var_member_vec_item_2(p):
+    'var_member : LCORCHETE exp_arit RCORCHETE'
+    p[0] = ['[' + p[2][0] + ']','ND']
+    if tipo(p[2][1]) != 'INT':
+        pass
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
+    
+def p_var_member_vec_item_2_rec(p):
+    'var_member : LCORCHETE exp_arit RCORCHETE var_member'
+    p[0] = ['[' + p[2][0] + ']' + p[4][0],'ND']
+    if tipo(p[2][1]) != 'INT':
+        pass
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
+    
+def p_var_member_vec_item_3(p):
+    'var_member : LCORCHETE var_asig_l RCORCHETE'
+    p[0] = ['[' + p[2][0] + ']','ND']
+    if tipo(p[2][1]) != 'INT':
+        pass
+        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2))
 
-def p_var_asig_l_vec1(p):
-    'var_asig_l : VARIABLE LCORCHETE VARIABLE RCORCHETE'
-    p[0] = [p[1][0] + '[' + p[3] +  ']',tipo(estaDefinida(p[1]))]
-
-    if not (p[1] in variables_dict) or not (p[3] in variables_dict) or tipo(estaDefinida(p[3][0])) != 'INT':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        raise Exception(message)
-
-def p_var_asig_l_vec2(p):
-    'var_asig_l : exp_arreglo LCORCHETE exp_arit RCORCHETE'
-    p[0] = [p[1][0] + '[' + str(p[3][0]) +  ']',tipo(estaDefinida(p[1][0]))]
-
-    if tipo(p[3][1]) != 'INT':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        raise Exception(message)
-
-
-def p_var_asig_l_vec3(p):
-    'var_asig_l : exp_arreglo  LCORCHETE VARIABLE RCORCHETE'
-    p[0] = [p[1][0] + '[' + p[3][0] +  ']',tipo(estaDefinida(p[1][0]))]
-
-    if not (p[3][0] in variables_dict) or tipo(estaDefinida(p[3][0])) != 'INT':
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        raise Exception(message)
-
-def p_var_asig_l_reg(p):
-    'var_asig_l : VARIABLE PUNTO VARIABLE'
-    p[0] = [p[1] + '.' + p[3],tipo(estaDefinida(p[1]))]
-
-    if not (p[1] in variables_dict) or not (p[3] in variables_dict):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        raise Exception(message)
-
+def p_var_member_reg_item(p):
+    'var_member : PUNTO VARIABLE'
+    p[0] = [ '.' + p[2],'ND']
+    
+def p_var_member_reg_item_rec(p):
+    'var_member : PUNTO VARIABLE var_member'
+    p[0] = [ '.' + p[2] + p[3][0],'ND']
+    
 def p_var_asig_base_mm(p):
     'var_asig : var_asig_l LESSLESS'
     p[0] = [toStrIfInt(p[1][0]) + '--', p[1][1]]
@@ -493,7 +465,7 @@ def p_var_asig_base_mm(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_var_asig_mm_base(p):
@@ -509,7 +481,7 @@ def p_var_asig_mm_base(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_var_asig_base_pp(p):
@@ -526,7 +498,7 @@ def p_var_asig_base_pp(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_var_asig_pp_base(p):
@@ -542,7 +514,7 @@ def p_var_asig_pp_base(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_var_asig_multipl(p):
@@ -558,7 +530,7 @@ def p_var_asig_multipl(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_var_asig_dividi(p):
     'var_asig : var_asig_l DIVIDI valores'
@@ -573,7 +545,7 @@ def p_var_asig_dividi(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 #def p_var_asig_sigual(p):
 #    'var_asig : VARIABLE'
@@ -594,7 +566,7 @@ def p_var_asig_agregar(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_var_asig_sacar(p):
     'var_asig : var_asig_l SACAR valores'
@@ -609,22 +581,7 @@ def p_var_asig_sacar(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
-
-def p_var_asig_multipl(p):
-    'var_asig : var_asig_l MULTIPL valores'
-    p[0] = [p[1][0] + '=*' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
-
-    if not esNumber(p[1][1]) or not esNumber(p[3][1]):
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
@@ -670,7 +627,7 @@ def p_operador_ternarioret_bool(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_operador_ternarioret_mat(p):
     'operador_ternario : exp_bool INTERROGACION exp_arit DOSPUNTOS exp_arit'
@@ -685,7 +642,7 @@ def p_operador_ternarioret_mat(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_operador_ternarioret_cadena(p):
     'operador_ternario : exp_cadena INTERROGACION exp_cadena DOSPUNTOS exp_cadena'
@@ -700,41 +657,11 @@ def p_operador_ternarioret_cadena(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
-def p_oper_var_reg(p):
-    'var_oper : VARIABLE PUNTO  VARIABLE'
-    p[0] = [p[1] + '.' + p[3], 'ND']
-
-def p_oper_var_vec(p):
-    'var_oper : VARIABLE LCORCHETE VARIABLE RCORCHETE'
-    p[0] = [p[1] + '[' + p[3] + ']', tipo(estaDefinida(p[1]))]
-
-    if not esVector(estaDefinida(p[1])) or estaDefinida(p[3]) != "NUMBER_INT":
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-
-        raise Exception(message)
-
-
-def p_oper_var_vec2(p):
-    'var_oper : VARIABLE LCORCHETE exp_arit RCORCHETE'
-    p[0] = [p[1] + '[' + p[3][0] + ']', tipo(estaDefinida(p[1]))]
-
-    if not esVector(estaDefinida(p[1])) or p[3][1] != "NUMBER_INT":
-        message = "[Semantic error]"
-        if p is not None:
-            message += "\ntype:" + p[0][1]
-            message += "\nvalue:" + p[0][0]
-            # message += "\nline:" + str(p.lineno)
-            # message += "\nposition:" + str(p.lexpos)
-
-        raise Exception(message)
+def p_oper_var(p):
+    'var_oper : VARIABLE var_member'
+    p[0] = [p[1] +  p[2][0], 'ND']
 
 
 #Producciones operaciones binarias con enteros
@@ -756,7 +683,7 @@ def p_exp_arit_epv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_arit_epv2(p):
     'exp_arit : exp_arit PLUS var_oper'
@@ -771,7 +698,7 @@ def p_exp_arit_epv2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_arit_vpt(p):
     'exp_arit : VARIABLE PLUS term'
@@ -786,7 +713,7 @@ def p_exp_arit_vpt(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_arit_v2pt(p):
     'exp_arit : var_oper PLUS term'
@@ -801,7 +728,7 @@ def p_exp_arit_v2pt(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_arit_vpv(p):
     'exp_arit : VARIABLE PLUS VARIABLE'
@@ -816,7 +743,7 @@ def p_exp_arit_vpv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_arit_v2pv2(p):
     'exp_arit : var_oper PLUS var_oper'
@@ -848,7 +775,7 @@ def p_exp_arit_emv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_exp_arit_emv2(p):
@@ -876,7 +803,7 @@ def p_exp_arit_vmt(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_arit_v2mt(p):
     'exp_arit : var_oper MINUS term'
@@ -903,7 +830,7 @@ def p_exp_arit_vmv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_arit_v2mv2(p):
     'exp_arit : var_oper MINUS var_oper'
@@ -950,7 +877,7 @@ def p_term_tmf(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_term_tmv(p):
@@ -966,7 +893,7 @@ def p_term_tmv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_term_tmv2(p):
     'term : term arit_oper_2 var_oper'
@@ -993,7 +920,7 @@ def p_term_vmf(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_term_v2mf(p):
     'term : var_oper arit_oper_2 factor'
@@ -1009,7 +936,7 @@ def p_term_v2mf(p):
 
 def p_term_vmv(p):
     'term : VARIABLE arit_oper_2 VARIABLE'
-    p[0] = [p[1] + p[2][0] + p[3], tipoNumber(estaDefinida(p[3]),estaDefinida(p[3][1]))]
+    p[0] = [p[1] + p[2][0] + p[3], tipoNumber(estaDefinida(p[3]),estaDefinida(p[3]))]
 
     if not esNumber(estaDefinida(p[1])) or not esNumber(estaDefinida(p[3])):
         message = "[Semantic error]"
@@ -1020,7 +947,38 @@ def p_term_vmv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
+
+def p_term_vmv2(p):
+    'term : VARIABLE arit_oper_2 var_oper'
+    p[0] = [p[1] + p[2][0] + p[3][0], tipoNumber(estaDefinida(p[1]),p[3][1])]
+
+    if not esNumber(estaDefinida(p[1])) or not esNumber(p[3][1]):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
+
+        #raise Exception(message)
+
+
+def p_term_v2mv(p):
+    'term : var_oper arit_oper_2 VARIABLE'
+    p[0] = [p[1][0] + p[2][0] + p[3], tipoNumber(estaDefinida(p[1][1]),estaDefinida(p[3]))]
+
+    if not esNumber(p[1][1]) or not esNumber(estaDefinida(p[3])):
+        message = "[Semantic error]"
+        if p is not None:
+            message += "\ntype:" + p[0][1]
+            message += "\nvalue:" + p[0][0]
+            # message += "\nline:" + str(p.lineno)
+            # message += "\nposition:" + str(p.lexpos)
+
+
+        #raise Exception(message)
 
 def p_term_v2mv2(p):
     'term : var_oper arit_oper_2 var_oper'
@@ -1055,7 +1013,7 @@ def p_factor_var_exp(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_factor_var_op__exp(p):
     'factor : var_oper ELEVADO sigexp'
@@ -1077,6 +1035,14 @@ def p_factor_m_base(p):
     'factor : MINUS base '
     p[0] = ['-' + toStrIfInt(p[2][0]), 'NUMBER_FLOAT']
 
+def p_factor_m_var(p):
+    'factor : MINUS VARIABLE'
+    p[0] = ['-' + p[2], 'NUMBER_FLOAT']
+
+def p_factor_m_var_oper(p):
+    'factor : MINUS var_oper'
+    p[0] = ['-' + p[2][0], 'NUMBER_FLOAT']
+
 def p_factor_var_mm(p):
     'factor : VARIABLE LESSLESS'
     p[0] = [toStrIfInt(p[1]) + '--', estaDefinida(p[1])]
@@ -1090,7 +1056,7 @@ def p_factor_var_mm(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_factor_var_op_mm(p):
     'factor : var_oper LESSLESS'
@@ -1121,7 +1087,7 @@ def p_factor_mm_var(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_factor_mm_var_op(p):
     'factor : LESSLESS var_oper'
@@ -1152,7 +1118,7 @@ def p_factor_var_pp(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_factor_var_op_pp(p):
     'factor : var_oper MASMAS'
@@ -1183,7 +1149,7 @@ def p_factor_pp_var(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_factor_pp_var_op(p):
     'factor : MASMAS var_oper'
@@ -1204,6 +1170,14 @@ def p_factor_pp_base(p):
 def p_base_expr(p):
     'base : LPAREN exp_arit RPAREN'
     p[0] = ['(' + toStrIfInt(p[2][0]) + ')', p[2][1]]
+
+def p_base_paren_var(p):
+    'base : LPAREN VARIABLE RPAREN'
+    p[0] = ['(' + p[2] + ')', estaDefinida(p[2])]
+
+def p_base_paren_var_oper(p):
+    'base : LPAREN var_oper RPAREN'
+    p[0] = ['(' + p[2][0] + ')', 'ND']
 
 def p_base_valor(p):
     'base : NUMBER'
@@ -1235,7 +1209,7 @@ def p_exp_var(p):
             # message += "\nline:" + str(p.lineno)
             # message += "\nposition:" + str(p.lexpos)
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_var_op(p):
     'exp : var_oper'
@@ -1250,7 +1224,7 @@ def p_exp_var_op(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_exp_valor(p):
@@ -1281,7 +1255,7 @@ def p_exp_cadena_concat_1(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_exp_cadena_concat_2(p):
@@ -1297,7 +1271,7 @@ def p_exp_cadena_concat_2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_exp_cadena_term(p):
@@ -1321,7 +1295,7 @@ def p_exp_cadena_funct_ret_string(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_exp_cadena_parent(p):
     'term_cadena : LPAREN exp_cadena RPAREN'
@@ -1360,7 +1334,7 @@ def p_bool_expr_vaf(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_bool_expr_v2af(p):
     'exp_bool : var_oper AND term_bool'
@@ -1375,7 +1349,7 @@ def p_bool_expr_v2af(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_expr_eav(p):
@@ -1391,7 +1365,7 @@ def p_bool_expr_eav(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_expr_eav2(p):
@@ -1407,7 +1381,7 @@ def p_bool_expr_eav2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_expr_v2av2(p):
@@ -1423,7 +1397,7 @@ def p_bool_expr_v2av2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_expr_vav(p):
@@ -1439,7 +1413,7 @@ def p_bool_expr_vav(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_expr_term(p):
@@ -1463,7 +1437,7 @@ def p_bool_tov(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_bool_tov2(p):
     'term_bool : term_bool OR var_oper'
@@ -1478,7 +1452,7 @@ def p_bool_tov2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_vof(p):
@@ -1494,7 +1468,7 @@ def p_bool_vof(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_v2of(p):
@@ -1510,7 +1484,7 @@ def p_bool_v2of(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_v2ov2(p):
@@ -1526,7 +1500,7 @@ def p_bool_v2ov2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_bool_vov(p):
     'term_bool : VARIABLE OR VARIABLE'
@@ -1541,7 +1515,7 @@ def p_bool_vov(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_bool_term_factor(p):
@@ -1553,7 +1527,11 @@ def p_term_not(p):
     p[0] = ['not ' + p[2][0], 'BOOL']
 
 def p_term_bool_parentesis(p):
-    'factor_bool : LPAREN exp_bool RPAREN'
+    'factor_bool : LPAREN comparacion RPAREN'
+    p[0] = ['(' + p[2][0] + ')', 'BOOL']
+
+def p_term_bool_op_ternario(p):
+    'factor_bool : LPAREN operador_ternario RPAREN'
     p[0] = ['(' + p[2][0] + ')', 'BOOL']
 
 def p_term_bool_bool(p):
@@ -1601,7 +1579,7 @@ def p_comparcion_acv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_comparcion_acv2(p):
@@ -1617,7 +1595,7 @@ def p_comparcion_acv2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_comparcion_vca(p):
@@ -1633,7 +1611,7 @@ def p_comparcion_vca(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_comparcion_v2ca(p):
@@ -1649,7 +1627,7 @@ def p_comparcion_v2ca(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_comparcion_exp_cadena(p):
     'comparacion : exp_cadena operador_comp exp_cadena'
@@ -1668,7 +1646,7 @@ def p_comparcion_exp_vcc(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_comparcion_exp_v2cc(p):
@@ -1684,7 +1662,7 @@ def p_comparcion_exp_v2cc(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_comparcion_exp_ccv(p):
     'comparacion : exp_cadena operador_comp VARIABLE'
@@ -1699,7 +1677,7 @@ def p_comparcion_exp_ccv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_comparcion_exp_ccv2(p):
@@ -1715,7 +1693,7 @@ def p_comparcion_exp_ccv2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 
 def p_comparcion_exp_vcv(p):
@@ -1731,7 +1709,7 @@ def p_comparcion_exp_vcv(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_comparcion_exp_v2cv2(p):
     'comparacion : var_oper operador_comp var_oper'
@@ -1746,7 +1724,7 @@ def p_comparcion_exp_v2cv2(p):
             # message += "\nposition:" + str(p.lexpos)
 
 
-        raise Exception(message)
+        #raise Exception(message)
 
 def p_error(token):
     message = "[Syntax error]"

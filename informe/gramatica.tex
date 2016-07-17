@@ -70,11 +70,15 @@
 
 <var_asig_l>    :   VARIABLE
                 |   RES
-                |   VARIABLE '[' <exp_arit> ']' 
-                |   <exp_arreglo> '[' <exp_arit> ']' 
-                |   VARIABLE '[' VARIABLE ']' 
-                |   <exp_arreglo> '[' VARIABLE ']' 
-                |   VARIABLE '.' VARIABLE 
+                |   VARIABLE <var_member>
+
+
+<var_member>    :   '[' <exp_arit> ']'  <var_member>
+                |   '[' VARIABLE ']' <var_member>
+                |   '.' VARIABLE <var_member>
+                |   '[' <exp_arit> ']' 
+                |   '[' VARIABLE ']' 
+                |   '.' VARIABLE 
 
 <var_asig>      :   <var_asig_l> '++'
                 |   '++' <var_asig_l>
@@ -149,6 +153,7 @@
                 |   <base>
 
 <base>          :   '(' <exp_arit> ')'
+                |   '(' VARIABLE ')'
                 |   NUMBER
                 |   <func_int>
 
