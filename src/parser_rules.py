@@ -44,6 +44,11 @@ def tipoNumber(*args):
 def esNumber(palabra):
 	return len(palabra) >= 6 and palabra[0:6] == 'NUMBER'
 
+# Funcion que devuelve True si tiene como prefijo a REGISTRO
+def esRegistro(palabra):
+	return len(palabra) >= 8 and palabra[0:8] == 'REGISTRO'
+
+
 # Funcion que accede al diccionario de variables y devuelve su tipo (Si esta definida)
 # Si no esta definida devuelve ND
 def estaDefinida(key):
@@ -151,7 +156,7 @@ def p_loop_while(p):
 
     if (p[3][1] != "BOOL"):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_loop_do(p):
     'loop : DO bloque WHILE LPAREN control_cond_term RPAREN PUNTOYCOMA'
@@ -159,7 +164,7 @@ def p_loop_do(p):
 
     if (p[5][1] != "BOOL"):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_loop_for(p):
     'loop : for'
@@ -171,7 +176,7 @@ def p_for_main(p):
 
     if (p[5][1] != "BOOL"):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 def p_for_term(p):
     'form_term : var_asig '
     p[0] = [ p[1][0],p[1][1]]
@@ -206,7 +211,7 @@ def p_ifelse(p):
 
     if (p[3][1] != "BOOL"):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN control_cond_term RPAREN bloque'
@@ -214,7 +219,7 @@ def p_ifSinElse(p):
 
     if (p[3][1] != "BOOL"):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_bloque_cb(p):
     'bloque : COMENTARIO bloque'
@@ -267,7 +272,7 @@ def p_funcion_ret_arreglo_3(p):
 
     if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1]) or p[7][1] != "BOOL"):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('MULTIPLICACIONESCALAR',p.lineno(3),p.lexpos(3))
 
 def p_funcion_ret_arreglo_2(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores RPAREN'
@@ -275,7 +280,7 @@ def p_funcion_ret_arreglo_2(p):
 
     if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1])):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('MULTIPLICACIONESCALAR',p.lineno(3),p.lexpos(3))
 
 def p_funcion_ret_int_length(p):
     'func_ret_int : LENGTH LPAREN valores RPAREN'
@@ -283,7 +288,7 @@ def p_funcion_ret_int_length(p):
 
     if (p[3][1] != "STRING" and not esVector(p[3][1])):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(3),p.lexpos(3))
 
 
 def p_funcion_ret_string(p):
@@ -292,16 +297,16 @@ def p_funcion_ret_string(p):
 
     if (p[3][1] != "STRING"):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
 
 
 def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
-    p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', 'VECTOR_' + tipoNumber(tipo(p[3][1]),tipo(p[5][1]))]
+    p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', 'BOOL']
 
     if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or (not esNumber(tipo(p[5][1])) and p[5][1] != "VECTOR_VACIO")):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('COLINEALES',p.lineno(2),p.lexpos(2))
 
 #Producciones para vectores y variables
 def p_valores_exp_arit(p):
@@ -330,7 +335,7 @@ def p_valores_reg2(p):
     p[0] = [p[1][0] + '.' + p[3][0], p[1][1]]
     if not p[3] in estaDefinida(p[1][0]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_valores_variables(p):
     'valores : var_asig_l'
@@ -375,43 +380,43 @@ def p_lista_valores_lista(p):
 
     if (p[1][1] != p[3][1] and p[1][1] != 'ND' and p[3][1] != 'ND'):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LISTAINCORRECTA',p.lineno(1),p.lexpos(1))
 
 #Producciones Registros
 def p_reg(p):
     'reg : LLAVEIZQ reg_item LLAVEDER'
-    p[0] = ['{' + p[2][0] + '}','REGISTRO']
+    p[0] = ['{' + p[2][0] + '}','REGISTRO' + '_' + p[2][1]]
 
 def p_reg_item_list(p):
     'reg_item : VARIABLE DOSPUNTOS valores COMA reg_item' 
-    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0],'REGISTRO']
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0], p[3][1] + '_' + p[5][1]]
 
 def p_reg_item(p):
     'reg_item : VARIABLE DOSPUNTOS valores' 
-    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), 'REGISTRO']
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), p[3][1]]
 
 #Producciones de asignaciones
 def p_var_asig_l_var(p):
     'var_asig_l : VARIABLE'
-    p[0] = [p[1],'ND']
+    p[0] = [p[1],estaDefinida(p[1])]
 
 
 def p_var_asig_l_res(p):
     'var_asig_l : RES'
-    p[0] = [p[1],'ND']
+    p[0] = [p[1],estaDefinida(p[1])]
 
 def p_var_asig_l_var_mem(p):
     'var_asig_l : VARIABLE var_member'
-    p[0] = [p[1] + p[2][0],'ND']
-    if not esVector(estaDefinida(p[1])) and estaDefinida(p[1]) != 'REGISTRO':
+    p[0] = [p[1] + p[2][0],'COMPLETAR']
+    if not esVector(estaDefinida(p[1])) and not esRegistro(estaDefinida(p[1])):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
     	
 
 def p_var_member_vec_item_rec(p):
     'var_member : LCORCHETE var_asig_l RCORCHETE var_member'
-    p[0] = ['[' + p[2] + ']' + p[4][0],'ND']
-    if tipo(estaDefinida(p[2])) != 'INT':
+    p[0] = ['[' + p[2][0] + ']' + p[4][0],'ND']
+    if tipo(estaDefinida(p[2][0])) != 'INT':
         pass
         #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
 
@@ -452,7 +457,7 @@ def p_var_asig_base_mm(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_var_asig_mm_base(p):
@@ -461,7 +466,7 @@ def p_var_asig_mm_base(p):
 
     if not esNumber(p[2][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_var_asig_base_pp(p):
@@ -471,7 +476,7 @@ def p_var_asig_base_pp(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_var_asig_pp_base(p):
@@ -480,7 +485,7 @@ def p_var_asig_pp_base(p):
 
     if not esNumber(p[2][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_var_asig_multipl(p):
@@ -489,7 +494,7 @@ def p_var_asig_multipl(p):
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_var_asig_dividi(p):
     'var_asig : var_asig_l DIVIDI valores'
@@ -497,7 +502,7 @@ def p_var_asig_dividi(p):
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 #def p_var_asig_sigual(p):
 #    'var_asig : VARIABLE'
@@ -511,7 +516,7 @@ def p_var_asig_agregar(p):
         pass
     else:
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_var_asig_sacar(p):
     'var_asig : var_asig_l SACAR valores'
@@ -519,7 +524,7 @@ def p_var_asig_sacar(p):
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_var_asig(p):
     'var_asig : var_asig_l ASIGNACION valores'
@@ -572,6 +577,8 @@ def p_operador_ternario_corchete(p):
 def p_operador_ternario_term1(p):
     'op_ternario_1 : valores INTERROGACION op_ternario_2'
     p[0] = [  p[1][0] + ' ? ' + p[3][0] ,p[3][1]]
+    if p[1][1] != 'BOOL':
+        """raise SemanticException('OPTERNARIO',p.lineno(1),p.lexpos(1))"""
 
 def p_operador_ternario_term1_comp(p):
     'op_ternario_1 : comparacion INTERROGACION op_ternario_2'
@@ -581,6 +588,10 @@ def p_operador_ternario_term2(p):
     'op_ternario_2 : valores DOSPUNTOS op_ternario_3'
     #Hay que verificar que valores y op_ternario_3 sean de mismo tipo
     p[0] = [  p[1][0] + ' : ' + p[3][0] ,p[3][1]]
+    if p[1][1] != p[3][1]:
+        """"raise SemanticException('OPTERNARIO',p.lineno(1),p.lexpos(1))"""
+
+
 
 def p_operador_ternario_term3(p):
     'op_ternario_3 : valores '
@@ -623,15 +634,15 @@ def p_oper_var(p):
 def p_oper_ternaerio(p):
     'var_oper : op_ternario_paren '
     #Seria lindo que tipo de operador ternario sea el tipo de los valores que develve
-    p[0] = [  p[1][0] , p[1][1]]
+    p[0] = [p[1][0] , p[1][1]]
 
 def p_oper_arreglo(p):
     'var_oper : exp_arreglo'
-    p[0] = [  p[1][0] , p[1][1]]
+    p[0] = [p[1][0] , p[1][1]]
 
 def p_oper_reg_fumador(p):
     'var_oper : reg PUNTO VARIABLE'
-    p[0] = [  p[1][0] , p[1][1]]
+    p[0] = [p[1][0] , p[1][1]]
 
 #Producciones operaciones binarias con enteros
 def p_exp_arit_ept(p):
@@ -645,7 +656,7 @@ def p_exp_arit_epv2(p):
 
     if not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_exp_arit_v2pt(p):
     'exp_arit : var_oper PLUS term'
@@ -653,7 +664,7 @@ def p_exp_arit_v2pt(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_exp_arit_v2pv2(p):
     'exp_arit : var_oper PLUS var_oper'
@@ -661,7 +672,7 @@ def p_exp_arit_v2pv2(p):
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_exp_arit_emt(p):
@@ -675,7 +686,7 @@ def p_exp_arit_emv2(p):
 
     if not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_exp_arit_v2mt(p):
@@ -684,7 +695,7 @@ def p_exp_arit_v2mt(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_exp_arit_v2mv2(p):
@@ -724,7 +735,7 @@ def p_term_tmf(p):
 
     if p[2][0] == '/' and not p[3][0]:
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_term_tmv2(p):
     'term : term arit_oper_2 var_oper'
@@ -732,7 +743,7 @@ def p_term_tmv2(p):
 
     if not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_term_v2mf(p):
     'term : var_oper arit_oper_2 factor'
@@ -740,7 +751,7 @@ def p_term_v2mf(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_term_v2mv2(p):
     'term : var_oper arit_oper_2 var_oper'
@@ -748,7 +759,7 @@ def p_term_v2mv2(p):
 
     if not esNumber(p[1][1]) or not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_term_factor(p):
     'term : factor'
@@ -765,7 +776,7 @@ def p_factor_var_op__exp(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_factor_base(p):
@@ -786,7 +797,7 @@ def p_factor_var_op_mm(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
         
 def p_factor_base_mm(p):
@@ -799,7 +810,7 @@ def p_factor_mm_var_op(p):
 
     if not esNumber(p[2][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_factor_mm_base(p):
     'factor : LESSLESS base '
@@ -811,7 +822,7 @@ def p_factor_var_op_pp(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_factor_base_pp(p):
     'factor : base MASMAS'
@@ -823,7 +834,7 @@ def p_factor_pp_var_op(p):
 
     if not esNumber(p[2][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_factor_pp_base(p):
     'factor : MASMAS base '
@@ -861,7 +872,7 @@ def p_exp_var_op(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_exp_valor(p):
@@ -885,7 +896,7 @@ def p_exp_cadena_concat_1(p):
 
     if estaDefinida(p[1][0]) != 'STRING':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_exp_cadena_concat_2(p):
@@ -894,7 +905,7 @@ def p_exp_cadena_concat_2(p):
 
     if estaDefinida(p[2]) != 'STRING':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_exp_cadena_term(p):
@@ -915,7 +926,7 @@ def p_exp_cadena_funct_ret_string(p):
 
     if p[3][1] != 'STRING':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_exp_cadena_parent(p):
     'term_cadena : LPAREN exp_cadena RPAREN'
@@ -938,7 +949,7 @@ def p_bool_expr_v2af(p):
 
     if p[1][1] != 'BOOL':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_bool_expr_eav2(p):
@@ -947,7 +958,7 @@ def p_bool_expr_eav2(p):
 
     if p[3][1] != 'BOOL':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_bool_expr_v2av2(p):
@@ -956,7 +967,7 @@ def p_bool_expr_v2av2(p):
 
     if p[3][1] != 'BOOL' or p[1][1] != 'BOOL':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_bool_expr_term(p):
@@ -973,7 +984,7 @@ def p_bool_tov2(p):
 
     if p[3][1] != 'BOOL':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_bool_v2of(p):
@@ -982,7 +993,7 @@ def p_bool_v2of(p):
 
     if p[1][1] != 'BOOL':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_bool_v2ov2(p):
@@ -991,7 +1002,7 @@ def p_bool_v2ov2(p):
 
     if p[1][1] != 'BOOL' or p[3][1] != 'BOOL':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_bool_term_factor(p):
     'term_bool : factor_bool'
@@ -1052,7 +1063,7 @@ def p_comparcion_bcv2(p):
 
     if not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 
@@ -1062,7 +1073,7 @@ def p_comparcion_v2cb(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_comparcion_exp_arit(p):
     'comparacion : exp_arit operador_comp exp_arit'
@@ -1075,7 +1086,7 @@ def p_comparcion_acv2(p):
 
     if not esNumber(p[3][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 
@@ -1085,7 +1096,7 @@ def p_comparcion_v2ca(p):
 
     if not esNumber(p[1][1]):
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_comparcion_exp_cadena(p):
     'comparacion : exp_cadena operador_comp exp_cadena'
@@ -1098,7 +1109,7 @@ def p_comparcion_exp_v2cc(p):
 
     if p[1][1] != 'STRING':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_comparcion_exp_ccv2(p):
     'comparacion : exp_cadena operador_comp var_oper'
@@ -1106,7 +1117,7 @@ def p_comparcion_exp_ccv2(p):
 
     if p[3][1] != 'STRING':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 
 def p_comparcion_exp_v2cv2(p):
@@ -1115,7 +1126,7 @@ def p_comparcion_exp_v2cv2(p):
 
     if p[1][1] != 'STRING' or p[3][1] != 'STRING':
         pass
-        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
 def p_error(token):
     message = "[Syntax error]"

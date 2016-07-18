@@ -88,9 +88,10 @@
 
 <var_member>    :   '[' var_asig_l ']' <var_member>
                 |   '[' <exp_arit> ']'  <var_member>
-                |   '.' VARIABLE <var_member>
                 |   '[' <exp_arit> ']' 
+                |   '[' <var_asig_l> ']' 
                 |   '.' VARIABLE 
+                |   '.' VARIABLE <var_member>
 
 <var_asig>      :   <var_asig_l> '++'
                 |   '++' <var_asig_l>
