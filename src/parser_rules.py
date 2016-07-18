@@ -118,12 +118,12 @@ def p_empty(p):
      
 def p_sentencia_var_asig(p):
     'sentencia : var_asig PUNTOYCOMA'
-    p[0] = [p[1][0] + ';', 'ND']
+    p[0] = [p[1][0] + ';', p[1][1]]
 
 
 def p_sentencia_func(p):
     'sentencia : funcion PUNTOYCOMA'
-    p[0] = [p[1][0] + ';', 'ND']
+    p[0] = [p[1][0] + ';', p[1][1]]
 
 #Producciones para estructuras de control
 def p_control_ifelse(p):
@@ -268,17 +268,17 @@ def p_funcion_ret_arreglo(p):
 
 def p_funcion_ret_arreglo_3(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores COMA valores RPAREN'
-    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ',' + p[7][0] + ')', 'VECTOR_' + tipoNumber(tipo(p[3][1]),p[5][1])]
+    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ',' + p[7][0] + ')', 'VECTOR_NUMBER_' + tipoNumber(tipo(p[3][1]),p[5][1])]
 
-    if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1]) or p[7][1] != "BOOL"):
+    if (not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1]) or p[7][1] != "BOOL":
         pass
         #raise SemanticException('MULTIPLICACIONESCALAR',p.lineno(3),p.lexpos(3))
 
 def p_funcion_ret_arreglo_2(p):
     'func_ret_arreglo : MULTIPLICACIONESCALAR LPAREN valores COMA valores RPAREN'
-    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ')', 'VECTOR_' + tipoNumber(tipo(p[3][1]),p[5][1])]
+    p[0] = ['multiplicacionEscalar(' + p[3][0] + ',' + p[5][0] + ')', 'VECTOR_NUMBER_' + tipoNumber(tipo(p[3][1]),p[5][1])]
 
-    if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1])):
+    if (not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or not esNumber(p[5][1]):
         pass
         #raise SemanticException('MULTIPLICACIONESCALAR',p.lineno(3),p.lexpos(3))
 
@@ -311,7 +311,7 @@ def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
     p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', 'BOOL']
 
-    if ((not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or (not esNumber(tipo(p[5][1])) and p[5][1] != "VECTOR_VACIO")):
+    if (not esNumber(tipo(p[3][1])) and p[3][1] != "VECTOR_VACIO") or (not esNumber(tipo(p[5][1])) and p[5][1] != "VECTOR_VACIO"):
         pass
         #raise SemanticException('COLINEALES',p.lineno(2),p.lexpos(2))
 
@@ -339,7 +339,7 @@ def p_valores_reg(p):
 
 def p_valores_reg2(p):
     'valores : reg PUNTO VARIABLE'
-    p[0] = [p[1][0] + '.' + p[3][0], p[1][1]]
+    p[0] = [p[1][0] + '.' + p[3], 'COMPLETAR']
     if not p[3] in estaDefinida(p[1][0]):
         pass
         #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
@@ -348,11 +348,11 @@ def p_valores_variables(p):
     'valores : var_asig_l'
     p[0] = [p[1][0], p[1][1]]
 
+
 def p_valor_perador(p):
     'valores : LPAREN operador_ternario RPAREN '
     p[0] = [ '(' + p[2][0] + ')',p[2][1]]
 
-    1
 def p_exp_arreglo(p):
     'exp_arreglo : LCORCHETE lista_valores RCORCHETE'
     p[0] = ['[' + toStrIfInt(p[2][0]) +  ']', 'VECTOR_' + p[2][1]]
@@ -406,15 +406,15 @@ def p_lista_ot_lista(p):
 #Producciones Registros
 def p_reg(p):
     'reg : LLAVEIZQ reg_item LLAVEDER'
-    p[0] = ['{' + p[2][0] + '}','REGISTRO' + '_' + p[2][1]]
+    p[0] = ['{' + p[2][0] + '}','COMPLETAR']
 
 def p_reg_item_list(p):
     'reg_item : VARIABLE DOSPUNTOS valores COMA reg_item' 
-    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0], p[3][1] + '_' + p[5][1]]
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]) + ',' + p[5][0], 'COMPLETAR']
 
 def p_reg_item(p):
     'reg_item : VARIABLE DOSPUNTOS valores' 
-    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), p[3][1]]
+    p[0] = [p[1] + ":" + toStrIfInt(p[3][0]), 'COMPLETAR']
 
 #Producciones de asignaciones
 def p_var_asig_l_var(p):
@@ -436,7 +436,7 @@ def p_var_asig_l_var_mem(p):
 
 def p_var_member_vec_item_rec(p):
     'var_member : LCORCHETE var_asig_l RCORCHETE var_member'
-    p[0] = ['[' + p[2][0] + ']' + p[4][0],'ND']
+    p[0] = ['[' + p[2][0] + ']' + p[4][0],'COMPLETAR']
     if tipo(estaDefinida(p[2][0])) != 'INT':
         pass
         #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
@@ -444,33 +444,33 @@ def p_var_member_vec_item_rec(p):
     
 def p_var_member_vec_item_2(p):
     'var_member : LCORCHETE exp_arit RCORCHETE'
-    p[0] = ['[' + p[2][0] + ']','ND']
+    p[0] = ['[' + p[2][0] + ']','COMPLETAR']
     if tipo(p[2][1]) != 'INT':
         pass
         #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
     
 def p_var_member_vec_item_2_rec(p):
     'var_member : LCORCHETE exp_arit RCORCHETE var_member'
-    p[0] = ['[' + p[2][0] + ']' + p[4][0],'ND']
+    p[0] = ['[' + p[2][0] + ']' + p[4][0],'COMPLETAR']
     if tipo(p[2][1]) != 'INT':
         pass
         #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
     
 def p_var_member_vec_item_3(p):
     'var_member : LCORCHETE var_asig_l RCORCHETE'
-    p[0] = ['[' + p[2][0] + ']','ND']
+    p[0] = ['[' + p[2][0] + ']','COMPLETAR']
     if tipo(p[2][1]) != 'INT':
         pass
         #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
 
 def p_var_member_reg_item(p):
     'var_member : PUNTO VARIABLE'
-    p[0] = [ '.' + p[2],p[2]]
+    p[0] = [ '.' + p[2],'COMPLETAR']
 
     
 def p_var_member_reg_item_rec(p):
     'var_member : PUNTO VARIABLE var_member'
-    p[0] = [ '.' + p[2] + p[3][0],p[2]]
+    p[0] = [ '.' + p[2] + p[3][0],'COMPLETAR']
     
 def p_var_asig_base_mm(p):
     'var_asig : var_asig_l LESSLESS'
@@ -638,7 +638,7 @@ def p_operador_ternario_3(p):
 
 def p_oper_var(p):
     'var_oper : var_asig_l'
-    p[0] = [p[1][0] , 'ND']
+    p[0] = [p[1][0] , p[1][1]]
 
 def p_oper_ternaerio(p):
     'var_oper : LPAREN operador_ternario RPAREN '
@@ -651,7 +651,7 @@ def p_oper_arreglo(p):
 
 def p_oper_reg_fumador(p):
     'var_oper : reg PUNTO VARIABLE'
-    p[0] = [p[1][0] , p[1][1]]
+    p[0] = [p[1][0] , 'COMPLETAR']
 
 #Producciones operaciones binarias con enteros
 def p_exp_arit_ept(p):
@@ -723,9 +723,6 @@ def p_exp_arit_term(p):
     'exp_arit : term'
     p[0] = [toStrIfInt(p[1][0]), p[1][1]]
 
-
-
-
 def p_arit_oper2_times(p):
     'arit_oper_2 : TIMES'
     p[0] = [p[1], 'ND' ]
@@ -742,7 +739,7 @@ def p_term_tmf(p):
     'term : term arit_oper_2 factor'
     p[0] = [p[1][0] + p[2][0] + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
-    if p[2][0] == '/' and not p[3][0]:
+    if p[2][0] == '/' and p[3][0] == 0:
         pass
         #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
@@ -787,7 +784,6 @@ def p_factor_var_op__exp(p):
         pass
         #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
 
-
 def p_factor_base(p):
     'factor : base '
     p[0] = [toStrIfInt(p[1][0]), p[1][1]]
@@ -823,11 +819,11 @@ def p_factor_mm_var_op(p):
 
 def p_factor_mm_base(p):
     'factor : LESSLESS base '
-    p[0] = ['--' + toStrIfInt(p[2][0]), p[2][1]]
+    p[0] = ['--' + p[2][0], p[2][1]]
 
 def p_factor_var_op_pp(p):
     'factor : var_oper MASMAS'
-    p[0] = [toStrIfInt(p[1][0]) + '++', p[1][1]]
+    p[0] = [p[1][0] + '++', p[1][1]]
 
     if not esNumber(p[1][1]):
         pass
@@ -839,7 +835,7 @@ def p_factor_base_pp(p):
 
 def p_factor_pp_var_op(p):
     'factor : MASMAS var_oper'
-    p[0] = ['++' + toStrIfInt(p[2][0]), p[2][1]]
+    p[0] = ['++' + p[2][0], p[2][1]]
 
     if not esNumber(p[2][1]):
         pass
@@ -847,11 +843,11 @@ def p_factor_pp_var_op(p):
 
 def p_factor_pp_base(p):
     'factor : MASMAS base '
-    p[0] = ['++' + toStrIfInt(p[2][0]), p[2][1]]
+    p[0] = ['++' + p[2][0], p[2][1]]
 
 def p_base_expr(p):
     'base : LPAREN exp_arit RPAREN'
-    p[0] = ['(' + toStrIfInt(p[2][0]) + ')', p[2][1]]
+    p[0] = ['(' + p[2][0] + ')', p[2][1]]
 
 def p_base_paren_var_oper(p):
     'base : LPAREN var_oper RPAREN'
@@ -865,7 +861,7 @@ def p_base_valor(p):
 def p_base_func_ret_int(p):
     'base : func_ret_int'
     #chequear que el valor sea numerico <-------- podria no se un numero ???????????????
-    p[0] =  [toStrIfInt(p[1][0]), p[1][1]] 
+    p[0] =  [p[1][0], p[1][1]] 
 
 def p_sigexp_m(p):
     'sigexp : MINUS exp'
@@ -873,7 +869,7 @@ def p_sigexp_m(p):
 
 def p_sigexp_exp(p):
     'sigexp : exp'
-    p[0] =  [toStrIfInt(p[1][0]), p[1][1]]
+    p[0] =  [p[1][0], p[1][1]]
 
 def p_exp_var_op(p):
     'exp : var_oper'
@@ -891,7 +887,7 @@ def p_exp_valor(p):
 
 def p_exp__expr(p):
     'exp : LPAREN exp_arit RPAREN'
-    p[0] = ['(' + toStrIfInt(p[2][0]) + ')', p[2][1]]
+    p[0] = ['(' + p[2][0] + ')', p[2][1]]
 
 
 #Producciones operaciones con Strings
@@ -1015,7 +1011,7 @@ def p_bool_v2ov2(p):
 
 def p_bool_term_factor(p):
     'term_bool : factor_bool'
-    p[0] = [p[1][0], ' BOOL'] 
+    p[0] = [p[1][0], 'BOOL'] 
 
 def p_term_not(p):
     'term_bool : NOT factor_bool'
@@ -1069,11 +1065,14 @@ def p_comparcion(p):
     #'comparacion : exp_bool operador_comp exp_bool'
     #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
 
+    if p[2][0] == ' > ' or p[2][0] == ' < ':
+        pass
+        #raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
+
 
 #def p_comparcion_bcv2(p):
     #'comparacion : exp_bool operador_comp var_oper'
     #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
     #if not esNumber(p[3][1]):
         #pass
         ##raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))

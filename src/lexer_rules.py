@@ -24,6 +24,14 @@ reserved = {
 
 }
 
+notokens = {
+	'begin':'BEGIN',
+	'end':'END',
+	'true':'TRUE',
+	'false':'FALSE',
+	'return':'RETURN',
+}
+
 tokens = [
 # Numeros
    'NUMBER',
@@ -66,7 +74,7 @@ tokens = [
 
 # Estos actualmente estan siendo ignorados, son tomados como tipo VARIABLE 
    'ASIGNACION',
-] + list(reserved.values())
+] + [valor for valor in list(reserved.values()) if valor not in list(notokens.values())]
 
 def t_NUMBER(token):
 	r"([0-9]+(\.[0-9][0-9]*)?)"
@@ -149,7 +157,10 @@ def t_BOOL(token) :
 def t_VARIABLE(token):
   r"([a-z]|[A-Z]) ([a-z]|[A-Z]|\_|[0-9])*"
   token.type = reserved.get(token.value.lower(),'VARIABLE')
-  return token
+  if token.type in notokens.values():
+  	raise Exception('Su codigo contiene palabras reservadas')
+  else:	
+	return token
 
 t_ASIGNACION = r"="
 
