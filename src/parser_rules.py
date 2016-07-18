@@ -129,17 +129,32 @@ def p_control_loop(p):
     'control : loop'
     p[0] = [p[1][0], 'ND']
 
+def p_control_cond_term_var_asig_l(p):
+    'control_cond_term : var_asig_l'
+    p[0] = [ p[1][0],p[1][1]]
+
+def p_control_cond_term_e_bool(p):
+    'control_cond_term : exp_bool'
+    p[0] = [ p[1][0],p[1][1]]
+
+def p_control_cond_term_comp(p):
+    'control_cond_term : comparacion'
+    p[0] = [ p[1][0],p[1][1]]
+
+def p_control_cond_term_ternario(p):
+    'control_cond_term : operador_ternario'
+    p[0] = [ p[1][0],p[1][1]]
+
 def p_loop_while(p):
-    'loop : WHILE LPAREN valores RPAREN bloque'
+    'loop : WHILE LPAREN control_cond_term RPAREN bloque'
     p[0] = ['while('+ p[3][0] + ')\n    ' + find_and_replace(p[5][0]), 'ND']
 
     if (p[3][1] != "BOOL"):
         pass
         #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
-
 def p_loop_do(p):
-    'loop : DO bloque WHILE LPAREN valores RPAREN PUNTOYCOMA'
+    'loop : DO bloque WHILE LPAREN control_cond_term RPAREN PUNTOYCOMA'
     p[0] = ['do\n    ' + find_and_replace(p[2][0]) + '\nwhile(' + p[5][0] + ');' +'\n', 'ND']
 
     if (p[5][1] != "BOOL"):
@@ -151,7 +166,7 @@ def p_loop_for(p):
     p[0] = [ p[1][0],'ND']
 
 def p_for_main(p):
-    'for : FOR LPAREN form_term PUNTOYCOMA valores PUNTOYCOMA form_term RPAREN bloque'
+    'for : FOR LPAREN form_term PUNTOYCOMA form_term_2 PUNTOYCOMA form_term RPAREN bloque'
     p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]) + '\n', 'ND']
 
     if (p[5][1] != "BOOL"):
@@ -161,12 +176,32 @@ def p_for_term(p):
     'form_term : var_asig '
     p[0] = [ p[1][0],p[1][1]]
 
+def p_for_term_2_val(p):
+    'form_term_2 : valores '
+    p[0] = [ p[1][0],p[1][1]]
+
+def p_for_term_2_comp(p):
+    'form_term_2 : comparacion'
+    p[0] = [ p[1][0],p[1][1]]
+
 def p_for_term_empty(p):
     'form_term : '
     p[0] = ['','ND']
 
+#def p_if_term_e_bool(p):
+    #'if_term : exp_bool'
+    #p[0] = [ p[1][0],p[1][1]]
+
+#def p_if_term_comp(p):
+    #'if_term : comparacion'
+    #p[0] = [ p[1][0],p[1][1]]
+
+#def p_if_term_var_asig_l(p):
+    #'if_term : var_asig_l'
+    #p[0] = [ p[1][0],p[1][1]]
+
 def p_ifelse(p):
-    'ifelse : IF LPAREN valores RPAREN bloque ELSE bloque'
+    'ifelse : IF LPAREN control_cond_term RPAREN bloque ELSE bloque'
     p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7][0]) + '\n', 'ND']
 
     if (p[3][1] != "BOOL"):
@@ -174,7 +209,7 @@ def p_ifelse(p):
         #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_ifSinElse(p):
-    'ifelse : IF LPAREN valores RPAREN bloque'
+    'ifelse : IF LPAREN control_cond_term RPAREN bloque'
     p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\n', 'ND']
 
     if (p[3][1] != "BOOL"):
@@ -274,7 +309,7 @@ def p_valores_exp_arit(p):
     p[0] = [toStrIfInt(p[1][0]), p[1][1]]
 
 def p_valores_exp_bool(p):
-    'valores : comparacion'
+    'valores : exp_bool'
     p[0] = [p[1][0], 'BOOL']
 
 def p_valores_exp_cadena(p):
@@ -498,6 +533,11 @@ def p_var_asig(p):
     p[0] = [p[1][0] + '=' + toStrIfInt(p[3][0]), 'ASIGNACION']
     variables_dict[p[1][0]] = p[3][1]
 
+def p_var_comparacion(p):
+    'var_asig : var_asig_l ASIGNACION comparacion'
+    p[0] = [p[1][0] + '=' + toStrIfInt(p[3][0]), 'ASIGNACION']
+    variables_dict[p[1][0]] = p[3][1]
+
 # En asignacion no importa el tipo, por mas que tengas una variable 'aux' del tipo que sea
 # aux = 10; deberia ser valido
 
@@ -538,6 +578,10 @@ def p_operador_ternario_corchete(p):
 
 def p_operador_ternario_term1(p):
     'op_ternario_1 : valores INTERROGACION op_ternario_2'
+    p[0] = [  p[1][0] + ' ? ' + p[3][0] ,p[3][1]]
+
+def p_operador_ternario_term1_comp(p):
+    'op_ternario_1 : comparacion INTERROGACION op_ternario_2'
     p[0] = [  p[1][0] + ' ? ' + p[3][0] ,p[3][1]]
 
 def p_operador_ternario_term2(p):
@@ -588,6 +632,13 @@ def p_oper_ternaerio(p):
     #Seria lindo que tipo de operador ternario sea el tipo de los valores que develve
     p[0] = [  p[1][0] , p[1][1]]
 
+def p_oper_arreglo(p):
+    'var_oper : exp_arreglo'
+    p[0] = [  p[1][0] , p[1][1]]
+
+def p_oper_reg_fumador(p):
+    'var_oper : reg PUNTO VARIABLE'
+    p[0] = [  p[1][0] , p[1][1]]
 
 #Producciones operaciones binarias con enteros
 def p_exp_arit_ept(p):
@@ -883,26 +934,6 @@ def p_exp_cadena_parent(p):
 # y si quiero hacer var_opr IGUAL comparacion , se puede?
 
 
-def p_comparacionarision_igual(p):
-    'comparacion : comparacion IGUAL exp_bool'
-    p[0] = [p[1][0] + ' == ' + p[3][0], 'BOOL']
-
-def p_comparacionarision_igual_v(p):
-    'comparacion : comparacion IGUAL var_oper'
-    p[0] = [p[1][0] + ' == ' + p[3][0], 'BOOL']
-
-def p_comparacionarision_dis(p):
-    'comparacion : comparacion DISTINTO exp_bool'
-    p[0] = [p[1][0] + ' != ' + p[3][0], 'BOOL']
-
-def p_comparacionarision_dis_v(p):
-    'comparacion : comparacion DISTINTO var_oper'
-    p[0] = [p[1][0] + ' != ' + p[3][0], 'BOOL']
-
-def p_comparacionarision_bool_exp(p):
-    'comparacion : exp_bool'
-    p[0] = [p[1][0], 'BOOL']
-
 def p_bool_expr_eat(p):
     'exp_bool : exp_bool AND term_bool'
     p[0] = [p[1][0] + ' and ' + p[3][0], 'BOOL']
@@ -985,6 +1016,10 @@ def p_term_bool_parentesis(p):
     'factor_bool : LPAREN comparacion RPAREN'
     p[0] = ['(' + p[2][0] + ')', 'BOOL']
 
+def p_term_bool_parentesis2(p):
+    'factor_bool : LPAREN exp_bool RPAREN'
+    p[0] = ['(' + p[2][0] + ')', 'BOOL']
+
 def p_term_bool_bool(p):
     'factor_bool : BOOL'
     p[0] = [str(p[1]), 'BOOL']
@@ -1012,6 +1047,29 @@ def p_operador_comparacion_menor(p):
 def p_operador_comparacion_dif(p):
     'operador_comp : DISTINTO'
     p[0] = [' != ', 'ND']
+
+def p_comparcion_exp_bool(p):
+    'comparacion : exp_bool operador_comp exp_bool'
+    p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
+
+
+def p_comparcion_bcv2(p):
+    'comparacion : exp_bool operador_comp var_oper'
+    p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
+
+    if not esNumber(p[3][1]):
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
+
+
+
+def p_comparcion_v2cb(p):
+    'comparacion : var_oper operador_comp exp_bool'
+    p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
+
+    if not esNumber(p[1][1]):
+        pass
+        #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
 
 def p_comparcion_exp_arit(p):
     'comparacion : exp_arit operador_comp exp_arit'
