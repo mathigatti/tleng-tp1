@@ -89,17 +89,46 @@ def t_IGUAL(token):
     token.value = '=='
     return token
 
-t_DISTINTO = r"\!="
-t_AGREGAR = r"\+="
-t_SACAR = r"\-="
-t_DIVIDI = r"/="
-t_MULTIPL = r"\*="
+
+def t_DISTINTO(token):
+    r"\!(\n)*="
+    token.value = '!='
+    return token;
+
+def t_AGREGAR(token):
+    r"\+(\n)*="
+    token.value = '+='
+    return token;
+
+def t_SACAR(token):
+    r"\-(\n)*="
+    token.value = '-='
+    return token
+
+def t_DIVIDI(token):
+    r"/(\n)*="
+    token.value = '/='
+    return token;
+
+def t_MULTIPL(token):
+    r"\*(\n)*="
+    token.value = '*='
+    return token;
+
+def t_MASMAS(token):
+    r"\+(\n)*\+"
+    token.value = '++'
+    return token
+
+def t_LESSLESS(token):
+    r"-(\n)*-"
+    token.value = '--'
+    return token
+
 t_MINUS = r"\-"
 t_ELEVADO = r"\^"
 t_MODULO = r"\%"
 t_DIV = r"\/"
-t_MASMAS = r"\+\+"
-t_LESSLESS = r"--"
 t_MAYOR = r">"
 t_MENOR = r"<"
 t_PLUS = r"\+"
