@@ -1,0 +1,23 @@
+En el presente trabajo práctico hemos llevado a cabo la construcción por completo de un parser. 
+La problemática planteada por la cátedra ha sido la de poder, a partir de un texto de entrada con líneas de 
+código del lenguaje descripto por el Trabajo Práctico, poder si este era tanto sintáctica como semánticamente válido, 
+darle una tabulación correcta según términos de legibilidad conocidos por los programadores. 
+
+Para realizar este trabajo, tuvimos que dividir nuestras tareas en varias etapas. 
+La primer etapa, es lograr conseguir los tokens de nuestra entrada, que es tener una lista con todos los símbolos que 
+vinieron en las líneas. Para poder realizar esto, hizo falta crear un lexer, que es un tokenizador, que a través de reglas 
+sabrá dividir la entrada en los tokens, dandole un significado a cada uno de ellos para que luego podamos parsear a los mismos. 
+
+Cabe destacar que para la realización de este lexer, decidimos utilizar la herramienta de ply,
+del lenguaje de programación Python. 
+
+Luego de realizada esta etapa, deberemos crear una gramática que pueda parsear correctamente cualquier entrada esperada
+de nuestro lenguaje. Muy importante destacar la necesidad de tener una gramática no ambigua, para que en el parseo posterior
+se genere solo un árbol sintáctico, lo cuál nos dará la posibilidad de utilizar el parser que la herramienta ply nos brinda, 
+ya que trabaja con un parser LALR, que es un tipo de parser ascendente, osea que genera este árbol desde las hojas
+hacia la raìz. 
+
+Una vez parseado esto, y generado el árbol de derivación debemos darle semántica a las producciones, para poder 
+hacer que este lenguaje tenga también significado. 
+
+
