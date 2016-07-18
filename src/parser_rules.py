@@ -408,15 +408,8 @@ def p_var_asig_l_var_mem(p):
         #raise SemanticException(COMPLETAR,p.lineno(COMPLETAR),p.lexpos(COMPLETAR))
     	
 
-def p_var_member_vec_item(p):
-    'var_member : LCORCHETE VARIABLE RCORCHETE'
-    p[0] = ['[' + p[2] + ']','ND']
-    if tipo(estaDefinida(p[2])) != 'INT':
-        pass
-        #raise SemanticException('INDEX_NOT_NAT',p.lineno(2),p.lexpos(2))
-
 def p_var_member_vec_item_rec(p):
-    'var_member : LCORCHETE VARIABLE RCORCHETE var_member'
+    'var_member : LCORCHETE var_asig_l RCORCHETE var_member'
     p[0] = ['[' + p[2] + ']' + p[4][0],'ND']
     if tipo(estaDefinida(p[2])) != 'INT':
         pass
