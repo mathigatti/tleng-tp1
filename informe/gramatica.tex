@@ -14,18 +14,26 @@
 <control>       :   <ifelse>
                 |   <loop>
 
-<loop>          :   'while' '(' <valores> ')' <bloque>
-                |   'do' <bloque> 'while' '(' <valores> ')' ';' 
+<control_cond>  :   <var_asig_l>
+                |   <exp_bool>
+                |   <comparacion>
+                |   <op_ternario>
+
+<loop>          :   'while' '(' <control_cond> ')' <bloque>
+                |   'do' <bloque> 'while' '(' <control_cond> ')' ';' 
                 |   <for>
                 
-<for>           :   'for' '(' <for_term> ',' <valores> ',' <for_term> ')' <bloque>
+<for>           :   'for' '(' <for_term> ',' <form_term_2> ',' <for_term> ')' <bloque>
 
 
-<for_term>    :   <var_asig> 
+<for_term>      :   <var_asig> 
                 |   <empty>
 
-<ifelse>        :   'if' '(' <valores> ')' <bloque>
-                |   'if' '(' <valores> ')' <bloque> else <bloque>
+<form_term_2>    :   <valores>
+                |   <comparacion>
+
+<ifelse>        :   'if' '(' <control_cond> ')' <bloque>
+                |   'if' '(' <control_cond> ')' <bloque> else <bloque>
 
 <bloque>        :   COMENTARIO <bloque>
                 |   <sentencia>
@@ -52,14 +60,16 @@
 
 
 <valores>       :   <exp_arit>
-                |   <comparacion>
+                |   <exp_bool>
                 |   <exp_cadena>
                 |   <exp_arreglo>
                 |   <registro>
-                |   <op_ternario>
+                |   <registro> '.' VARIABLE
                 |   <var_asig_l>
+                |   <op_ternario>
 
 <exp_arreglo>   :   '[' <list_valores> ']'
+                |   '[' <list_valores> ']' <exp_arreglo>
                 |   '['']'
                 |   func_ret_arreglo
 
@@ -76,11 +86,10 @@
                 |   VARIABLE <var_member>
 
 
-<var_member>    :   '[' <exp_arit> ']'  <var_member>
-                |   '[' VARIABLE ']' <var_member>
+<var_member>    :   '[' var_asig_l ']' <var_member>
+                |   '[' <exp_arit> ']'  <var_member>
                 |   '.' VARIABLE <var_member>
                 |   '[' <exp_arit> ']' 
-                |   '[' VARIABLE ']' 
                 |   '.' VARIABLE 
 
 <var_asig>      :   <var_asig_l> '++'
@@ -92,6 +101,7 @@
                 |   <var_asig_l> '+=' <valores>
                 |   <var_asig_l> '-=' <valores>
                 |   <var_asig_l> '=' <valores>
+                |   <var_asig_l> '=' <comparacion>
 
 <op_ternario>   :   <op_ternario_1>
                 |   <op_ternario_paren>
@@ -102,9 +112,10 @@
 <op_ternario_3>         :   <valores>
 
 
-<var_oper>      :   VARIABLE '[' <exp_arit> ']' 
-                |   VARIABLE '[' VARIABLE ']' 
-                |   VARIABLE '.' VARIABLE 
+<var_oper>      :   <var_asig_l>
+                |   <op_ternario_paren>
+                |   <exp_arreglo>
+                |   <registro> '.' VARIABLE 
 
  
 <exp_arit>      :   <exp_arit> '+' <term>
@@ -176,10 +187,10 @@
                 |   <exp_arit>   <op_comp>   <exp_arit>
                 |   <var_oper>   <op_comp>   <exp_arit>
                 |   <exp_arit>   <op_comp>   <var_oper>
+                |   <exp_bool> <op_comp> <exp_bool>
+                |   <exp_bool> <op_comp> <var_oper>
+                |   <var_oper> <op_comp> <exp_bool>
                 |   <var_oper>   <op_comp>  <var_oper> 
-                |   <exp_bool> '==' <exp_bool>
-                |   <exp_bool> '!=' <exp_bool>
-                |   <exp_bool>
 
 <exp_bool>      :   <exp_bool> AND <term_bool>
                 |   <var_oper> AND <term_bool>
@@ -191,10 +202,12 @@
                 |   <var_oper> OR <factor_bool>
                 |   <term_bool> OR <var_oper>
                 |   <var_oper> OR <var_oper>
-                |   'not' factor_bool
+                |   'not' <factor_bool>
+                |   'not' <var_oper>
 
 <factor_bool>   :   BOOL
                 |   '(' <exp_bool> ')'
+                |   '(' <comparacion> ')'
                 |   <func_bool>
                 |   <comparacion>
 
