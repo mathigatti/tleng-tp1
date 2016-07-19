@@ -5,6 +5,7 @@ from semantic_error import SemanticException
 # Diccionario donde se almacenaran las variables declaradas junto con su tipo
 variables_dict = dict()
 reg_dict = dict()
+
 # Funcion que reemplaza los '\n' por '\n    ' o sea agrega un tab en cada salto de linea
 def find_and_replace(palabra):
     j = 0
@@ -73,7 +74,6 @@ def estaReg(key):
     if key in reg_dict:
         return reg_dict[key]
     else: return 'ND'
-
 
 # Funcion que convierte a str su entrada en caso que sea un int
 def toStrIfInt(var):
@@ -302,14 +302,6 @@ def p_funcion_ret_string(p):
     if not esString(p[3][1]):
         pass
         raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
-
-#def p_funcion_ret_string_opternario(p):
-    #'func_ret_cadena : CAPITALIZAR LPAREN operador_ternario RPAREN'
-    #p[0] = ['capitalizar(' + p[3][0] + ')', 'STRING']
-
-    #if (p[3][1] != "STRING"):
-        #pass
-        ##raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
         
 def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
@@ -1018,89 +1010,6 @@ def p_operador_comparacion_dif(p):
 def p_comparcion(p):
     'comparacion : valores operador_comp valores'
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    
-#def p_comparcion_exp_bool(p):
-    #'comparacion : exp_bool operador_comp exp_bool'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-    # if p[2][0] == ' > ' or p[2][0] == ' < ':
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_bcv2(p):
-    #'comparacion : exp_bool operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    #if not esNumber(p[3][1]):
-        #pass
-        ##raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
-
-    # if not esBool(p[3][1]) or p[2][0] == ' > ' or p[2][0] == ' < ':
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_v2cb(p):
-    #'comparacion : var_oper operador_comp exp_bool'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esBool(p[1][1]) or p[2][0] == ' > ' or p[2][0] == ' < ':
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-    #if not esNumber(p[1][1]):
-        #pass
-        ##raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_exp_arit(p):
-    #'comparacion : exp_arit operador_comp exp_arit'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-
-#def p_comparcion_acv2(p):
-    #'comparacion : exp_arit operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-    # if not esNumber(p[3][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-
-
-#def p_comparcion_v2ca(p):
-    #'comparacion : var_oper operador_comp exp_arit'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esNumber(p[1][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_exp_cadena(p):
-    #'comparacion : exp_cadena operador_comp exp_cadena'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-
-#def p_comparcion_exp_v2cc(p):
-    #'comparacion : var_oper operador_comp exp_cadena'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esString(p[1][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_exp_ccv2(p):
-    #'comparacion : exp_cadena operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esString(p[3][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-
-#def p_comparcion_exp_v2cv2(p):
-    #'comparacion : var_oper operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-    #if p[1][1] != 'STRING' or p[3][1] != 'STRING':
-        #pass
-        ##raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
-    # if not(esString(p[1][1]) and esString(p[3][1])) and not(esBool(p[1][1]) and esBool(p[3][1])) and not(esNumber(p[1][1]) and esNumber(p[3][1])):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
 
 def p_error(token):
     message = "[Syntax error]"
