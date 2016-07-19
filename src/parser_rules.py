@@ -303,14 +303,6 @@ def p_funcion_ret_string(p):
         pass
         raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
 
-#def p_funcion_ret_string_opternario(p):
-    #'func_ret_cadena : CAPITALIZAR LPAREN operador_ternario RPAREN'
-    #p[0] = ['capitalizar(' + p[3][0] + ')', 'STRING']
-
-    #if (p[3][1] != "STRING"):
-        #pass
-        ##raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
-        
 def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
     p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', 'BOOL']
@@ -589,13 +581,18 @@ def p_operador_ternario_3(p):
     if not esBool(p[1][1]) or (p[3][1] != p[5][1] and not(esNumber(p[3][1]) and esNumber(p[5][1])) and p[3][1] != 'CUALQUIER_TIPO' and p[5][1] != 'CUALQUIER_TIPO'):
         raise SemanticException('OPTERNARIO',p.lineno(1),p.lexpos(1))
 
+def p_operador_ternario_4(p):
+    'operador_ternario : comparacion INTERROGACION valores DOSPUNTOS operador_ternario'                             
+    p[0] = [  p[1][0] + ' ? ' + p[3][0] + ':' + p[5][0],p[3][1]]
+    if not esBool(p[1][1]) or (p[3][1] != p[5][1] and not(esNumber(p[3][1]) and esNumber(p[5][1])) and p[3][1] != 'CUALQUIER_TIPO' and p[5][1] != 'CUALQUIER_TIPO'):
+            raise SemanticException('OPTERNARIO',p.lineno(1),p.lexpos(1))
+
 def p_oper_var(p):
     'var_oper : var_asig_l'
     p[0] = [p[1][0] , p[1][1]]
 
 def p_oper_ternaerio(p):
     'var_oper : LPAREN operador_ternario RPAREN '
-    #Seria lindo que tipo de operador ternario sea el tipo de los valores que develve
     p[0] = [ '(' + p[2][0] + ')', p[2][1]]
 
 def p_oper_arreglo(p):
@@ -610,7 +607,9 @@ def p_exp_arregloValor(p):
     'exp_arreglo : LCORCHETE lista_valores RCORCHETE exp_arreglo'
     p[0] = ['[' + toStrIfInt(p[2][0]) +  ']' + p[4][0], 'CUALQUIER_TIPO']
 
-#Producciones operaciones binarias con enteros
+#Producciones operaciones binarias con Numeros
+
+
 def p_exp_arit_ept(p):
     'exp_arit : exp_arit PLUS term'
     p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
@@ -880,20 +879,9 @@ def p_exp_cadena_cadena(p):
     'term_cadena : CADENA'
     p[0] = [p[1], 'STRING' ]
 
-def p_exp_cadena_funct_ret_string_2(p):
-   'term_cadena : CAPITALIZAR LPAREN operador_ternario RPAREN'
-   p[0] = ['capitalizar(' + p[3][0] + ')', 'STRING']
-   if not esString(p[3][1]):
-        pass
-        raise SemanticException('ERRORTIPO',p.lineno(1),p.lexpos(1))
-
 def p_exp_cadena_funct_ret_string(p):
-    'term_cadena : CAPITALIZAR LPAREN valores RPAREN'
-    p[0] = ['capitalizar(' + p[3][0] + ')', 'STRING']
-
-    if not esString(p[3][1]):
-        pass
-        raise SemanticException('ERRORTIPO',p.lineno(1),p.lexpos(1))
+   'term_cadena : func_ret_cadena'
+   p[0] =  [p[1][0], p[1][1]] 
 
 def p_exp_cadena_parent(p):
     'term_cadena : LPAREN exp_cadena RPAREN'
@@ -1019,88 +1007,6 @@ def p_comparcion(p):
     'comparacion : valores operador_comp valores'
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
     
-#def p_comparcion_exp_bool(p):
-    #'comparacion : exp_bool operador_comp exp_bool'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-    # if p[2][0] == ' > ' or p[2][0] == ' < ':
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_bcv2(p):
-    #'comparacion : exp_bool operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    #if not esNumber(p[3][1]):
-        #pass
-        ##raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
-
-    # if not esBool(p[3][1]) or p[2][0] == ' > ' or p[2][0] == ' < ':
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_v2cb(p):
-    #'comparacion : var_oper operador_comp exp_bool'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esBool(p[1][1]) or p[2][0] == ' > ' or p[2][0] == ' < ':
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-    #if not esNumber(p[1][1]):
-        #pass
-        ##raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_exp_arit(p):
-    #'comparacion : exp_arit operador_comp exp_arit'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-
-#def p_comparcion_acv2(p):
-    #'comparacion : exp_arit operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-    # if not esNumber(p[3][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-
-
-#def p_comparcion_v2ca(p):
-    #'comparacion : var_oper operador_comp exp_arit'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esNumber(p[1][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_exp_cadena(p):
-    #'comparacion : exp_cadena operador_comp exp_cadena'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-
-#def p_comparcion_exp_v2cc(p):
-    #'comparacion : var_oper operador_comp exp_cadena'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esString(p[1][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-#def p_comparcion_exp_ccv2(p):
-    #'comparacion : exp_cadena operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    # if not esString(p[3][1]):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
-
-
-#def p_comparcion_exp_v2cv2(p):
-    #'comparacion : var_oper operador_comp var_oper'
-    #p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-
-    #if p[1][1] != 'STRING' or p[3][1] != 'STRING':
-        #pass
-        ##raise SemanticException('LENGTH',p.lineno(1),p.lexpos(1))
-    # if not(esString(p[1][1]) and esString(p[3][1])) and not(esBool(p[1][1]) and esBool(p[3][1])) and not(esNumber(p[1][1]) and esNumber(p[3][1])):
-    #     pass
-    #     raise SemanticException('COMPINVALIDA',p.lineno(1),p.lexpos(1))
 
 def p_error(token):
     message = "[Syntax error]"
