@@ -4,6 +4,8 @@ from semantic_error import SemanticException
 
 # Diccionario donde se almacenaran las variables declaradas junto con su tipo
 variables_dict = dict()
+
+# Diccionario donde se almacenaran los nombres de las variables de todos los registros declarados
 reg_dict = dict()
 
 # Funcion que reemplaza los '\n' por '\n    ' o sea agrega un tab en cada salto de linea
@@ -68,7 +70,7 @@ def estaDefinida(key):
 		return variables_dict[key]
 	else: return 'ND'
 
-# Funcion que accede al diccionario de variables y devuelve su tipo (Si esta definida)
+# Funcion que accede al diccionario de registros y devuelve su tipo (Si esta definida)
 # Si no esta definida devuelve ND
 def estaReg(key):
     if key in reg_dict:

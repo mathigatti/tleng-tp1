@@ -1,0 +1,73 @@
+\section{Análisis semántico}
+
+Con lo descrito hasta ahora podemos reconocer y aceptar textos escritos con una sintaxis correcta bajo las reglas enunciadas en las consignas del trabajo pero hay posibles expresiones que no queremos que sean aceptadas a pesar de que cumplan las reglas de la gramática, porque pueden carecer de significado para el proposito del lenguaje. Para esta situación extenderemos lo que tenemos a una gramática de tipos. De esta manera podremos detectar, por ejemplo, cuando se intenta realizar un cálculo aritmetico con una variable que no fue declarada.
+
+
+\subsection{Introduccion}
+
+Para hacer esto utilizamos algunas estructuras de datos. La principal es una tupla [STRING, TIPO] la cual tiene como primer componente el texto de salida y como segunda componente su tipo. Si una variable no esta definida su tipo será 'ND'. Si en algún momento se le asigna un valor entonces almacenaremos su nuevo tipo en un diccionario llamado $variables\_dict$. Entonces al recorrer las reglas de la gramática que forman el texto iremos armando el texto de sálida al mismo tiempo que verificaremos que no haya ningún error semántico. Como ejemplo se puede ver como se describe el tipo de la siguiente regla.
+
+\begin{verbatim}
+
+def p_factor_var_op_pp(p):
+    'factor : var_oper MASMAS'
+    p[0] = [p[1][0] + '++', p[1][1]]
+
+    if not esNumber(p[1][1]):
+        pass
+        raise SemanticException('ERRORTIPO',p.lineno(1),p.lexpos(1))
+
+\end{verbatim}
+
+El valor del tipo de factor es $p[0]$ el cual como dijimos queda definido por una tupla, la primer componente es el valor de la variable $var\_oper$ seguido del signo $++$, el segundo es el tipo, el cual dependerá unicamente del tipo de $var\_oper$, al cual se accede escribiendo $p[1][1]$. En este caso sería un problema que la variable no fuera de tipo $INT$ o $FLOAT$, para verificar esto se utiliza la funcion $esNumber$ y dependiendo su resultado se expondrá un mensaje de error de tipo o no.
+
+\subsection{Registros y Arreglos}
+
+Otro posible error semántico es el de los registros y el acceso a variables que no pertenecen al mismo. Para esto, de manera muy similar al caso anterior, utilizamos un diccionario llamado $reg\_dic$. Aquí se guardan todas las variables de cada registro que se define en el código de entrada. Y se verifica en caso de haber un intento de acceder al valor de la variable de algún registro si la misma fue definida. En la siguiente regla se ve un caso en el que esto ocurre.
+
+\begin{verbatim}
+
+def p_valores_reg2(p):
+    'valores : reg PUNTO VARIABLE'
+    p[0] = [p[1][0] + '.' + p[3], 'CUALQUIER_TIPO']
+    if estaReg(p[3]) == 'ND':
+        pass
+        raise SemanticException('REGISTRO',p.lineno(1),p.lexpos(1))
+
+
+\end{verbatim}
+
+Aquí verificamos utilizando la función $estaReg$ si $VARIABLE$ fue definida como clave de algún registro. De no ser así devolvemos un error de tipo $'REGISTRO'$. Notar que para no complicar demasiado el código decidimos no verificar cual es el tipo exacto de esa variable en el registro. Por eso le asignamos como tipo $'CUALQUIER\_TIPO'$ y en estos caso permitimos que esta sea parte de cualquier tipo de expresiones, ya sea booleana, aritmetica o cadena. Lo mismo sucede cuando accedemos al valor de un arreglo.
+
+\subsection{Comentarios}
+
+Para reconocer si un comentario es inline o no utilizamos la funcion $lineno$ la cual nos proporciona la linea en la cual esta escrita una sentencia, si dicha sentencia esta escrita en la misma que un comentario, luego a la salida imprimimos ambos a la misma altura, en caso contrario los separamos en distintas lineas. Un ejemplo de como hacemos esto se puede ver en el siguiente fracmento de codigo extraido de $parser\_rules.py$ .
+
+\begin{verbatim}
+
+def p_programa_s_pp(p):
+    'p : sentencia pp'
+    if (p.lineno(1) == p.lineno(2)) and p[2][1] == 'COMENTARIO':    	
+        p[0] = [p[1][0] + ' '  + p[2][0], 'ND']
+    else:
+        p[0] = [p[1][0] + '\n'  + p[2][0], 'ND']
+
+\end{verbatim} 
+
+El if verifica que ambas expresiones esten en la misma linea como dijimos pero a parte, obviamente, que el tipo de la segunda expresión sea $'COMENTARIO'$, de no ser así, deberiamos imprimir ambas sentencias en distintas lineas por mas que originalmente hubieran estado juntas.
+
+\subsection{Tabulaciones}
+
+Para manejar las tabulaciones usamos la función $find\_and\_replace$ que recibe como entrada un string y la agrega a todos los saltos de linea una tabulacion. De esta manera cuando sea necesario, por ejemplo en los bloques de los while, for e if's llamarremos a esta función para que les agregue un espaciado extra.
+
+\begin{verbatim}
+
+def p_ifSinElse(p):
+    'ifelse : IF LPAREN control_cond_term RPAREN bloque'
+    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\n', 'ND']
+
+\end{verbatim}
+
+\subsection{Detalles Finales}
+
+Como el código esta comentado y pensamos que será de fácil lectura ya que no tiene mayores dificultades no extenderemos demasiado esta sección, pero creemos que vale la pena mencionar algunos detalles finales para facilitar el entendimiento del lector. El valor 'ND' es un poco ambigüo ya que lo utilizamos mayormente para simbolizar el tipo de una variable que no esta definida pero también en algunas partes está asignado al tipo de algunas expresiones las cuales no necesitamos chequear nunca. Los posibles errores semánticos son variados, se puede encontrar el listado de todos los errores posibles en el archivo $semantic\_error.py$
