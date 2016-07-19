@@ -1,9 +1,6 @@
-a = 100;
-for (i=1; i<a;i++) b = b+10*i;
-
-res = b*8;
-
+inicio = "hola";
+i =0;
 do { i++; # comento algo
-inicio += " ";
+inicio += " "; # Se agrega un espacio
 j = length(inicio)* i;
 }while (j % 32 != 0); print("Mundo!");

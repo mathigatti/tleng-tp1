@@ -8,7 +8,13 @@ semantic_errors =  {
         'PRINT' : 'Argumentos incorrectos, la funcion print recibe solo un argumento',
         'LENGTH' : 'Argumentos incorrectos, length(STRING) o length(VECTOR)',
         'LISTAINCORRECTA' : 'El vector debe tener todos sus elementos del mismo tipo',
-        'OPTERNARIO' : 'El operador ternario debe devolver en ambos casos un elemento del mismo tipo y tener una guarda de tipo BOOL'
+        'OPTERNARIO' : 'El operador ternario debe devolver en ambos casos un elemento del mismo tipo y tener una guarda de tipo BOOL',
+        'COMPINVALIDA' : 'Comparacion invalida, error de tipos.',
+        'ERRORTIPO' : 'Operacion invalida, error de tipos.',
+        'NODEFINIDA' : 'Variable no definida.',
+        'REGISTRO' : 'Esta intentando acceder a un valor que no esta en el registro.',
+        'LOOP' : 'Error en un ciclo. La guarda no es de tipo BOOL',
+        'IF' : 'Error en un IF. La guarda no es de tipo BOOL',
         }
 
 class SemanticException(Exception):
