@@ -303,6 +303,14 @@ def p_funcion_ret_string(p):
         pass
         raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
       
+def p_funcion_ret_string_2(p):
+    'func_ret_cadena : CAPITALIZAR LPAREN operador_ternario RPAREN'
+    p[0] = ['capitalizar(' + p[3][0] + ')', 'STRING']
+
+    if not esString(p[3][1]):
+        pass
+        raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
+
 def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
     p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', 'BOOL']
