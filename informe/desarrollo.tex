@@ -1,0 +1,270 @@
+\section{Analizador léxico }
+
+Para configurar el analizar léxico es necesario proveer expresiones regulares que reconozcan cada uno de los tokens. Para poder reconocer las palabras reservadas del lenguaje  fue necesario agregar lógica extra al analizador. Para evitar que las palabras reservadas sean usadas como variables se creo un diccionario donde cada elemento es el par (palabra reservado,token palabra reservada). Cuando una cadena del código siendo analizado se corresponde con la expresión regular del token VARIABLE, antes de aceptar el token se buscar la cadena en el diccionario. De encontrar la cadena en el diccionario se utiliza el tipo de token definido en el mismo, en caso contrario se devuelve un token VARIABLE. 
+
+\subsection{Expresiones regulares para tokens}
+
+\begin{verbatim}
+                  DO ->    'do'
+               WHILE ->    'while'
+                 FOR ->    'for'
+                  IF ->    'if'
+                ELSE ->    'else'
+                 RES ->    'res'
+               RETURN ->    'return'
+                BEGIN ->    'begin'
+                  END ->    'end'
+          CAPITALIZAR ->    'capitalizar'
+               LENGTH ->    'length'
+                PRINT ->    'print'
+MULTIPLICACIONESCALAR ->    'multiplicacionescalar'
+           COLINEALES ->    'colineales'
+                  AND ->    'and'
+                   OR ->    'or'
+                  NOT ->    'not'
+                MINUS ->    '-'
+              ELEVADO ->    '^'
+               MODULO ->    '%'
+                  DIV ->    '/'
+                MAYOR ->    '>'
+                MENOR ->    '<'
+                 PLUS ->    '+'
+                TIMES ->    '*'
+               LPAREN ->    '('
+               RPAREN ->    ')'
+            LCORCHETE ->    '['
+            RCORCHETE ->    ']'
+             LLAVEIZQ ->    '{'
+             LLAVEDER ->    '}'
+        INTERROGACION ->    '?'
+                PUNTO ->    '.'
+            DOSPUNTOS ->    ':'
+           PUNTOYCOMA ->    ';'
+                 COMA ->    ','
+                IGUAL ->    '='('\n')*'='
+             DISTINTO ->    '!'('\n')*'='
+              AGREGAR ->    '+'('\n')*'='
+                SACAR ->    '-'('\n')*'='
+               DIVIDI ->    '/'('\n')*'='
+              MULTIPL ->    '*'('\n')*'='
+               MASMAS ->    '+'('\n')*'+'
+           COMENTARIO ->    '#'.*
+               CADENA -> '"' .*? '"'
+                 BOOL ->    'true' | 'false' | 'FALSE' | 'TRUE'
+             VARIABLE -> ([a-z][A-Z])([a-z][A-Z]|'_'|[0-9])*
+           ASGINACION ->   '='
+
+\end{verbatim}
+\section{Análisis sintáctico y chequeo de tipos}
+
+La herramienta utilizada para construir el analizador sintáctica crea un analizador LALR. 
+\subsection{Gramática}
+\begin{verbatim}
+    <programa>      :   <sentencia> <programa'>   
+                    |   <control> <programa'>   
+                    |   COMENTARIO <programa>   
+
+    <programa'>     :   <sentencia> <programa'>   
+                    |   <control> <programa'>   
+                    |   COMENTARIO <programa'>   
+                    |   <empty>
+
+    <sentencia>     :   <var_asig> ';'
+                    |   <funcion> ';'
+
+    <control>       :   <ifelse>
+                    |   <loop>
+
+    <control_cond>  :   <var_asig_l>
+                    |   <exp_bool>
+                    |   <comparacion>
+                    |   <op_ternario>
+
+    <loop>          :   'while' '(' <control_cond> ')' <bloque>
+                    |   'do' <bloque> 'while' '(' <control_cond> ')' ';' 
+                    |   <for>
+
+    <for>           :   'for' '(' <for_term> ',' <form_term_2> ',' <for_term> ')' 
+                                <bloque>
+
+
+    <for_term>      :   <var_asig> 
+                    |   <empty>
+
+    <form_term_2>   :   <valores>
+                    |   <comparacion>
+
+    <ifelse>        :   'if' '(' <control_cond> ')' <bloque>
+                    |   'if' '(' <control_cond> ')' <bloque> else <bloque>
+
+    <bloque>        :   COMENTARIO <bloque>
+                    |   <sentencia>
+                    |   <control>
+                    |   '{' <programa'> '}'
+
+    <funcion>       :   func_ret
+                    |   func_void
+
+    <func_void>     :   'print' '(' <valores> ')'
+
+    <func_ret>      :   <func_ret_int>
+                    |   <func_ret_cadena>
+                    |   <func_ret_bool>
+                    |   <func_ret_arreglo>
+
+<func_ret_arreglo>  :   'multiplicarEscalar' '(' <valores> ',' <valores> ')'
+                    |   'multiplicarEscalar' '(' <valores> ',' <valores> ',' 
+                                                 <valores>')'
+                    
+<func_ret_bool>     :   'colineales' '(' <valores> ',' <valores> ')'
+
+<func_ret_cadena>   :   'capitalizar' '(' <valores> ')'
+
+    <func_ret_int>  :   'length' '(' valores ')'
+
+
+    <valores>       :   <exp_arit>
+                    |   <exp_bool>
+                    |   <exp_cadena>
+                    |   <exp_arreglo>
+                    |   <registro>
+                    |   <registro> '.' VARIABLE
+                    |   <var_asig_l>
+                    |   <op_ternario>
+
+    <exp_arreglo>   :   '[' <list_valores> ']'
+                    |   '[' <list_valores> ']' <exp_arreglo>
+                    |   '['']'
+                    |   func_ret_arreglo
+
+    <lista_valores> :  <valores>
+                    |  <valores> ',' <lista_valores>
+
+    <registro>      :   '{' <reg_item> '}'
+
+    <reg_item>      :   VARIABLE ':' <valores> ',' <reg_item>
+                    |   VARIABLE ':' <valores> 
+
+    <var_asig_l>    :   VARIABLE
+                    |   RES
+                    |   VARIABLE <var_member>
+
+
+    <var_member>    :   '[' var_asig_l ']' <var_member>
+                    |   '[' <exp_arit> ']'  <var_member>
+                    |   '.' VARIABLE <var_member>
+                    |   '[' <exp_arit> ']' 
+                    |   '[' <var_asig_l> ']' 
+                    |   '.' VARIABLE 
+
+
+    <var_asig>      :   <var_asig_l> '++'
+                    |   '++' <var_asig_l>
+                    |   <var_asig_l> '--'
+                    |   '--' <var_asig_l>
+                    |   <var_asig_l> '*=' <valores>
+                    |   <var_asig_l> '/=' <valores>
+                    |   <var_asig_l> '+=' <valores>
+                    |   <var_asig_l> '-=' <valores>
+                    |   <var_asig_l> '=' <valores>
+                    |   <var_asig_l> '=' <comparacion>
+                    |   <var_asig_l> '=' <operador_ternario>
+
+    <op_ternario>   :   <valores> '?' <valores> ':' <valores>
+                    |   <comparacion> '?' <valores> ':' <valores>
+                    |   <valores> '?' <valores> ':' <op_ternario>
+                    |   <comparacion> '?' <valores> ':' <op_ternario> 
+                
+    <var_oper>      :   <var_asig_l>
+                    |   '(' <op_ternario> ')'
+                    |   <exp_arreglo>
+                    |   <registro> '.' VARIABLE 
+
+ 
+    <exp_arit>      :   <exp_arit> '+' <term>
+                    |   <exp_arit> '+' <var_oper>
+                    |   <var_oper> '+' <term>
+                    |   <var_oper> '+' <var_oper>
+                    |   <exp_arit> '-' <term>
+                    |   <exp_arit> '-' <var_oper>
+                    |   <var_oper> '-' <term>
+                    |   <var_oper> '-' <var_oper>
+                    |   <term>
+
+
+    <arit_oper_2>   :   '*'
+                    |   '/'
+                    |   '%'
+    
+    <term>          :   <term>  <arti_oper_2> <factor>
+                    |   <var_oper> <arit_oper_2> <factor>
+                    |   <term> <arit_oper_2> <var_oper>
+                    |   <var_oper> <arit_oper_2> <var_oper> 
+                    |   <factor>
+
+    <factor>        :   <base> '^' <sigexp>
+                    |   <var_oper> '^' <sigexp>
+                    |   '-' <base>  
+                    |   '-' <var_oper>  
+                    |   <base> '++'
+                    |   <base> '--'
+                    |   '++' <base>
+                    |   '--'<base>
+                    |   <var_oper> '++'
+                    |   '++' <var_oper>
+                    |   <var_oper> '--'
+                    |   '--' <var_oper>
+                    |   <base>
+
+    <base>          :   '(' <exp_arit> ')'
+                    |   '(' <var_oper> ')'
+                    |   NUMBER
+                    |   <func_int>
+
+    <sigexp>        :   '-' <exp>
+                    |   <exp>
+
+    <exp>           :   <var_oper>
+                    |   NUMBER
+                    |   '(' <exp_arit> ')'
+
+    <exp_cadena>    :   <exp_cadena> '+' <term_cadena>
+                    |   <var_oper> '+' <term_cadena>
+                    |   <term_cadena> '+' <var_oper> 
+                    |   <term_cadena> 
+
+    <term_cadena>   :   CADENA
+                    |   <func_ret_cadena>
+                    |   '(' <exp_cadena> ')'
+
+
+
+    <exp_bool>      :   <exp_bool> AND <term_bool>
+                    |   <var_oper> AND <term_bool>
+                    |   <exp_bool> AND <var_oper>
+                    |   <var_oper> AND <var_oper>
+                    |   <term_bool>
+
+    <term_bool>     :   <term_bool> OR <factor_bool>
+                    |   <var_oper> OR <factor_bool>
+                    |   <term_bool> OR <var_oper>
+                    |   <var_oper> OR <var_oper>
+                    |   'not' <factor_bool>
+                    |   'not' <var_oper>
+
+    <factor_bool>   :   BOOL
+                    |   '(' <exp_bool> ')'
+                    |   '(' <comparacion> ')'
+                    |   <func_bool>
+
+    <op_comp>       :   '=='
+                    |   '>'
+                    |   '<'
+                    |   '!='
+
+    <comparacion>   :   <valores> <op_comp>  <valores>
+
+    
+\end{verbatim}
+
+%A pesar de que las comparaciones generadas por el no terminal <comparacion> puedan ser consideradas como un booleano solo pueden ser incluidas en una expresión booleana compleja,<exp\_bool>, encerrada entre paréntesis. 

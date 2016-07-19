@@ -1,4 +1,5 @@
 \documentclass[hidelinks,a4paper,12pt, nofootinbib]{article}
+\usepackage[nounderscore]{syntax}
 \usepackage[left=3cm, top=2.5cm, right=2cm, left=2.5cm]{geometry}
 \usepackage[spanish, es-tabla]{babel} %es-tabla es para que ponga Tabla en vez de Cuadro en el caption
 \usepackage[utf8]{inputenc}
@@ -26,7 +27,7 @@
 \usepackage{amsmath}
 \usepackage{wrapfig}
 \usepackage{caption}
-
+%\usepackage{minted}
 
 %Formato de los links
 \usepackage{hyperref}
@@ -38,7 +39,6 @@
 }
 
 \usepackage{comment}
-
 %Bibliografia
 \usepackage[
   backend=bibtex,
@@ -70,16 +70,16 @@
 \titulo{Trabajo Práctico Número 1}
 %\subtitulo{}
 \grupo{Grupo n\_n}
-\integrante{Gasco, Emilio}{}{gascoe@gmail.com}
+\integrante{Gasco, Emilio}{171/12}{gascoe@gmail.com}
 \integrante{Gatti, Mathias}{477/14}{mathigatti@gmail.com}
-\integrante{Patané, Federico}{ }{fede\_river\_8e@hotmail.com}
+\integrante{Patané, Federico}{683/10}{fede\_river\_8e@hotmail.com}
 
 \fecha{6 de julio de 2016}
 
 \usepackage{etoolbox}
 \AtBeginEnvironment{tikzpicture}{\shorthandoff{>}\shorthandoff{<}}{}{}
 \newcommand{\cupdot}{\mathbin{\mathaccent\cdot\cup}}
-
+\title{tp-leng}
 \begin{document}
 \maketitle
 
@@ -91,8 +91,7 @@
 \input{intro.tex}
 \newpage
 
-\section{La Gramática}
-\input{gramatica.tex}
+\input{desarrollo.tex}
 \newpage
 
 \section{El Código}
