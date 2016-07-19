@@ -5,6 +5,7 @@ from semantic_error import SemanticException
 # Diccionario donde se almacenaran las variables declaradas junto con su tipo
 variables_dict = dict()
 reg_dict = dict()
+
 # Funcion que reemplaza los '\n' por '\n    ' o sea agrega un tab en cada salto de linea
 def find_and_replace(palabra):
     j = 0
@@ -73,7 +74,6 @@ def estaReg(key):
     if key in reg_dict:
         return reg_dict[key]
     else: return 'ND'
-
 
 # Funcion que convierte a str su entrada en caso que sea un int
 def toStrIfInt(var):
@@ -302,7 +302,7 @@ def p_funcion_ret_string(p):
     if not esString(p[3][1]):
         pass
         raise SemanticException('CAPITALIZAR',p.lineno(3),p.lexpos(3))
-
+      
 def p_funcion_ret_bool_f(p):
     'func_ret_bool : COLINEALES LPAREN valores COMA valores RPAREN '
     p[0] = ['colineales(' + p[3][0] + ',' + p[5][0] + ')', 'BOOL']
@@ -1006,7 +1006,6 @@ def p_operador_comparacion_dif(p):
 def p_comparcion(p):
     'comparacion : valores operador_comp valores'
     p[0] = [p[1][0] + p[2][0] + p[3][0], 'BOOL']
-    
 
 def p_error(token):
     message = "[Syntax error]"
