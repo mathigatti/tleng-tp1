@@ -1,4 +1,6 @@
-Para correr el programa se utiliza el archivo SLSparser. Este cuenta con cuatro opciones distintas de ejecución.
+Para correr el programa se utiliza el archivo SLSparser. Este cuenta con cuatro opciones distintas de ejecución. Notar que se requiere tener instalado python junto con la biblioteca ply para utilizarlo.
+
+Las opciones de ejectución son:
 
 1. SLSparser -o archivo_salida -c archivo_entrada
 
