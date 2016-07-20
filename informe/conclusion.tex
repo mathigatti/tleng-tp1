@@ -1,2 +1,23 @@
-A medida que que desambiguamos la gramatica la cantidad de producciones aumenteaba significativamente haciendo la mas compleja de entender y dificil de modificar. A veces es preferible resolver un conflicto solucionando una accion, y evitar complejizar la grámatica al desambiguar. En cuanto al chuqueo de tipos a fin de mantener un gŕamatica relativamnete pequeña y manjeable es preferible delegar todo lo posible al analisis semantico. 
+En primer instancia, pudimos crear muy rápidamente una gramática que pedía todo lo que el lenguaje especificado nos pedía, 
+pero contenía muchísimas ambiguedades, ambiguedades que si bien fueron muchas y con gran número de producciones, aplicando
+metódica y ordenadamente el algoritmo para desambiguar, nos quedo una gramática no ambigua, con muy pocos conflictos, que 
+se podían resolver para que pueda un parser LALR parsearla.
+
+Sin embargo, a medida que que desambiguamos la gramática la cantidad de producciones aumenteaba significativamente haciendola más 
+compleja de entender y difícil de modificar.
+
+A veces es preferible resolver un conflicto solucionando una accion, y evitar complejizar la grámatica al desambiguar.
+En cuanto al chuqueo de tipos a fin de mantener un gŕamatica relativamnete pequeña y manjeable es preferible delegar 
+todo lo posible al análisis semántico. 
+
+Muchas cosas se pueden restringir tanto semántica como sintácticamente, en nuestro caso tratamos de que todo lo que podíamos
+resolver con el anális semántico se resolviera ahí, para que no nos genere coflictos ni ambiguedades en una gramática demasiado
+extensa. 
+
+Por ejemplos casos de operadores de comparación, que esperan dos expresiones del mismo tipo, claramente es mucho más fácil poder
+restringirlo del lado de la semántica, con algo de código que agregar varias producciones más que parseen correctamente estos casos.
+También nos enfrentamos a casos en los que necesitabamos si o si poder hacerlo desde el lado semántico, facilitando así el parseo
+o casos en los que debimos hacerlo desde el lado sintáctico. 
+
+
      
