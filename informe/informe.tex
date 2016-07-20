@@ -19,14 +19,18 @@
 \usepackage{amsthm}
 \usepackage{listings}
 \usepackage{soul}
-
+\usepackage[titletoc]{appendix}
 \usepackage{pgf}
-
 \usepackage{graphicx}
 \usepackage{sidecap}
 \usepackage{amsmath}
 \usepackage{wrapfig}
 \usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
+
 %\usepackage{minted}
 
 %Formato de los links
@@ -94,16 +98,17 @@
 \input{desarrollo.tex}
 \newpage
 
-\section{El Código}
-\input{codigo.tex}
-\newpage
-\section{Casos de Prueba}
-\input{tests.tex}
 \section{Conclusión}
 \input{conclusion.tex}
 
 
 \newpage
 \printbibliography
+\appendix
+\section{\\Apendice A:Casos de Prueba}\label{App:AppendixA}
+\input{tests.tex}
+\section{\\Apendice B: Código} \label{App:AppendixB}
+  \input{codigo.tex}
+% the \\ insures the section title is centered below the phrase: AppendixA
 
 \end{document}

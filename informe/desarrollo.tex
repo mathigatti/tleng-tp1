@@ -1,6 +1,7 @@
 \section{Analizador léxico }
 
 Para configurar el analizar léxico es necesario proveer expresiones regulares que reconozcan cada uno de los tokens. Para poder reconocer las palabras reservadas del lenguaje  fue necesario agregar lógica extra al analizador. Para evitar que las palabras reservadas sean usadas como variables se creo un diccionario donde cada elemento es el par (palabra reservado,token palabra reservada). Cuando una cadena del código siendo analizado se corresponde con la expresión regular del token VARIABLE, antes de aceptar el token se buscar la cadena en el diccionario. De encontrar la cadena en el diccionario se utiliza el tipo de token definido en el mismo, en caso contrario se devuelve un token VARIABLE. 
+Como en etapas posteriores se verificara no solo la sintaxis, sino también que el código cumple con las restricciones de tipado del lenguaje, el lexer diferencia entre números, cadenas de caracteres y booleanos, devolviendo los tokens NUMERO,CADENA y BOOL respectivamente.
 
 \subsection{Expresiones regulares para tokens}
 
@@ -55,10 +56,15 @@ MULTIPLICACIONESCALAR ->    'multiplicacionescalar'
            ASGINACION ->   '='
 
 \end{verbatim}
-\section{Análisis sintáctico y chequeo de tipos}
+\section{Análisis sintáctico}
 
-La herramienta utilizada para construir el analizador sintáctica crea un analizador LALR. 
-\subsection{Gramática}
+Se procedió a crear una gramática que pudiese reconocer el lenguaje SLS. 
+La herramienta utilizada para construir el analizador sintáctica,a la cual se le proveen los tokens del lexer y las producciones de la gramática, crea un analizador LALR. 
+
+La creación de la gramática fue un proceso iterativo. Al procesar las primeras versiones de la gramática con el ply se encontraban gran número de conflictos. Se fue modificando la gramática, resolviendo ambigüedades para eliminar conflictos shift/reduce y reduce/reduce encontrados, lo que hizo que la misma creciera en cantidad de producciones y en complejidad.
+Una vez eliminados los conflictos que no podían ser solucionados seleccionando un acción  de la tabla LALR, se procedió a ejecutar tests mas complejos provistos por la cátedra para terminar de pulir los últimos detalles. En las siguientes secciones se presentan las producciones de la gramática, solución de conflicto de if-else mediante selección de acción y chequeo de tipos. 
+
+\subsection{Producciones gramática}\label{sec:pgram}
 \begin{verbatim}
     <programa>      :   <sentencia> <programa'>   
                     |   <control> <programa'>   
@@ -266,7 +272,58 @@ La herramienta utilizada para construir el analizador sintáctica crea un analiz
 
     
 \end{verbatim}
-%
-%A pesar de que las comparaciones generadas por el no terminal <comparacion> puedan ser consideradas como un booleano solo pueden ser incluidas en una expresión booleana compleja,<exp\_bool>, encerrada entre paréntesis. 
-%
+\subsection{Resolución de conflicto if-else}\label{sec:pgram}
+Nuestra gramática presenta la ambigüedad conocida como "dangling else". En nuestra gramática una sentencia de la forma "if E1 B1 else if E2 B2 else B3" tiene dos arboles de parseo posibles cuando <bloque> deriva en <sentencia> , ver figura ~\ref{fig:trees} .  En este caso se opto por resolver el conflicto seleccionando la acción shift de la tabla, dado que con dicha selección se logra el comportamiento deseado de hacer mathcear el "else" con el anterior if sin matchear.  
+
+\begin{figure}[H]
+
+    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{tikzpicture}[every node/.style={align=center},level distance=1.5cm]
+    \Tree [ .<ifelse> \textbf{if} [ .<control\_cond> \edge[roof]; {E1}  ] [ .<bloque> [ .<sentencia> \textbf{if} [ .<control\_cond> \edge[roof]; {E2}  ]  ] [ .<bloque> [ .<sentencia> \edge[roof]; {B1}  ] ] ] \textbf{else}  [ .<bloque> [ .<sentencia> \edge[roof]; {B2}  ] ] ] 
+    \end{tikzpicture}
+    \end{subfigure}
+    
+    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{tikzpicture}[every node/.style={align=center},level distance=1.5cm]
+    \Tree [ .<ifelse> \textbf{if} [ .<control\_cond> \edge[roof]; {E1}  ] [ .<bloque> [ .<sentencia> \textbf{if} [ .<control\_cond> \edge[roof]; {E2}  ] [ .<bloque> [ .<sentencia> \edge[roof]; {B1}  ] ] \textbf{else}  [ .<bloque> [ .<sentencia> \edge[roof]; {B2}  ] ] ] ] ]
+    \end{tikzpicture}
+    \end{subfigure}
+    
+
+
+
+     \caption{Versión simplificada de arboles de parseo para \\"if E1 B1 else if E2 B2 else B3 }
+      \label{fig:trees}
+\end{figure}    
+\subsection{Chequeo de tipos}
+
+Unos de los objetivos de la implementación era verificar que el código cumpliese con restricciones de tipado del lenguaje. Parte de este chequeo se hace a través de la sintaxis no permitiendo  que se formen cadenas que violen dichas restricciones. 
+Por ejemplo las producciones mostradas a continuación del caso  base de exp\_arit no aseguran que los tokens BOOL y CADENA no van a aparecer en una expresión aritmética. 
+\begin{verbatim}
+    <base>          :   '(' <exp_arit> ')'
+                    |   '(' <var_oper> ')'
+                    |   NUMBER
+                    |   <func_int>
+
+\end{verbatim}
+	Ahora bien, no es posible chequear con esta gramática expresiones donde se usan variables . Para ellos se extendió la gramática a una una gramática de atributos para poder poder hacer una validación más completa. Esta extensión no solo permitió hacer un chequeo mas completo sino adema permitió simplificar algunas producciones por ejemplo el de las comparaciones donde las producciones:
+    
+\begin{verbatim}
+<comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
+                 |   <var_oper> <op_comp>  <exp_cadena>
+                 |   <exp_cadena> <op_comp> <var_oper> 
+                 |   <exp_arit>   <op_comp>   <exp_arit>
+                 |   <var_oper>   <op_comp>   <exp_arit>
+                 |   <exp_arit>   <op_comp>   <var_oper>
+                 |   <var_oper>   <op_comp>  <var_oper>
+                 |   <exp_bool> '==' <exp_bool>
+                 |   <exp_bool> '!=' <exp_bool>
+\end{verbatim}
+fueron reemplazadas por una sola producción:
+\begin{verbatim}
+ <comparacion>   :   <valores> <op_comp>  <valores>
+\end{verbatim}
+ 
+
+
 \input{semantica.tex}
