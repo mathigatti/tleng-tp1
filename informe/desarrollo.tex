@@ -308,7 +308,7 @@ Por ejemplo las producciones mostradas a continuación del caso  base de exp\_ar
                     |   <func_int>
 
 \end{verbatim}
-	Ahora bien, no es posible chequear con esta gramática expresiones donde se usan variables . Para ellos se extendió la gramática a una una gramática de atributos para poder poder hacer una validación más completa. Esto se logra mediante la sintesis del atributo tipo y chequeando que se cumplan las restricciones en el momento que se utlizan las variables. Esta extensión no solo permitió hacer un chequeo mas completo sino adema permitió simplificar algunas producciones por ejemplo el de las comparaciones donde las producciones:
+	Ahora bien, no es posible chequear con esta gramática expresiones donde se usan variables . Para ellos se extendió la gramática a una una gramática de atributos para poder poder hacer una validación más completa. Esto se logra mediante la síntesis del atributo tipo y chequeando que se cumplan las restricciones en el momento que se utilizan las variables. Esta extensión no solo permitió hacer un chequeo mas completo sino adema permitió simplificar algunas producciones por ejemplo el de las comparaciones donde las producciones:
     
 \begin{verbatim}
 <comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
@@ -326,6 +326,7 @@ fueron reemplazadas por una sola producción:
  <comparacion>   :   <valores> <op_comp>  <valores>
 \end{verbatim}
  
-
+Otro caso en el que la síntesis del atributo tipo resulto útil fue para expresiones que son suma de todas variables. Dicha expresión es válida tanto para cadenas como para números, pero solo se puede derivar a partir de <exp\_arit>. Utilizando el atributo de tipo, podemos permitir que dicha expresión se forme tanto para suma de cadenas como para suma de variables con números.
+    En la siguiente sección se profundiza sobre el análisis semántico.
 
 \input{semantica.tex}
