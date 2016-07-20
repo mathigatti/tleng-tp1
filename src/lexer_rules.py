@@ -1,4 +1,3 @@
-# Si el codigo esta vacio o solo tiene espacios, saltos de linea y demas caracteres no imprimibles entonces no es valido
 
 #
 reserved = {
@@ -72,7 +71,6 @@ tokens = [
    'VARIABLE',
    'CADENA',
 
-# Estos actualmente estan siendo ignorados, son tomados como tipo VARIABLE 
    'ASIGNACION',
 ] + [valor for valor in list(reserved.values()) if valor not in list(notokens.values())]
 
