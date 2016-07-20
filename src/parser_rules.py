@@ -324,7 +324,7 @@ def p_funcion_ret_bool_f(p):
 #Producciones para vectores y variables
 def p_valores_exp_arit(p):
     'valores : exp_arit'
-    p[0] = [toStrIfInt(p[1][0]), p[1][1]]
+    p[0] = [p[1][0], p[1][1]]
 
 def p_valores_exp_bool(p):
     'valores : exp_bool'
@@ -624,12 +624,17 @@ def p_exp_arit_ept(p):
     'exp_arit : exp_arit PLUS term'
     p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
-
 def p_exp_arit_epv2(p):
     'exp_arit : exp_arit PLUS var_oper'
-    p[0] = [p[1][0] + ' + ' + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
-    if not esNumber(p[3][1]) and not esString(p[3][1]):
+    if esNumber(p[3][1]):
+        tipo = tipoNumber(p[1][1],p[3][1])
+    else:
+        tipo = 'STRING' 
+
+    p[0] = [p[1][0] + ' + ' + p[3][0], tipo]
+
+    if (not esNumber(p[1][1]) or not esNumber(p[3][1])) and (not esString(p[1][1]) or not esString(p[3][1])):
         pass
         raise SemanticException('ERRORTIPO',p.lineno(1),p.lexpos(1))
 
@@ -643,9 +648,16 @@ def p_exp_arit_v2pt(p):
 
 def p_exp_arit_v2pv2(p):
     'exp_arit : var_oper PLUS var_oper'
-    p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), tipoNumber(p[1][1],p[3][1])]
 
-    if ((not esNumber(p[1][1]) or not esNumber(p[3][1])) and (not esString(p[1][1]) or not esString(p[3][1])) ):
+    if esNumber(p[3][1]):
+        tipo = tipoNumber(p[1][1],p[3][1])
+    else:
+        tipo = 'STRING' 
+    
+
+    p[0] = [p[1][0] + ' + ' + toStrIfInt(p[3][0]), tipo]
+
+    if (not esNumber(p[1][1]) or not esNumber(p[3][1])) and (not esString(p[1][1]) or not esString(p[3][1])):
         pass
         raise SemanticException('ERRORTIPO',p.lineno(1),p.lexpos(1))
 
