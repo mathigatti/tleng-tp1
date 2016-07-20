@@ -1,7 +1,7 @@
 \section{Analizador léxico }
 
 Para configurar el analizar léxico es necesario proveer expresiones regulares que reconozcan cada uno de los tokens. Para poder reconocer las palabras reservadas del lenguaje  fue necesario agregar lógica extra al analizador. Para evitar que las palabras reservadas sean usadas como variables se creo un diccionario donde cada elemento es el par (palabra reservado,token palabra reservada). Cuando una cadena del código siendo analizado se corresponde con la expresión regular del token VARIABLE, antes de aceptar el token se buscar la cadena en el diccionario. De encontrar la cadena en el diccionario se utiliza el tipo de token definido en el mismo, en caso contrario se devuelve un token VARIABLE. 
-Como en etapas posteriores se verificara no solo la sintaxis, sino también que el código cumple con las restricciones de tipado del lenguaje, el lexer diferencia entre números, cadenas de caracteres y booleanos, devolviendo los tokens NUMERO,CADENA y BOOL respectivamente.
+Como en etapas posteriores se verificará no sólo la sintáxis, sino también que el código cumpla con las restricciones de tipado del lenguaje, el lexer diferencia entre números, cadenas de caracteres y booleanos, devolviendo los tokens NUMERO,CADENA y BOOL respectivamente.
 
 \subsection{Expresiones regulares para tokens}
 
@@ -59,10 +59,10 @@ MULTIPLICACIONESCALAR ->    'multiplicacionescalar'
 \section{Análisis sintáctico}
 
 Se procedió a crear una gramática que pudiese reconocer el lenguaje SLS. 
-La herramienta utilizada para construir el analizador sintáctica,a la cual se le proveen los tokens del lexer y las producciones de la gramática, crea un analizador LALR. 
+La herramienta utilizada para construir el analizador sintáctico, al cuál se le proveen los tokens del lexer y las producciones de la gramática, crea un analizador LALR. 
 
 La creación de la gramática fue un proceso iterativo. Al procesar las primeras versiones de la gramática con el ply se encontraban gran número de conflictos. Se fue modificando la gramática, resolviendo ambigüedades para eliminar conflictos shift/reduce y reduce/reduce encontrados, lo que hizo que la misma creciera en cantidad de producciones y en complejidad.
-Una vez eliminados los conflictos que no podían ser solucionados seleccionando un acción  de la tabla LALR, se procedió a ejecutar tests mas complejos provistos por la cátedra para terminar de pulir los últimos detalles. Dado que la gramática es ambigua no es LR(1) y por ende no es LALR. 
+Una vez eliminados los conflictos que no podían ser solucionados seleccionando un acción  de la tabla LALR, se procedió a ejecutar tests mas complejos provistos por la cátedra para terminar de pulir los últimos detalles. Dado que la gramática es ambigua, no es LR(1) y por ende no es LALR. 
     En las siguientes secciones se presentan las producciones de la gramática, solución de conflicto de if-else mediante selección de acción y chequeo de tipos. 
     
 
@@ -275,7 +275,7 @@ Una vez eliminados los conflictos que no podían ser solucionados seleccionando 
     
 \end{verbatim}
 \subsection{Resolución de conflicto if-else}\label{sec:pgram}
-Nuestra gramática presenta la ambigüedad conocida como "dangling else". En nuestra gramática una sentencia de la forma "if E1 B1 else if E2 B2 else B3" tiene dos arboles de parseo posibles cuando <bloque> deriva en <sentencia> , ver figura ~\ref{fig:trees} .  En este caso se opto por resolver el conflicto seleccionando la acción shift de la tabla, dado que con dicha selección se logra el comportamiento deseado de hacer matchear el "else" con el anterior if sin matchear.  
+Nuestra gramática presenta la ambigüedad conocida como "dangling else". En nuestra gramática una sentencia de la forma "if E1 B1 else if E2 B2 else B3" tiene dos árboles de parseo posibles cuando <bloque> deriva en <sentencia> , ver figura ~\ref{fig:trees} .  En este caso se opto por resolver el conflicto seleccionando la acción shift de la tabla, dado que con dicha selección se logra el comportamiento deseado de hacer matchear el 'else' con el anterior if sin matchear.  
 
 \begin{figure}[H]
 
@@ -299,7 +299,7 @@ Nuestra gramática presenta la ambigüedad conocida como "dangling else". En nue
 \end{figure}    
 \subsection{Chequeo de tipos}
 
-Unos de los objetivos de la implementación era verificar que el código cumpliese con restricciones de tipado del lenguaje. Parte de este chequeo se hace a través de la sintaxis no permitiendo  que se formen cadenas que violen dichas restricciones. 
+Unos de los objetivos de la implementación era verificar que el código cumpliese con restricciones de tipado del lenguaje. Parte de este chequeo se hace a través de la sintáxis no permitiendo  que se formen cadenas que violen dichas restricciones. 
 Por ejemplo las producciones mostradas a continuación del caso  base de exp\_arit no aseguran que los tokens BOOL y CADENA no van a aparecer en una expresión aritmética. 
 \begin{verbatim}
     <base>          :   '(' <exp_arit> ')'
@@ -308,7 +308,7 @@ Por ejemplo las producciones mostradas a continuación del caso  base de exp\_ar
                     |   <func_int>
 
 \end{verbatim}
-	Ahora bien, no es posible chequear con esta gramática expresiones donde se usan variables . Para ellos se extendió la gramática a una una gramática de atributos para poder poder hacer una validación más completa. Esto se logra mediante la síntesis del atributo tipo y chequeando que se cumplan las restricciones en el momento que se utilizan las variables. Esta extensión no solo permitió hacer un chequeo mas completo sino adema permitió simplificar algunas producciones por ejemplo el de las comparaciones donde las producciones:
+	Ahora bien, no es posible chequear con esta gramática expresiones donde se usan variables . Para ellos se extendió la gramática a una una gramática de atributos para poder poder hacer una validación más completa. Esto se logra mediante la síntesis del atributo tipo y chequeando que se cumplan las restricciones en el momento que se utilizan las variables. Esta extensión no solo permitió hacer un chequeo mas completo sino además permitió simplificar algunas producciones por ejemplo el de las comparaciones donde las producciones:
     
 \begin{verbatim}
 <comparacion>   :   <exp_cadena> <op_comp>  <exp_cadena>
