@@ -629,7 +629,7 @@ def p_exp_arit_epv2(p):
     'exp_arit : exp_arit PLUS var_oper'
     p[0] = [p[1][0] + ' + ' + p[3][0], tipoNumber(p[1][1],p[3][1])]
 
-    if not esNumber(p[3][1]):
+    if not esNumber(p[3][1]) and not esString(p[3][1]):
         pass
         raise SemanticException('ERRORTIPO',p.lineno(1),p.lexpos(1))
 
