@@ -1,7 +1,7 @@
 \section{Analizador léxico }
 
 Para configurar el analizar léxico es necesario proveer expresiones regulares que reconozcan cada uno de los tokens. Para poder reconocer las palabras reservadas del lenguaje  fue necesario agregar lógica extra al analizador. Para evitar que las palabras reservadas sean usadas como variables se creo un diccionario donde cada elemento es el par (palabra reservado,token palabra reservada). Cuando una cadena del código siendo analizado se corresponde con la expresión regular del token VARIABLE, antes de aceptar el token se buscar la cadena en el diccionario. De encontrar la cadena en el diccionario se utiliza el tipo de token definido en el mismo, en caso contrario se devuelve un token VARIABLE. 
-Como en etapas posteriores se verificará no sólo la sintáxis, sino también que el código cumpla con las restricciones de tipado del lenguaje, el lexer diferencia entre números, cadenas de caracteres y booleanos, devolviendo los tokens NUMERO,CADENA y BOOL respectivamente.
+Como en etapas posteriores se verificará no sólo la sintaxis, sino también que el código cumpla con las restricciones de tipado del lenguaje, el lexer diferencia entre números, cadenas de caracteres y booleanos, devolviendo los tokens NUMERO,CADENA y BOOL respectivamente.
 
 \subsection{Expresiones regulares para tokens}
 
@@ -299,7 +299,7 @@ Nuestra gramática presenta la ambigüedad conocida como "dangling else". En nue
 \end{figure}    
 \subsection{Chequeo de tipos}
 
-Unos de los objetivos de la implementación era verificar que el código cumpliese con restricciones de tipado del lenguaje. Parte de este chequeo se hace a través de la sintáxis no permitiendo  que se formen cadenas que violen dichas restricciones. 
+Unos de los objetivos de la implementación era verificar que el código cumpliese con restricciones de tipado del lenguaje. Parte de este chequeo se hace a través de la sintaxis no permitiendo  que se formen cadenas que violen dichas restricciones. 
 Por ejemplo las producciones mostradas a continuación del caso  base de exp\_arit no aseguran que los tokens BOOL y CADENA no van a aparecer en una expresión aritmética. 
 \begin{verbatim}
     <base>          :   '(' <exp_arit> ')'
