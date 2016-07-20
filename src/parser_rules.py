@@ -177,7 +177,7 @@ def p_loop_while(p):
 
 def p_loop_do(p):
     'loop : DO bloque WHILE LPAREN control_cond_term RPAREN PUNTOYCOMA'
-    p[0] = ['do\n    ' + find_and_replace(p[2][0]) + '\nwhile(' + p[5][0] + ');' +'\n', 'ND']
+    p[0] = ['do\n    ' + find_and_replace(p[2][0]) + '\nwhile(' + p[5][0] + ');', 'ND']
 
     if not esBool(p[5][1]):
         pass
@@ -189,7 +189,7 @@ def p_loop_for(p):
 
 def p_for_main(p):
     'for : FOR LPAREN form_term PUNTOYCOMA form_term_2 PUNTOYCOMA form_term RPAREN bloque'
-    p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]) + '\n', 'ND']
+    p[0] = ['for(' + p[3][0] + ';' + p[5][0] + ';' + p[7][0] +')\n    ' + find_and_replace(p[9][0]), 'ND']
 
     if not esBool(p[5][1]):
         pass
@@ -213,7 +213,7 @@ def p_for_term_empty(p):
 
 def p_ifelse(p):
     'ifelse : IF LPAREN control_cond_term RPAREN bloque ELSE bloque'
-    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7][0]) + '\n', 'ND']
+    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\nelse\n    ' + find_and_replace(p[7][0]), 'ND']
 
     if not esBool(p[3][1]):
         pass
@@ -221,7 +221,7 @@ def p_ifelse(p):
 
 def p_ifSinElse(p):
     'ifelse : IF LPAREN control_cond_term RPAREN bloque'
-    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]) + '\n', 'ND']
+    p[0] = ['If(' + p[3][0] + ')\n    ' + find_and_replace(p[5][0]), 'ND']
 
     if not esBool(p[3][1]):
         pass

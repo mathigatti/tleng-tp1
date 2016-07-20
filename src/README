@@ -1,0 +1,16 @@
+Para correr el programa se utiliza el archivo SLSparser. Este cuenta con cuatro opciones distintas de ejecución. Notar que se requiere tener instalado python junto con la biblioteca ply para utilizarlo.
+
+Las opciones de ejectución son:
+
+1. SLSparser -o archivo_salida -c archivo_entrada
+
+2. SLSparser -c archivo_entrada <---- En este caso la salida se imprime en el terminal
+
+3. SLRparser -o arvhico_salida 'texto de entrada escrito en el terminal directamente'
+
+4. SLRparser 'texto de entrada' <---- En este caso la salida se imprime en el terminal
+
+
+Para verificar que funcione todo correctamente utilizamos los archivos de texto que se encuentran dentro de la carpeta tests. Para hacer pruebas rápidas utilizamos el archivo test.sh
+
+Todos los tests pasan correctamente y se imprime en los casos correspondientes el texto deseado.
